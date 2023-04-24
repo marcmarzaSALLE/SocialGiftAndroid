@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue_whis">#002640</color>
+    <color name="green_hard_whis">#189356</color>
+    <color name="green_light_whis">#25BF7B</color>
+    <color name="grey">#BDBDBD</color>
+
 </resources>

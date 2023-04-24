@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">SocialGift</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">LOGIN</string>
+    <string name="social_gift">Social Gift</string>
+    <string name="new_in_social_gift">¿New in Social Gift?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="register">REGISTER</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="name">Name</string>
+    <string name="lastname">Lastname</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
