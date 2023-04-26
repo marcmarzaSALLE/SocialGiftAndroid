@@ -11,4 +11,7 @@
     <string name="name">Name</string>
     <string name="lastname">Lastname</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="list">List</string>
+    <string name="chat">Chat</string>
+    <string name="user">User</string>
 </resources>

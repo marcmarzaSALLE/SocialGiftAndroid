@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+   >
+
+    <item
+        android:id="@+id/id_menu_list"
+        android:icon="@drawable/ic_list_hightblue_24"
+        android:enabled="true"
+        android:color="@color/black"
+        />
+    <item
+        android:id="@+id/id_menu_chat"
+        android:icon="@drawable/ic_chat_hightblue_24"
+        android:enabled="true"
+        android:color="@color/black"
+        android:title="TODO" />
+    <item
+        android:id="@+id/id_menu_user"
+        android:icon="@drawable/ic_person_hightblue_24dp"
+        android:enabled="true"
+        android:color="@color/black"
+        />
+
+</menu>
