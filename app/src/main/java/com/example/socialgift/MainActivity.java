@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
         Log.wtf("MainActivity", String.valueOf(getApplicationContext()));
-        VolleyRequest volleyRequest = new VolleyRequest(getApplicationContext());
-        volleyRequest.createUser();
         Log.d("MainActivity", "onCreate: ");
     }
 }

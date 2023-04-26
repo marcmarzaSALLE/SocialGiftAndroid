@@ -1,6 +1,7 @@
 package com.example.socialgift.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,24 +32,28 @@ public class VolleyRequest {
         try {
             String name = "John";
             String last_name = "Doe";
-            String email = "email";
+            String email = "johnsalchichon@gmail.com";
             String password = "password";
-            String image = "image";
-            User user = new User(name, last_name, email, password);
+            String image = "https://balandrau.salle.url.edu/i3/repositoryimages/photo/47601a8b-dc7f-41a2-a53b-19d2e8f54cd0.png";
+            User user = new User(name, last_name, email, password, image);
 
             jsonBody.put("user", user);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUserUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    System.out.println(response);
+                    Log.wtf("VolleyRequest", "onResponse: ");
+                    Log.wtf("VolleyRequest", "onResponse: " + jsonBody.toString());
+                    System.out.println("" + response);
                 }
-            },new Response.ErrorListener() {
+            }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.wtf("VolleyRequest", "onResponse: " + jsonBody.toString());
 
+                    Log.wtf("VolleyRequest", "onErrorResponse: " + error.getMessage());
                 }
             });
-                    queue.add(jsonObjectRequest);
+            queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
