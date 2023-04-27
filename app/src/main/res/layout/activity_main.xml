@@ -6,11 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/grey">
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+
+
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#A81010"
-        app:itemTextColor="@color/black"
-        app:menu="@menu/bottom_navigation_menu">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black" />
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:menu="@menu/bottom_navigation_menu"
+
+        app:backgroundColor="@color/grey"
+        app:iconSize="24dp"
+        app:iconTint="@color/blue_whis"
+        app:indicatorColor="@color/white"
+        app:iconTintActive="@color/green_hard_whis"
+        app:indicatorRadius="100dp"
+        app:itemPadding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+
+        />
+
 </LinearLayout>
