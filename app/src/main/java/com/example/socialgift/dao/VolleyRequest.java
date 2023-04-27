@@ -10,16 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.socialgift.model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-
 public class VolleyRequest {
     private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
     private final String userParameter = "/users";
+    private final String loginParameter = "/login";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
@@ -33,17 +31,14 @@ public class VolleyRequest {
     public void createUser() {
         String createUserUrl = this.url + this.userParameter;
         try {
-            jsonBody.put("name", "string");
-            jsonBody.put("last_name", "string");
             jsonBody.put("email", "johnsalchicon@mail.es");
             jsonBody.put("password", "password");
-            jsonBody.put("image", "https://balandrau.salle.url.edu/i3/repositoryimages/photo/47601a8b-dc7f-41a2-a53b-19d2e8f54cd0.png");
 
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUserUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(context, "User created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
                     Log.wtf("VolleyRequest", "onResponse: ");
                     Log.wtf("VolleyRequest", "onResponse: " + jsonBody.toString());
                     System.out.println("" + response);
@@ -58,6 +53,18 @@ public class VolleyRequest {
                     Log.wtf("VolleyRequest", "onErrorResponse: " + error.getMessage());
                 }
             });
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loginUser(String email, String password, Response.Listener<JSONObject> loginActivity, Response.ErrorListener errorListener) {
+        String createUrl = this.url + this.userParameter + this.loginParameter;
+        try {
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, loginActivity,errorListener);
             queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             throw new RuntimeException(e);
