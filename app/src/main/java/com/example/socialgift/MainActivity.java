@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.socialgift.activities.LoginActivity;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.fragments.ChatFragment;
 import com.example.socialgift.fragments.ListFragment;
@@ -26,39 +29,35 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        replace(new ListFragment());
-
-        bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public boolean onItemSelect(int i) {
-                switch (i){
-                    case 0:
-                        replace(new ListFragment());
-                        break;
-
-                    case 1:
-                        replace(new ChatFragment());
-                        break;
-
-                    case 2:
-                        replace(new UserFragment());
-                        break;
-                }
-                return true;
-            }
-        });
-
-        /*
         sharedPreferencesController = new SharedPreferencesController();
         if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) != null){
-            Toast.makeText(getApplicationContext(), "AUTORIZADO", Toast.LENGTH_SHORT).show();
+            replace(new ListFragment());
+            bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
+                @Override
+                public boolean onItemSelect(int i) {
+                    switch (i){
+                        case 0:
+                            replace(new ListFragment());
+                            break;
+
+                        case 1:
+                            replace(new ChatFragment());
+                            break;
+
+                        case 2:
+                            replace(new UserFragment());
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
         else{
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
 
-         */
+
     }
     private void replace(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

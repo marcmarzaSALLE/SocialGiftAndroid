@@ -28,6 +28,22 @@ public class VolleyRequest {
         jsonBody = new JSONObject();
     }
 
+
+    public void registerUser(String name, String last_name,String email,String password,String image, Response.Listener<JSONObject> registerListener, Response.ErrorListener errorListener){
+        String createUrl = this.url + this.userParameter;
+        try {
+            jsonBody.put("name", name);
+            jsonBody.put("last_name", last_name);
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
+            jsonBody.put("image", image);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, registerListener,errorListener);
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     public void createUser() {
         String createUserUrl = this.url + this.userParameter;
         try {
