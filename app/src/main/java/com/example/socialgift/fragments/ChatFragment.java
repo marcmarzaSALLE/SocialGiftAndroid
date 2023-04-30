@@ -17,7 +17,7 @@ import com.example.socialgift.R;
 
 public class ChatFragment extends Fragment {
     private Toolbar toolbar;
-    private TextView txtViewToolbar;
+    private TextView txtViewToolbar,txtAddList;
     private ImageButton imgBtnToolbar;
 
     @Override
@@ -33,11 +33,13 @@ public class ChatFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
         imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
+        txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
     }
 
     private void changeInformationToolbar(){
         txtViewToolbar.setText(getResources().getText(R.string.messages));
-        imgBtnToolbar.setVisibility(View.INVISIBLE);
+        imgBtnToolbar.setVisibility(View.GONE);
+        txtAddList.setVisibility(View.GONE);
     }
 }
