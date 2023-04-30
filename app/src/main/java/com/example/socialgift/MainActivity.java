@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.socialgift.activities.LoginActivity;
 import com.example.socialgift.controller.SharedPreferencesController;
@@ -22,15 +23,20 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferencesController sharedPreferencesController;
     private SmoothBottomBar bottomNavigationView;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
         sharedPreferencesController = new SharedPreferencesController();
-        if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) != null){
+        if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) == null){
             replace(new ListFragment());
             bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
                 @Override

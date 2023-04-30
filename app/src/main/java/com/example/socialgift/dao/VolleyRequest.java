@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VolleyRequest {
-    private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
+    private final String url = "https://172.16.205.128/i3/socialgift/api/v1";
     private final String userParameter = "/users";
     private final String loginParameter = "/login";
     private final RequestQueue queue;

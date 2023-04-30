@@ -22,6 +22,12 @@
     <string name="lastname_required">Lastname is required</string>
     <string name="email_invalid">Email is invalid</string>
     <string name="confirm_password_required">Confirm Password is required</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="friends">Friends</string>
+    <string name="booking">Booking</string>
+    <string name="my_list">My Lists</string>
+    <string name="messages">Messages</string>
+    <string name="todo">TODO</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="desc_toolbar_button">log out icon</string>
+    <string name="username">Name Secondname</string>
 </resources>
