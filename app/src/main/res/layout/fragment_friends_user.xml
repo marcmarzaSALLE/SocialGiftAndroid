@@ -11,6 +11,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -22,6 +23,7 @@
             app:theme="@style/SearchViewStyle"
             />
         <ImageButton
+            android:id="@+id/imgBtnFriendRequest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

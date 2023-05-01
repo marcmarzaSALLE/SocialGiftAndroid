@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.EditUserFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="#ECECEC"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/border_imageview"
+            android:contentDescription="@string/desc_image_edit"
+            android:src="@drawable/image_person_blue_64" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/change_profile_picture"
+            android:textColor="@color/green_button_user"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="190dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/green_button_user" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/name"
+            android:textColorHint="@color/grey"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/MyHintStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/lastname"
+            android:textColorHint="@color/grey"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/MyHintStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtTextLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/email"
+            android:textColorHint="@color/grey"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/MyHintStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtTxtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveBtn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/green_hard_whis"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/txtViewChangePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/change_password"
+            android:textColor="@color/green_button_user" />
+
+        <View
+            android:layout_width="115dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/green_button_user" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
