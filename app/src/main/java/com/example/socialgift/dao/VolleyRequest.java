@@ -2,27 +2,37 @@ package com.example.socialgift.dao;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.socialgift.controller.SharedPreferencesController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VolleyRequest {
     private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
     private final String userParameter = "/users";
+
+    private final String searchParameter = "/search";
     private final String loginParameter = "/login";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
 
+    private final SharedPreferencesController sharedPreferencesController;
+
     public VolleyRequest(Context context) {
         this.context=context;
         queue = Volley.newRequestQueue(context);
         jsonBody = new JSONObject();
+        sharedPreferencesController = new SharedPreferencesController();
     }
 
 
@@ -54,7 +64,25 @@ public class VolleyRequest {
         }
     }
 
-    public void getMyUser(String token){
+    public void getMyUser(String email, Response.Listener<JSONObject> searchUser, Response.ErrorListener errorListener) {
+        String createUrl = this.url + this.userParameter + this.searchParameter;
+        try {
 
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl, jsonBody, searchUser,errorListener ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                    return headers;
+                }
+            };
+            jsonBody.put("email", email);
+
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

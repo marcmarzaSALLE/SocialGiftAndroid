@@ -28,4 +28,23 @@ public class SharedPreferencesController {
         editor.remove("token");
         editor.apply();
     }
+
+    public void saveUserIdSharedPreferences(String userId, Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("id", userId);
+        editor.apply();
+    }
+
+    public String loadUserIdSharedPreferences( Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
+        return sharedPref.getString("id", null);
+    }
+
+    public void deleteUserIdSharedPreferences(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove("id");
+        editor.apply();
+    }
 }
