@@ -1,6 +1,7 @@
 package com.example.socialgift.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -29,14 +30,14 @@ public class VolleyRequest {
     private final SharedPreferencesController sharedPreferencesController;
 
     public VolleyRequest(Context context) {
-        this.context=context;
+        this.context = context;
         queue = Volley.newRequestQueue(context);
         jsonBody = new JSONObject();
         sharedPreferencesController = new SharedPreferencesController();
     }
 
 
-    public void registerUser(String name, String last_name,String email,String password,String image, Response.Listener<JSONObject> registerListener, Response.ErrorListener errorListener){
+    public void registerUser(String name, String last_name, String email, String password, String image, Response.Listener<JSONObject> registerListener, Response.ErrorListener errorListener) {
         String createUrl = this.url + this.userParameter;
         try {
             jsonBody.put("name", name);
@@ -44,7 +45,7 @@ public class VolleyRequest {
             jsonBody.put("email", email);
             jsonBody.put("password", password);
             jsonBody.put("image", image);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, registerListener,errorListener);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, registerListener, errorListener);
             queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -57,7 +58,7 @@ public class VolleyRequest {
         try {
             jsonBody.put("email", email);
             jsonBody.put("password", password);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, loginActivity,errorListener);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUrl, jsonBody, loginActivity, errorListener);
             queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -65,24 +66,17 @@ public class VolleyRequest {
     }
 
     public void getMyUser(String email, Response.Listener<JSONObject> searchUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + this.searchParameter;
-        try {
+        String createUrl = this.url + this.userParameter + this.searchParameter + "?s=" + email;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl, null, searchUser, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl, jsonBody, searchUser,errorListener ){
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers = new HashMap<>();
-
-                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
-                    return headers;
-                }
-            };
-            jsonBody.put("email", email);
-
-            queue.add(jsonObjectRequest);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
     }
 
 }

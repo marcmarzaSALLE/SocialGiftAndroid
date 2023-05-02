@@ -58,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Login correcte", Toast.LENGTH_SHORT).show();
                     try {
                         saveUserId();
-                        Log.wtf("LoginActivity", "onResponse: " + response.getString("accessToken"));
                         sharedPreferencesController.saveDateSharedPreferences(response.getString("accessToken"), getApplicationContext());
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -71,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Login incorrecte", Toast.LENGTH_SHORT).show();
-                    Log.wtf("LoginActivity", "onErrorResponse: " + error.toString());
                 }
             });
 
@@ -85,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     sharedPreferencesController.saveUserIdSharedPreferences(String.valueOf(response.getInt("id")), getApplicationContext());
                     Log.wtf("UserID", "onResponse: " + response.getInt("id"));
-                    Log.wtf("Email", "onResponse: " + edtEmail.getText().toString());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
