@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.socialgift.R;
 import com.example.socialgift.activities.EditProfileActivity;
 import com.example.socialgift.activities.LoginActivity;
+import com.example.socialgift.controller.SharedPreferencesController;
 
 import java.util.Objects;
 
@@ -28,6 +29,8 @@ public class UserFragment extends Fragment {
     private TextView txtViewToolbar,txtAddList;
     private ImageButton imgBtnLogOut;
     private TextView txtViewEditProfile;
+
+    private SharedPreferencesController sharedPreferencesController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +74,7 @@ public class UserFragment extends Fragment {
         imgBtnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sharedPreferencesController.deleteDateSharedPreferences(requireActivity().getApplicationContext());
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 requireActivity().finish();
@@ -92,6 +96,8 @@ public class UserFragment extends Fragment {
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
         imgBtnLogOut = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
+
+        sharedPreferencesController = new SharedPreferencesController();
     }
     private void changeBackgroundPressButton(Button button){
         button.setBackgroundResource(R.drawable.btn_background_menu_user_press);

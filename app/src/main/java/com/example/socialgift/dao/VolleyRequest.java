@@ -1,13 +1,10 @@
 package com.example.socialgift.dao;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -15,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VolleyRequest {
-    private final String url = "https://172.16.205.128/i3/socialgift/api/v1";
+    private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
     private final String userParameter = "/users";
     private final String loginParameter = "/login";
     private final RequestQueue queue;
@@ -44,36 +41,6 @@ public class VolleyRequest {
         }
 
     }
-    public void createUser() {
-        String createUserUrl = this.url + this.userParameter;
-        try {
-            jsonBody.put("email", "johnsalchicon@mail.es");
-            jsonBody.put("password", "password");
-
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createUserUrl, jsonBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
-                    Log.wtf("VolleyRequest", "onResponse: ");
-                    Log.wtf("VolleyRequest", "onResponse: " + jsonBody.toString());
-                    System.out.println("" + response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    Log.wtf("VolleyRequest", "onResponse: " + jsonBody.toString());
-
-                    Log.wtf("VolleyRequest", "onErrorResponse: " + error.getMessage());
-                }
-            });
-            queue.add(jsonObjectRequest);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void loginUser(String email, String password, Response.Listener<JSONObject> loginActivity, Response.ErrorListener errorListener) {
         String createUrl = this.url + this.userParameter + this.loginParameter;
@@ -85,5 +52,9 @@ public class VolleyRequest {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void getMyUser(String token){
+
     }
 }

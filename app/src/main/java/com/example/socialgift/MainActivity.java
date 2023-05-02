@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         sharedPreferencesController = new SharedPreferencesController();
-        if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) == null){
+        if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) != null){
             replace(new ListFragment());
             bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
                 @Override
