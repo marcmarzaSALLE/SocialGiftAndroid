@@ -17,6 +17,7 @@ import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,12 +78,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveUserId(){
-        volleyRequest.getMyUser(edtEmail.getText().toString(),new Response.Listener<JSONObject>() {
+        volleyRequest.getMyUser(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 try {
-                    sharedPreferencesController.saveUserIdSharedPreferences(String.valueOf(response.getInt("id")), getApplicationContext());
-                    Log.wtf("UserID", "onResponse: " + response.getInt("id"));
+                    int id = response.getJSONObject(0).getInt("id");
+                    sharedPreferencesController.saveUserIdSharedPreferences(String.valueOf(id), getApplicationContext());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

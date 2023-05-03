@@ -7,10 +7,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.SharedPreferencesController;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,9 +67,9 @@ public class VolleyRequest {
         }
     }
 
-    public void getMyUser(String email, Response.Listener<JSONObject> searchUser, Response.ErrorListener errorListener) {
+    public void getMyUser(String email, Response.Listener<JSONArray> searchUser, Response.ErrorListener errorListener) {
         String createUrl = this.url + this.userParameter + this.searchParameter + "?s=" + email;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl, null, searchUser, errorListener) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, searchUser, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -76,7 +78,7 @@ public class VolleyRequest {
                 return headers;
             }
         };
-        queue.add(jsonObjectRequest);
+        queue.add(jsonArrayRequest);
     }
 
 }
