@@ -78,12 +78,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveUserId(){
-        volleyRequest.getMyUser(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
+        volleyRequest.getMyUserId(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
                     int id = response.getJSONObject(0).getInt("id");
-                    sharedPreferencesController.saveUserIdSharedPreferences(String.valueOf(id), getApplicationContext());
+                    sharedPreferencesController.saveUserIdSharedPreferences(id, getApplicationContext());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

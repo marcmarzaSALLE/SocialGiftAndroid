@@ -1,7 +1,6 @@
 package com.example.socialgift.dao;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,7 +22,7 @@ public class VolleyRequest {
     private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
     private final String userParameter = "/users";
 
-    private final String searchParameter = "/search";
+    private final String searchParameter = "/search?s=";
     private final String loginParameter = "/login";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
@@ -67,8 +66,8 @@ public class VolleyRequest {
         }
     }
 
-    public void getMyUser(String email, Response.Listener<JSONArray> searchUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + this.searchParameter + "?s=" + email;
+    public void getMyUserId(String email, Response.Listener<JSONArray> searchUser, Response.ErrorListener errorListener) {
+        String createUrl = this.url + this.userParameter + this.searchParameter + email;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, searchUser, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -81,4 +80,40 @@ public class VolleyRequest {
         queue.add(jsonArrayRequest);
     }
 
+    public void getMyUser(int id,Response.Listener<JSONObject> findMyUser,Response.ErrorListener errorListener){
+        String createUrl = this.url + this.userParameter + "/" + id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl,null,findMyUser,errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+
+                headers.put("Authorization","Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public void editMyUser(String name,String last_name,String email,String password,String image,Response.Listener<JSONObject> editMyUser,Response.ErrorListener errorListener){
+        String createUrl = this.url + this.userParameter;
+        try {
+            jsonBody.put("name", name);
+            jsonBody.put("last_name", last_name);
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
+            jsonBody.put("image", image);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, createUrl, jsonBody, editMyUser, errorListener){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers = new HashMap<>();
+
+                    headers.put("Authorization","Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                    return headers;
+                }
+            };
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

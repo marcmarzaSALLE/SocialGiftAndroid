@@ -29,16 +29,16 @@ public class SharedPreferencesController {
         editor.apply();
     }
 
-    public void saveUserIdSharedPreferences(String userId, Context context) {
+    public void saveUserIdSharedPreferences(int userId, Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("id", userId);
+        editor.putInt("id", userId);
         editor.apply();
     }
 
-    public String loadUserIdSharedPreferences( Context context) {
+    public int loadUserIdSharedPreferences( Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
-        return sharedPref.getString("id", null);
+        return sharedPref.getInt("id", 0);
     }
 
     public void deleteUserIdSharedPreferences(Context context) {

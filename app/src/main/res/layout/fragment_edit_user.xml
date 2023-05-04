@@ -16,6 +16,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/imageViewEdit"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
@@ -46,12 +47,13 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutName"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="@string/name"
+            android:focusableInTouchMode="true"
             android:textColorHint="@color/grey"
-            app:hintEnabled="true"
+            app:boxBackgroundMode="outline"
             app:hintTextAppearance="@style/MyHintStyle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,11 +64,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutLastName"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="@string/lastname"
+            android:focusableInTouchMode="true"
             android:textColorHint="@color/grey"
+            app:boxBackgroundMode="outline"
             app:hintEnabled="true"
             app:hintTextAppearance="@style/MyHintStyle">
 
@@ -78,11 +82,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEmail"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="@string/email"
+            android:focusableInTouchMode="true"
             android:textColorHint="@color/grey"
+            app:boxBackgroundMode="outline"
             app:hintEnabled="true"
             app:hintTextAppearance="@style/MyHintStyle">
 
