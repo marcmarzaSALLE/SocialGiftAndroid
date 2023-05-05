@@ -9,13 +9,13 @@
     tools:context=".activities.EditProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarEditProfile"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#D1D1D1">
 
         <ImageButton
-            android:id="@+id/toolbar_button_left"
+            android:id="@+id/toolbar_edit_button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -34,7 +34,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/toolbar_button"
+            android:id="@+id/toolbar_button_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

@@ -28,7 +28,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_left);
+        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back);
 
     }
 }

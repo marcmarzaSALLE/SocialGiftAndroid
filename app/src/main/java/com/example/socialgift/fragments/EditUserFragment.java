@@ -3,6 +3,8 @@ package com.example.socialgift.fragments;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
@@ -26,8 +30,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class EditUserFragment extends Fragment {
 
@@ -37,8 +39,10 @@ public class EditUserFragment extends Fragment {
     private TextInputLayout txtInputLayoutName, txtInputLayoutLastName, txtInputLayoutEmail;
     private VolleyRequest volleyRequest;
     private SharedPreferencesController sharedPreferencesController;
-
+    private ImageButton imgBtnBack;
     private Button btnSaveEdit;
+
+    private Toolbar toolbar;
 
     private String name, lastName, email,password, urlImage;
     @Override
@@ -138,6 +142,13 @@ public class EditUserFragment extends Fragment {
             }
         });
 
+        imgBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().finish();
+            }
+        });
+
         return view;
     }
 
@@ -151,6 +162,10 @@ public class EditUserFragment extends Fragment {
         txtInputLayoutLastName = view.findViewById(R.id.textInputLayoutLastName);
         txtInputLayoutEmail = view.findViewById(R.id.textInputLayoutEmail);
         btnSaveEdit = view.findViewById(R.id.saveBtn);
+
+        toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarEditProfile);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
 
         volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
         sharedPreferencesController = new SharedPreferencesController();
@@ -169,7 +184,7 @@ public class EditUserFragment extends Fragment {
                     edtTxtLastName.setHint(lastName);
                     edtTxtEmail.setHint(email);
 
-                    Glide.with(requireContext()).load(response.getString("image")).into(imgViewProfile);
+                    Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

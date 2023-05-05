@@ -1,6 +1,7 @@
 package com.example.socialgift.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,28 +22,23 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.activities.EditProfileActivity;
 import com.example.socialgift.activities.LoginActivity;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private Button btnFriends, btnBooking, btnMyLists;
     private Toolbar toolbar;
-    private TextView txtViewToolbar,txtAddList,txtViewEmailUser;
+    private TextView txtViewToolbar,txtAddList,txtViewEmailUser,txtViewEditProfile;
     private ImageButton imgBtnLogOut;
     private ImageView imgViewProfile;
-    private TextView txtViewEditProfile;
-
     private VolleyRequest volleyRequest;
-
     private SharedPreferencesController sharedPreferencesController;
 
     @Override
@@ -110,7 +106,7 @@ public class UserFragment extends Fragment {
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnLogOut = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
+        imgBtnLogOut = (ImageButton) toolbar.findViewById(R.id.toolbar_main_button_logout);
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
         sharedPreferencesController = new SharedPreferencesController();
@@ -143,7 +139,7 @@ public class UserFragment extends Fragment {
                 try {
                     txtViewToolbar.setText(response.getString("name") + " " + response.getString("last_name"));
                     txtViewEmailUser.setText(response.getString("email"));
-                    Glide.with(requireContext()).load(response.getString("image")).into(imgViewProfile);
+                    Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

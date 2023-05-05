@@ -32,7 +32,7 @@ public class ChatFragment extends Fragment {
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
+        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_main_button_logout);
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
     }

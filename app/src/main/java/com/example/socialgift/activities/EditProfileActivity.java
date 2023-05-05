@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.socialgift.R;
 import com.example.socialgift.fragments.EditUserFragment;
-import com.example.socialgift.fragments.FriendsUserFragment;
 
 public class EditProfileActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -28,12 +27,12 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void syncronizeView() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbarEditProfile);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
-        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_left);
+        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_button_logout);
+        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
 
     }
 

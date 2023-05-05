@@ -1,6 +1,5 @@
 package com.example.socialgift.fragments;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +15,6 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.socialgift.R;
-
-import java.util.Objects;
 
 
 public class ListFragment extends Fragment {
@@ -52,7 +49,7 @@ public class ListFragment extends Fragment {
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         txtViewToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_button);
+        imgBtnToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_main_button_logout);
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
     }
