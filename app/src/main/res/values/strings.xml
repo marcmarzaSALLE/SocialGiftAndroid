@@ -37,8 +37,6 @@
     <string name="change_profile_picture">Change profile photo</string>
     <string name="save">Save</string>
     <string name="change_password">Change password</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="current_password">Current password</string>
     <string name="new_password">New password</string>
     <string name="name_list">Name list</string>
@@ -48,4 +46,8 @@
     <string name="add_gift">Add_gift</string>
     <string name="list_not_saved_gifts">This list doesn\'t have any saved gifts</string>
     <string name="delete_list">Delete list</string>
+    <string name="name_list_required">Name list is required</string>
+    <string name="description_required">Description is required</string>
+    <string name="end_date_required">End date is required</string>
+    <string name="errorDate">The date and time must be current or later than the current one</string>
 </resources>
