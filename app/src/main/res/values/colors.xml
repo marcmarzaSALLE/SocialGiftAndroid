@@ -10,6 +10,8 @@
     <color name="hightblue">#102E4C</color>
     <color name="light_white">#EFEFEF</color>
     <color name="background_activity">#EEEEEE</color>
+    <color name="background_fragment">#ECECEC</color>
     <color name="transparent">#00000000</color>
+    <color name="blue_add_gift">#002A45</color>
 
 </resources>
