@@ -11,7 +11,7 @@
     <string name="name">Name</string>
     <string name="lastname">Lastname</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="list">List</string>
+    <string name="wishlist">List</string>
     <string name="chat">Chat</string>
     <string name="user">User</string>
     <string name="email_required">Email is required</string>
@@ -30,7 +30,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="desc_toolbar_button">log out icon</string>
     <string name="username">Name Secondname</string>
-    <string name="add_list">Add list</string>
+    <string name="add_list">Add wishlist</string>
     <string name="search_new_friend">Search new friend</string>
     <string name="friends_request">Friends requests</string>
     <string name="desc_image_edit">TODO</string>
@@ -39,15 +39,17 @@
     <string name="change_password">Change password</string>
     <string name="current_password">Current password</string>
     <string name="new_password">New password</string>
-    <string name="name_list">Name list</string>
+    <string name="name_list">Name wishlist</string>
     <string name="description">Description</string>
     <string name="end_date">End date</string>
     <string name="gifts">Gifts</string>
     <string name="add_gift">Add_gift</string>
-    <string name="list_not_saved_gifts">This list doesn\'t have any saved gifts</string>
-    <string name="delete_list">Delete list</string>
-    <string name="name_list_required">Name list is required</string>
+    <string name="list_not_saved_gifts">This wishlist doesn\'t have any saved gifts</string>
+    <string name="delete_list">Delete wishlist</string>
+    <string name="name_list_required">Name wishlist is required</string>
     <string name="description_required">Description is required</string>
     <string name="end_date_required">End date is required</string>
     <string name="errorDate">The date and time must be current or later than the current one</string>
+    <string name="no_lists_created">You have no wishlists created</string>
+    <string name="date_list">%1$s - %2$s</string>
 </resources>

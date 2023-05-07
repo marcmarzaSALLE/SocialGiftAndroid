@@ -137,4 +137,18 @@ public class VolleyRequest {
             throw new RuntimeException(e);
         }
     }
+
+    public void getWishListUser(int id, Response.Listener<JSONArray> getWishListUser, Response.ErrorListener errorListener) {
+        String createUrl = this.url + this.userParameter + "/" + id + this.whishlistParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getWishListUser, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
+    }
 }
