@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Login correcte", Toast.LENGTH_SHORT).show();
                     try {
                         saveUserId();
+                        saveCurrentPassword();
                         sharedPreferencesController.saveDateSharedPreferences(response.getString("accessToken"), getApplicationContext());
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -95,6 +96,12 @@ public class LoginActivity extends AppCompatActivity {
                 Log.wtf("LoginActivity", "onErrorResponse: " + error.toString());
             }
         });
+    }
+
+    private void saveCurrentPassword(){
+        String passwordHash = sharedPreferencesController.passwordEncrypt(edtPassword.getText().toString());
+        sharedPreferencesController.savePasswordSharedPreferences(passwordHash, getApplicationContext());
+
     }
 
     private boolean checkData(){
