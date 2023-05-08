@@ -37,7 +37,8 @@ public class EditPasswordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_password, container, false);
-        syncronizeView();
+        sharedPreferencesController = new SharedPreferencesController();
+        syncronizeView(view);
         imgBtnBack.setOnClickListener(v -> {
             Log.wtf("EditPasswordFragment", "onClick: ");
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -52,14 +53,14 @@ public class EditPasswordFragment extends Fragment {
         return view;
     }
 
-    private void syncronizeView() {
-        btnSave = (Button) requireActivity().findViewById(R.id.saveBtn);
+    private void syncronizeView(View view) {
+        btnSave = (Button) view.findViewById(R.id.saveBtnPassword);
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarEditProfile);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
-        edtCurrentPassword = (EditText) requireActivity().findViewById(R.id.edtCurrentPassword);
-        edtNewPassword = (EditText) requireActivity().findViewById(R.id.edtNewPassword);
-        edtNewPasswordConfirm = (EditText) requireActivity().findViewById(R.id.edtNewPasswordConfirm);
+        edtCurrentPassword = (EditText) view.findViewById(R.id.edtCurrentPassword);
+        edtNewPassword = (EditText) view.findViewById(R.id.edtNewPassword);
+        edtNewPasswordConfirm = (EditText) view.findViewById(R.id.edtNewPasswordConfirm);
 
     }
 
