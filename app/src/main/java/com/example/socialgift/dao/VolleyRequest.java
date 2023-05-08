@@ -9,6 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.controller.SharedPreferencesController;
 
 import org.json.JSONArray;
@@ -117,6 +119,8 @@ public class VolleyRequest {
             throw new RuntimeException(e);
         }
     }
+
+
 
     public void addNewList(String name, String description, String date, Response.Listener<JSONObject> addNewList, Response.ErrorListener errorListener) {
         String createUrl = this.url + this.whishlistParameter;

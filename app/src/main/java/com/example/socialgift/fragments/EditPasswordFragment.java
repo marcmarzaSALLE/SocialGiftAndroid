@@ -15,16 +15,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
 public class EditPasswordFragment extends Fragment {
     private Toolbar toolbar;
     private ImageButton imgBtnBack;
+
+    private String name, lastName, email, password, urlImage;
+    ImageView imgViewProfile;
 
     private VolleyRequest volleyRequest;
 
@@ -62,13 +74,15 @@ public class EditPasswordFragment extends Fragment {
         edtNewPassword = (EditText) view.findViewById(R.id.edtNewPassword);
         edtNewPasswordConfirm = (EditText) view.findViewById(R.id.edtNewPasswordConfirm);
 
+
     }
 
     private void savePassword(){
-        if (checkData()){
-            Log.wtf("holaa","Si");
+        if (checkData()) {
+        }else{
+
         }
-        Log.wtf("holaa","no");
+
 
 
     }
