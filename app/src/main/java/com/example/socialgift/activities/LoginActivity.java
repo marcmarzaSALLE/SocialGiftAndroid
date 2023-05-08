@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.MainActivity;
 import com.example.socialgift.R;
+import com.example.socialgift.controller.Manager;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 
@@ -29,11 +30,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private VolleyRequest volleyRequest;
     private SharedPreferencesController sharedPreferencesController;
+    private Manager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        manager = new Manager();
         syncronizedWigets();
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -99,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveCurrentPassword(){
-        String passwordHash = sharedPreferencesController.passwordEncrypt(edtPassword.getText().toString());
+        String passwordHash = manager.passwordEncrypt(edtPassword.getText().toString());
         sharedPreferencesController.savePasswordSharedPreferences(passwordHash, getApplicationContext());
 
     }

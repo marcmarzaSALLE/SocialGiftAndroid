@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
+import com.example.socialgift.controller.Manager;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 
@@ -35,12 +36,12 @@ public class EditPasswordFragment extends Fragment {
     private Toolbar toolbar;
     private ImageButton imgBtnBack;
 
-    private String name, lastName, email, password, urlImage;
     ImageView imgViewProfile;
 
     private VolleyRequest volleyRequest;
 
     private SharedPreferencesController sharedPreferencesController;
+    private Manager manager;
     private Button btnSave;
 
     private EditText edtCurrentPassword, edtNewPassword, edtNewPasswordConfirm;
@@ -50,6 +51,8 @@ public class EditPasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_password, container, false);
         sharedPreferencesController = new SharedPreferencesController();
+        manager = new Manager();
+        volleyRequest = new VolleyRequest(requireContext());
         syncronizeView(view);
         imgBtnBack.setOnClickListener(v -> {
             Log.wtf("EditPasswordFragment", "onClick: ");
@@ -77,36 +80,67 @@ public class EditPasswordFragment extends Fragment {
 
     }
 
-    private void savePassword(){
+    private void savePassword() {
         if (checkData()) {
-        }else{
-
+            volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String name = response.getString("name");
+                        String lastName = response.getString("last_name");
+                        String email = response.getString("email");
+                        String password = edtNewPasswordConfirm.getText().toString();
+                        String urlImage = response.getString("image");
+                        editMyUser(name, lastName, email, password, urlImage);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.wtf("EditPasswordFragment", "onErrorResponse: " + error.getMessage());
+                }
+            });
         }
-
-
-
     }
 
-    private boolean checkData(){
-        if(edtCurrentPassword.getText().toString().matches("") ){
-            edtCurrentPassword.setError("Current password required");
+    public void editMyUser(String name, String lastName, String email, String password, String urlImage){
+        volleyRequest.editMyUser(name, lastName, email, password, urlImage, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String passwordHash = manager.passwordEncrypt(password);
+                sharedPreferencesController.savePasswordSharedPreferences(passwordHash, requireContext().getApplicationContext());
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.password_changed), Toast.LENGTH_SHORT).show();
+                requireActivity().finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.wtf("EditPasswordFragment", "onErrorResponse: " + error.getMessage());
+            }
+        });
+    }
+
+    private boolean checkData() {
+        if (edtCurrentPassword.getText().toString().matches("")) {
+            edtCurrentPassword.setError(getResources().getString(R.string.current_password_required));
             return false;
 
-        }else if (edtNewPassword.getText().toString().matches("")){
-                edtNewPassword.setError("New password required");
-                return false;
-
-        }else if (edtNewPasswordConfirm.getText().toString().matches("")){
-                edtNewPasswordConfirm.setError("Confirm password required");
-                return false;
-        }else if(!edtNewPassword.getText().toString().equals(edtNewPasswordConfirm.getText().toString())){
-            edtNewPasswordConfirm.setError("Passwords don't match");
+        } else if (edtNewPassword.getText().toString().matches("")) {
+            edtNewPassword.setError(getResources().getString(R.string.new_password_required));
             return false;
 
-        }else if(!sharedPreferencesController.passwordEncrypt(edtCurrentPassword.getText().toString()).equals(sharedPreferencesController.loadPasswordSharedPreferences(requireContext().getApplicationContext()))){
-            edtCurrentPassword.setError("Incorrect password");
+        } else if (edtNewPasswordConfirm.getText().toString().matches("")) {
+            edtNewPasswordConfirm.setError(getResources().getString(R.string.confirm_password_required));
+            return false;
+        } else if (!edtNewPassword.getText().toString().equals(edtNewPasswordConfirm.getText().toString())) {
+            edtNewPasswordConfirm.setError(getResources().getString(R.string.password_confirm));
             return false;
 
+        } else if (!manager.passwordEncrypt(edtCurrentPassword.getText().toString()).equals(sharedPreferencesController.loadPasswordSharedPreferences(requireContext().getApplicationContext()))) {
+            edtCurrentPassword.setError(getResources().getString(R.string.password_incorrect));
+            return false;
         }
         return true;
     }

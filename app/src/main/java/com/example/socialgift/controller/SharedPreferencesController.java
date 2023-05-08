@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -39,7 +40,7 @@ public class SharedPreferencesController {
         editor.apply();
     }
 
-    public int loadUserIdSharedPreferences( Context context) {
+    public int loadUserIdSharedPreferences(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("userId", MODE_PRIVATE);
         return sharedPref.getInt("id", 0);
         //Integer.parseInt(sharedPref.getString("id", "0"));
@@ -63,24 +64,4 @@ public class SharedPreferencesController {
         SharedPreferences sharedPref = context.getSharedPreferences("passwordHash", MODE_PRIVATE);
         return sharedPref.getString("password", null);
     }
-
-        public String passwordEncrypt(String password) {
-            try {
-                // Obtener instancia de MessageDigest para SHA-256
-                MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-                // Aplicar hash a la contraseña
-                byte[] hashedPassword = md.digest(password.getBytes());
-
-                // Convertir el hash a una cadena hexadecimal
-                StringBuilder sb = new StringBuilder();
-                for (byte b : hashedPassword) {
-                    sb.append(String.format("%02x", b));
-                }
-                return sb.toString();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
 }

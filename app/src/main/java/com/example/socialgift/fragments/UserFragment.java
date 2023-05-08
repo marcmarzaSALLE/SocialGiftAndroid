@@ -137,7 +137,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    txtViewToolbar.setText(response.getString("name") + " " + response.getString("last_name"));
+                    txtViewToolbar.setText(getResources().getString(R.string.username,response.getString("name") ,response.getString("last_name")));
                     txtViewEmailUser.setText(response.getString("email"));
                     Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                 } catch (JSONException e) {

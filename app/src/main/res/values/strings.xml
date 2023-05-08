@@ -29,7 +29,7 @@
     <string name="todo">TODO</string>
     <string name="edit_profile">Edit profile</string>
     <string name="desc_toolbar_button">log out icon</string>
-    <string name="username">Name Secondname</string>
+    <string name="username">%1$s  %2$s</string>
     <string name="add_list">Add wishlist</string>
     <string name="search_new_friend">Search new friend</string>
     <string name="friends_request">Friends requests</string>
@@ -52,4 +52,9 @@
     <string name="errorDate">The date and time must be current or later than the current one</string>
     <string name="no_lists_created">You have no wishlists created</string>
     <string name="date_list">%1$s - %2$s</string>
+    <string name="current_password_required">Current password required</string>
+    <string name="new_password_required">New password required</string>
+    <string name="password_incorrect">Incorrect password</string>
+    <string name="password_changed">the user\'s password has been changed</string>
+    <string name="error">Error changing password</string>
 </resources>
