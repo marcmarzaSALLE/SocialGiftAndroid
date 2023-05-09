@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:gravity="center"
-        android:text="@string/social_gift"
         android:textColor="@color/green_hard_whis"
+        android:text="@string/social_gift"
+
         android:textSize="50sp"
         android:textStyle="bold" />
 
