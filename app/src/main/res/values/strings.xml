@@ -52,6 +52,7 @@
     <string name="errorDate">The date and time must be current or later than the current one</string>
     <string name="no_lists_created">You have no wishlists created</string>
     <string name="date_list">%1$s - %2$s</string>
+    <string name="booked_gift_list">Booked gifts: %1$d</string>
     <string name="current_password_required">Current password required</string>
     <string name="new_password_required">New password required</string>
     <string name="password_incorrect">Incorrect password</string>

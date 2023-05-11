@@ -2,6 +2,7 @@ package com.example.socialgift.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,13 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
             txtNameList.setText(wishlist.getNameList());
             txtDescriptionList.setText(wishlist.getDescriptionList());
             txtDateList.setText(itemView.getResources().getString(R.string.date_list, wishlist.getCreatedDateList(), wishlist.getEndDateList()));
+            if(wishlist.getGifts().isEmpty()){
+                Log.d("TAG", "bindData: " + wishlist.getGifts().size());
+                txtBookedGiftsList.setText(itemView.getResources().getString(R.string.booked_gift_list,wishlist.getBookedGifts()));
+            }else {
+                Log.d("TAG", "bindData: " + wishlist.getGifts().size());
+                txtBookedGiftsList.setText(itemView.getResources().getString(R.string.booked_gift_list, wishlist.getBookedGifts()));
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

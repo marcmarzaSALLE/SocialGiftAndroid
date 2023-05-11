@@ -52,9 +52,7 @@ public class AddListFragment extends Fragment {
         imgBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.wtf("AddListFragment", "Back button clicked");
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame, new ListFragment()).commit();
+                requireActivity().finish();
             }
         });
         edtTxtDate.setOnClickListener(v ->{
@@ -69,9 +67,7 @@ public class AddListFragment extends Fragment {
                         volleyRequest.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(requireActivity().getApplicationContext(), "Lista creada correctamente", Toast.LENGTH_SHORT).show();
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.frame, new ListFragment()).commit();
+                                requireActivity().finish();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -87,12 +83,10 @@ public class AddListFragment extends Fragment {
     }
 
     private void syncronizeViewToolbar() {
-        toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-        txtListName = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back);
-        txtDeleteList = (TextView) toolbar.findViewById(R.id.txtAddList);
-        imgBtnAddList = (ImageButton) toolbar.findViewById(R.id.toolbar_main_button_logout);
+        toolbar.setTitle("");
+        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
     }
 
     private void syncronizeViewWidgets(View view){
@@ -117,9 +111,7 @@ public class AddListFragment extends Fragment {
         newFragment.show(getParentFragmentManager(), "datePicker");
     }
     private void showInfoToolbar() {
-        imgBtnAddList.setVisibility(View.INVISIBLE);
-        imgBtnBack.setVisibility(View.VISIBLE);
-        txtDeleteList.setText(getResources().getText(R.string.delete_list));
+
     }
 
     private boolean checkData(){

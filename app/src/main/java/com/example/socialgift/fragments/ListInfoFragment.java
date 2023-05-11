@@ -1,6 +1,7 @@
 package com.example.socialgift.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,15 +49,12 @@ public class ListInfoFragment extends Fragment {
         volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
-        showInfoToolbar();
         showInfoWidgets();
 
         imgBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.wtf("AddListFragment", "Back button clicked");
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame, new ListFragment()).commit();
+                requireActivity().finish();
             }
         });
         edtTxtDate.setOnClickListener(v ->{
@@ -89,12 +87,12 @@ public class ListInfoFragment extends Fragment {
     }
 
     private void syncronizeViewToolbar() {
-        toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-        txtListName = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back);
-        txtDeleteList = (TextView) toolbar.findViewById(R.id.txtAddList);
-        imgBtnAddList = (ImageButton) toolbar.findViewById(R.id.toolbar_main_button_logout);
+        toolbar.setTitle("");
+        txtListName = (TextView) toolbar.findViewById(R.id.toolbar_title_add_list);
+        imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
+        txtDeleteList = (TextView) toolbar.findViewById(R.id.txtDeleteList);
     }
 
     private void syncronizeViewWidgets(View view){
@@ -105,8 +103,10 @@ public class ListInfoFragment extends Fragment {
     }
 
     private void showInfoWidgets(){
-        Bundle bundle = getArguments();
-        Wishlist wishlist = (Wishlist) bundle.getSerializable("wishlist");
+        Intent intent = requireActivity().getIntent();
+        Wishlist wishlist = (Wishlist) intent.getSerializableExtra("wishlist");
+        Log.wtf("AddListFragment", "Wishlist: " + wishlist.toString());
+        Log.wtf("AddListFragment", "Wishlist: ");
         txtListName.setText(wishlist.getNameList());
         edtTxtListName.setHint(wishlist.getNameList());
         edtTxtDescription.setHint(wishlist.getDescriptionList());
@@ -128,11 +128,7 @@ public class ListInfoFragment extends Fragment {
 
         newFragment.show(getParentFragmentManager(), "datePicker");
     }
-    private void showInfoToolbar() {
-        imgBtnAddList.setVisibility(View.INVISIBLE);
-        imgBtnBack.setVisibility(View.VISIBLE);
-        txtDeleteList.setText(getResources().getText(R.string.delete_list));
-    }
+
 
     private boolean checkData(){
         if(edtTxtListName.getText().toString().isEmpty()){

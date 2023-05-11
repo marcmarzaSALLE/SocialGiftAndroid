@@ -9,8 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.controller.SharedPreferencesController;
 
 import org.json.JSONArray;
@@ -21,8 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VolleyRequest {
-    private final String url = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
+    private final String urlSocialGift = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
+    private final String urlMercadoExpress = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1";
     private final String userParameter = "/users";
+    private final String productParameter = "/products";
 
     private final String searchParameter = "/search?s=";
     private final String loginParameter = "/login";
@@ -42,7 +42,7 @@ public class VolleyRequest {
 
 
     public void registerUser(String name, String last_name, String email, String password, String image, Response.Listener<JSONObject> registerListener, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter;
+        String createUrl = this.urlSocialGift + this.userParameter;
         try {
             jsonBody.put("name", name);
             jsonBody.put("last_name", last_name);
@@ -58,7 +58,7 @@ public class VolleyRequest {
     }
 
     public void loginUser(String email, String password, Response.Listener<JSONObject> loginActivity, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + this.loginParameter;
+        String createUrl = this.urlSocialGift + this.userParameter + this.loginParameter;
         try {
             jsonBody.put("email", email);
             jsonBody.put("password", password);
@@ -70,7 +70,7 @@ public class VolleyRequest {
     }
 
     public void getMyUserId(String email, Response.Listener<JSONArray> searchUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + this.searchParameter + email;
+        String createUrl = this.urlSocialGift + this.userParameter + this.searchParameter + email;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, searchUser, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -84,7 +84,7 @@ public class VolleyRequest {
     }
 
     public void getMyUser(int id, Response.Listener<JSONObject> findMyUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + "/" + id;
+        String createUrl = this.urlSocialGift + this.userParameter + "/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, createUrl, null, findMyUser, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -98,7 +98,7 @@ public class VolleyRequest {
     }
 
     public void editMyUser(String name, String last_name, String email, String password, String image, Response.Listener<JSONObject> editMyUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter;
+        String createUrl = this.urlSocialGift + this.userParameter;
         try {
             jsonBody.put("name", name);
             jsonBody.put("last_name", last_name);
@@ -121,9 +121,8 @@ public class VolleyRequest {
     }
 
 
-
     public void addNewList(String name, String description, String date, Response.Listener<JSONObject> addNewList, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.whishlistParameter;
+        String createUrl = this.urlSocialGift + this.whishlistParameter;
         try {
             jsonBody.put("name", name);
             jsonBody.put("description", description);
@@ -143,7 +142,7 @@ public class VolleyRequest {
     }
 
     public void getWishListUser(int id, Response.Listener<JSONArray> getWishListUser, Response.ErrorListener errorListener) {
-        String createUrl = this.url + this.userParameter + "/" + id + this.whishlistParameter;
+        String createUrl = this.urlSocialGift + this.userParameter + "/" + id + this.whishlistParameter;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getWishListUser, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -155,4 +154,12 @@ public class VolleyRequest {
         };
         queue.add(jsonArrayRequest);
     }
+
+    public void getGiftByUserMercadoExpress(int id, Response.Listener<JSONArray> getGiftByUserMercadoExpress, Response.ErrorListener errorListener) {
+        String createUrl = this.urlMercadoExpress + this.productParameter+"/"+id;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getGiftByUserMercadoExpress, errorListener);
+        queue.add(jsonArrayRequest);
+    }
+
 }
+

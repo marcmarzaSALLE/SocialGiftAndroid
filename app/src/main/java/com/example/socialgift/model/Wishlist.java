@@ -9,6 +9,8 @@ public class Wishlist implements Serializable {
     private String descriptionList;
     private String createdDateList;
     private String endDateList;
+
+    private int bookedGifts;
     private ArrayList<Gift>gifts;
 
     public Wishlist(int id, String nameList, String descriptionList, String createdDateList, String endDateList, ArrayList<Gift> gifts) {
@@ -21,6 +23,8 @@ public class Wishlist implements Serializable {
     }
 
     public Wishlist() {
+        this.gifts = new ArrayList<>();
+        this.bookedGifts = 0;
     }
 
     public int getId() {
@@ -69,5 +73,13 @@ public class Wishlist implements Serializable {
 
     public void setGifts(ArrayList<Gift> gifts) {
         this.gifts = gifts;
+    }
+
+    public int getBookedGifts() {
+        return bookedGifts;
+    }
+
+    public void setBookedGifts(int bookedGifts) {
+        this.bookedGifts = bookedGifts;
     }
 }

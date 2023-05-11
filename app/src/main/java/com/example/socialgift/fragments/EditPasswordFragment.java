@@ -34,7 +34,7 @@ import java.util.Objects;
 
 public class EditPasswordFragment extends Fragment {
     private Toolbar toolbar;
-    private ImageButton imgBtnBack;
+    private ImageButton imgBtnBack,imgBtnLogout;
 
     ImageView imgViewProfile;
 
@@ -73,6 +73,8 @@ public class EditPasswordFragment extends Fragment {
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarEditProfile);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
+        imgBtnLogout = (ImageButton) toolbar.findViewById(R.id.toolbar_button_logout);
+        imgBtnLogout.setVisibility(View.GONE);
         edtCurrentPassword = (EditText) view.findViewById(R.id.edtCurrentPassword);
         edtNewPassword = (EditText) view.findViewById(R.id.edtNewPassword);
         edtNewPasswordConfirm = (EditText) view.findViewById(R.id.edtNewPasswordConfirm);

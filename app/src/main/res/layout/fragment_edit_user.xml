@@ -20,8 +20,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/desc_image_edit"
-            />
+            android:contentDescription="@string/desc_image_edit" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,7 +57,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextUsername"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +77,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtTextLastName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +97,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtTxtEmail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
