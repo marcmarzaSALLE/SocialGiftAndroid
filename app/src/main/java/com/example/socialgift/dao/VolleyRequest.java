@@ -1,6 +1,8 @@
 package com.example.socialgift.dao;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -15,8 +17,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 public class VolleyRequest {
     private final String urlSocialGift = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
@@ -161,5 +170,22 @@ public class VolleyRequest {
         queue.add(jsonArrayRequest);
     }
 
+    public void uploadFile(Uri image){
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        File file = new File(image.getPath());
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("myFile", file.getName(),
+                        RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                .build();
+        okhttp3.Request okhttp3 = new okhttp3.Request.Builder().url("https://balandrau.salle.url.edu/i3/repositoryimages/uploadfile").method("POST", requestBody).build();
+        try (okhttp3.Response response = client.newCall(okhttp3).execute()) {
+            String responseBody = response.body().string();
+            Log.wtf("RESPONSE", responseBody);
+            // Hacer algo con la respuesta
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

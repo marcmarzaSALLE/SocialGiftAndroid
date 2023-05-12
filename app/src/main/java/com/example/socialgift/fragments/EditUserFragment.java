@@ -1,13 +1,22 @@
 package com.example.socialgift.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +46,7 @@ public class EditUserFragment extends Fragment {
     private EditText edtTxtName, edtTxtLastName, edtTxtEmail;
     private ImageView imgViewProfile;
     private TextInputLayout txtInputLayoutName, txtInputLayoutLastName, txtInputLayoutEmail;
+    private TextView txtViewEditImage;
     private VolleyRequest volleyRequest;
     private SharedPreferencesController sharedPreferencesController;
     private ImageButton imgBtnBack;
@@ -52,6 +62,13 @@ public class EditUserFragment extends Fragment {
         syncronizeWidgets(view);
         getInformationUser();
 
+        txtViewEditImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+              someActivityResultLauncher.launch(intent);
+            }
+        });
         edtTxtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -162,6 +179,7 @@ public class EditUserFragment extends Fragment {
         txtInputLayoutLastName = view.findViewById(R.id.textInputLayoutLastName);
         txtInputLayoutEmail = view.findViewById(R.id.textInputLayoutEmail);
         btnSaveEdit = view.findViewById(R.id.saveBtn);
+        txtViewEditImage = view.findViewById(R.id.txtViewEditImage);
 
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarEditProfile);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -197,4 +215,18 @@ public class EditUserFragment extends Fragment {
             }
         });
     }
+    private ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedImage = result.getData().getData();
+                        imgViewProfile.setImageURI(selectedImage);
+                        volleyRequest.uploadFile(selectedImage);
+                       //Log.wtf("response",response);
+                        // Hacer algo con la imagen seleccionada
+                    }
+                }
+            });
 }

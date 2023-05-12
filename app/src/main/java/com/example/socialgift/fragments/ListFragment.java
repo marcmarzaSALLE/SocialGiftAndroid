@@ -27,6 +27,7 @@ import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 import com.example.socialgift.model.Gift;
 import com.example.socialgift.model.Wishlist;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,7 +134,7 @@ public class ListFragment extends Fragment {
                                 if (giftObject.getInt("booked")==1) {
                                     booked++;
                                 }
-                                //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
+                                getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
 
@@ -154,31 +155,29 @@ public class ListFragment extends Fragment {
     }
 
     public void getGiftsFromMercadoExpress(ArrayList<Wishlist> wishlists, Wishlist list, String product_url) {
-        URL url = null;
+        Gson gson = new Gson();
         try {
-            url = new URL(product_url);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            // Crear una conexión HTTP a la URL de la API
+            URL url = new URL(product_url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
 
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                // Si la respuesta es correcta, obtén la información del regalo
-                InputStream is = conn.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-                String giftInfoJson = sb.toString();
-                JSONObject giftInfo = new JSONObject(giftInfoJson);
-                Log.wtf("ListFragment", giftInfo.toString());
-                // Haz lo que necesites con la información del regalo obtenida
+            // Leer la respuesta de la API
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
             }
-        } catch (JSONException | IOException e) {
-            throw new RuntimeException(e);
-        }
+            reader.close();
+            Log.wtf("Holaaaaa","holaaaaaaa");
 
+            // Analizar el JSON utilizando Gson
+            Gift gift=gson.fromJson(response.toString(), Gift.class);
+            Log.wtf("Gifts list", gift.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setAdapterRecyclerview(ArrayList<Wishlist> wishlists) {
@@ -194,7 +193,6 @@ public class ListFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), AddListActivity.class);
                     intent.putExtra("wishlist", list);
                     startActivity(intent);
-                    Log.wtf("ListFragment", list.getNameList());
                 }
             });
 

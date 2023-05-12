@@ -23,6 +23,7 @@
             android:contentDescription="@string/desc_image_edit" />
 
         <TextView
+            android:id="@+id/txtViewEditImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
