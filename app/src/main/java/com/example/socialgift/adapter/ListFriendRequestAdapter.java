@@ -98,13 +98,12 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
                         @Override
                         public void onResponse(JSONObject response) {
                             notifyItemRemoved(getAdapterPosition());
-                            notifyDataSetChanged();
+                            notifyItemChanged(getAdapterPosition());
                             Toast.makeText(context, "You declined "+friend.getEmail()+"'s friend request", Toast.LENGTH_SHORT).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            notifyDataSetChanged();
                             Toast.makeText(context, "Error: "+error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });

@@ -31,7 +31,6 @@ public class FriendsRequestActivity extends AppCompatActivity {
     private RecyclerView recyclerViewFriendsRequest;
     private VolleyRequest volleyRequest;
     private ArrayList<Friend> friendsRequestList;
-    private SharedPreferencesController sharedPreferencesController;
     ListFriendRequestAdapter listFriendRequestAdapter;
 
     @Override
@@ -39,7 +38,6 @@ public class FriendsRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_request);
         volleyRequest = new VolleyRequest(this);
-        sharedPreferencesController = new SharedPreferencesController();
         syncronizeView();
         addData();
         imgBtnBack.setOnClickListener(v -> {

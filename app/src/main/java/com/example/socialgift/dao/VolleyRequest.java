@@ -243,5 +243,19 @@ public class VolleyRequest {
         };
         queue.add(jsonObjectRequest);
     }
+
+    public void getMyFriends(Response.Listener<JSONArray> getMyFriends, Response.ErrorListener errorListener){
+        String url = this.urlSocialGift + this.friendParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,getMyFriends,errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+
+                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
+    }
 }
 

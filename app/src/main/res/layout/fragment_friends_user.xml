@@ -35,7 +35,17 @@
             android:src="@drawable/ic_person_add_24"/>
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/txtNoFriends"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="@string/no_friends"
+        android:textSize="25sp" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewFriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
