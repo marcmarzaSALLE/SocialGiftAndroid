@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.Manager;
 import com.example.socialgift.controller.SharedPreferencesController;
+import com.example.socialgift.controller.UserData;
 import com.example.socialgift.dao.VolleyRequest;
 
 import org.json.JSONException;
@@ -37,6 +38,8 @@ public class EditPasswordFragment extends Fragment {
     private ImageButton imgBtnBack,imgBtnLogout;
 
     ImageView imgViewProfile;
+
+    UserData userData;
 
     private VolleyRequest volleyRequest;
 
@@ -78,32 +81,53 @@ public class EditPasswordFragment extends Fragment {
         edtCurrentPassword = (EditText) view.findViewById(R.id.edtCurrentPassword);
         edtNewPassword = (EditText) view.findViewById(R.id.edtNewPassword);
         edtNewPasswordConfirm = (EditText) view.findViewById(R.id.edtNewPasswordConfirm);
+        userData = UserData.getInstance();
 
 
     }
 
     private void savePassword() {
         if (checkData()) {
-            volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        String name = response.getString("name");
-                        String lastName = response.getString("last_name");
-                        String email = response.getString("email");
-                        String password = edtNewPasswordConfirm.getText().toString();
-                        String urlImage = response.getString("image");
-                        editMyUser(name, lastName, email, password, urlImage);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+            if (userData.isInitialized()) {
+                volleyRequest.editMyUser(userData.getName(), userData.getLast_name(), userData.getEmail(), edtNewPassword.getText().toString(), userData.getImage(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String passwordHash = manager.passwordEncrypt(edtNewPassword.getText().toString());
+                        sharedPreferencesController.savePasswordSharedPreferences(passwordHash, requireContext().getApplicationContext());
+                        Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.password_changed), Toast.LENGTH_SHORT).show();
+                        requireActivity().finish();
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.wtf("EditPasswordFragment", "onErrorResponse: " + error.getMessage());
-                }
-            });
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+            } else {
+
+                volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String name = response.getString("name");
+                            String lastName = response.getString("last_name");
+                            String email = response.getString("email");
+                            String password = edtNewPasswordConfirm.getText().toString();
+                            String urlImage = response.getString("image");
+                            editMyUser(name, lastName, email, password, urlImage);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.wtf("EditPasswordFragment", "onErrorResponse: " + error.getMessage());
+                    }
+                });
+            }
         }
     }
 

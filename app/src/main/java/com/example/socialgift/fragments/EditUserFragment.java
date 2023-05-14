@@ -35,7 +35,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
+import com.example.socialgift.controller.UserData;
 import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.model.User;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -208,6 +210,13 @@ public class EditUserFragment extends Fragment {
                     edtTxtEmail.setHint(email);
 
                     Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
+
+                    UserData userData = UserData.getInstance();
+                    userData.setName(name);
+                    userData.setLast_name(lastName);
+                    userData.setEmail(email);
+                    userData.setImage(urlImage);
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
