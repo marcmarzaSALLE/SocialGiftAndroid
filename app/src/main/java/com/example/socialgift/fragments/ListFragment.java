@@ -134,7 +134,7 @@ public class ListFragment extends Fragment {
                                 if (giftObject.getInt("booked")==1) {
                                     booked++;
                                 }
-                                getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
+                                //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
 

@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -40,6 +41,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Objects;
+
 public class EditUserFragment extends Fragment {
 
     private TextView txtViewChangePassword;
@@ -54,7 +58,8 @@ public class EditUserFragment extends Fragment {
 
     private Toolbar toolbar;
 
-    private String name, lastName, email,password, urlImage;
+    private String name, lastName, email, password, urlImage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,21 +71,21 @@ public class EditUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-              someActivityResultLauncher.launch(intent);
+                someActivityResultLauncher.launch(intent);
             }
         });
         edtTxtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     txtInputLayoutName.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                     txtInputLayoutName.setHint(getResources().getString(R.string.name));
-                }else{
+                } else {
                     txtInputLayoutName.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-                    if (edtTxtName.getText().toString().isEmpty()){
+                    if (edtTxtName.getText().toString().isEmpty()) {
                         txtInputLayoutName.setHint(name);
                         edtTxtName.setHint("");
-                    }else{
+                    } else {
                         txtInputLayoutName.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                         txtInputLayoutName.setHint(getResources().getString(R.string.name));
                     }
@@ -90,15 +95,15 @@ public class EditUserFragment extends Fragment {
         edtTxtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     txtInputLayoutLastName.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                     txtInputLayoutLastName.setHint(getResources().getString(R.string.lastname));
-                }else{
+                } else {
                     txtInputLayoutLastName.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-                    if (edtTxtLastName.getText().toString().isEmpty()){
+                    if (edtTxtLastName.getText().toString().isEmpty()) {
                         txtInputLayoutLastName.setHint(lastName);
                         edtTxtLastName.setHint("");
-                    }else{
+                    } else {
                         txtInputLayoutLastName.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                         txtInputLayoutLastName.setHint(getResources().getString(R.string.lastname));
                     }
@@ -109,15 +114,15 @@ public class EditUserFragment extends Fragment {
         edtTxtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     txtInputLayoutEmail.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                     txtInputLayoutEmail.setHint(getResources().getString(R.string.email));
-                }else{
+                } else {
                     txtInputLayoutEmail.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-                    if (edtTxtEmail.getText().toString().isEmpty()){
+                    if (edtTxtEmail.getText().toString().isEmpty()) {
                         txtInputLayoutEmail.setHint(email);
                         edtTxtEmail.setHint("");
-                    }else{
+                    } else {
                         txtInputLayoutEmail.setHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black)));
                         txtInputLayoutEmail.setHint(getResources().getString(R.string.email));
                     }
@@ -132,7 +137,7 @@ public class EditUserFragment extends Fragment {
             }
         });
 
-        btnSaveEdit.setOnClickListener(new View.OnClickListener(){
+        btnSaveEdit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -169,7 +174,7 @@ public class EditUserFragment extends Fragment {
         return view;
     }
 
-    private void syncronizeWidgets(View view){
+    private void syncronizeWidgets(View view) {
         txtViewChangePassword = view.findViewById(R.id.txtViewChangePassword);
         edtTxtName = view.findViewById(R.id.editTextUsername);
         edtTxtLastName = view.findViewById(R.id.edtTextLastName);
@@ -189,7 +194,7 @@ public class EditUserFragment extends Fragment {
         sharedPreferencesController = new SharedPreferencesController();
     }
 
-    private void getInformationUser(){
+    private void getInformationUser() {
         volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity().getApplicationContext()), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -207,14 +212,15 @@ public class EditUserFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             }
-        },new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.wtf("error",error.toString());
+                Log.wtf("error", error.toString());
                 Toast.makeText(requireActivity().getApplicationContext(), "Error al cargar la información del usuario", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     private ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -223,10 +229,23 @@ public class EditUserFragment extends Fragment {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri selectedImage = result.getData().getData();
                         imgViewProfile.setImageURI(selectedImage);
-                        volleyRequest.uploadFile(selectedImage);
-                       //Log.wtf("response",response);
-                        // Hacer algo con la imagen seleccionada
+                        String path = getFileFromUri(selectedImage);
+                        volleyRequest.uploadFile(new File(path));
                     }
                 }
             });
+
+    private String getFileFromUri(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = requireActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) {
+            return uri.getPath();
+        } else {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+    }
 }

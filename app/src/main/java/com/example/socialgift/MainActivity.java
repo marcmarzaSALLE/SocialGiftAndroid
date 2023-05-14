@@ -1,12 +1,16 @@
 package com.example.socialgift;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.Manifest;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.socialgift.activities.LoginActivity;
@@ -24,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private SmoothBottomBar bottomNavigationView;
 
     private Toolbar toolbar;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getPermission();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         toolbar = findViewById(R.id.toolbar);
@@ -65,9 +72,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     private void replace(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame,fragment);
         transaction.commit();
+    }
+
+    private void getPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
     }
 }
