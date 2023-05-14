@@ -37,6 +37,8 @@ public class VolleyRequest {
 
     private final String searchParameter = "/search?s=";
     private final String loginParameter = "/login";
+    private final String friendParameter = "/friends";
+    private final String requestParameter = "/requests";
     private final String whishlistParameter = "/wishlists";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
@@ -198,6 +200,48 @@ public class VolleyRequest {
                 }
             }
         });
+    }
+
+    public void getFriendRequest(Response.Listener<JSONArray> getFriendRequest, Response.ErrorListener errorListener) {
+        String createUrl = this.urlSocialGift + this.friendParameter + this.requestParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,createUrl,null,getFriendRequest,errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+
+                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
+    }
+
+    public void acceptRequestFriend(int idFriendRequest, Response.Listener<JSONObject> acceptRequestFriend, Response.ErrorListener errorListener) {
+        String url = this.urlSocialGift + this.friendParameter + "/" + idFriendRequest;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,url,null,acceptRequestFriend,errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+
+                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public void declineRequestFriend(int id, Response.Listener<JSONObject>declineRequestFriend, Response.ErrorListener errorListener){
+        String url = this.urlSocialGift + this.friendParameter + "/" + id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE,url,null,declineRequestFriend,errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+
+                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
     }
 }
 
