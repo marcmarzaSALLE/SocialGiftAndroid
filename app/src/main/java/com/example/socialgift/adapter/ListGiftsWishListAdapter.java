@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
@@ -85,12 +86,11 @@ public class ListGiftsWishListAdapter extends RecyclerView.Adapter<ListGiftsWish
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                       Log.wtf("PHOTO","PHOTOOOOO"+ response.getString("photo"));
-                        Glide.with(context).load(response.getString("photo")).apply(RequestOptions.circleCropTransform()).into(imgGift);
-                        txtGiftId.setText("Gift id: "+response.getInt("id"));
-                        txtWishlistId.setText("Wishlist id: "+wishlist.getId());
-                        txtNameGift.setText("Gift name: "+response.getString("name"));
-                        txtGiftBooked.setText("Booked: "+giftWishList.isBooked());
+                        Glide.with(context).load(response.getString("photo")).error(ResourcesCompat.getDrawable(context.getResources(),R.drawable.ic_giftcard_green_24,null)).into(imgGift);
+                        txtGiftId.setText(context.getResources().getString(R.string.gift_id,giftWishList.getId()));
+                        txtWishlistId.setText(context.getResources().getString(R.string.wishlist_id,wishlist.getId()));
+                        txtNameGift.setText(context.getResources().getString(R.string.gift_name,response.getString("name")));
+                        txtGiftBooked.setText(context.getResources().getString(R.string.booked_gift_wishlist, String.valueOf(giftWishList.isBooked())));
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -102,7 +102,7 @@ public class ListGiftsWishListAdapter extends RecyclerView.Adapter<ListGiftsWish
                 }
             });
             btnDeleteGift.setOnClickListener(v -> {
-                Toast.makeText(context, "Delete gift", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.delete_gift), Toast.LENGTH_SHORT).show();
             });
         }
     }

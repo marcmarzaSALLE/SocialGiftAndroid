@@ -13,5 +13,7 @@
     <color name="background_fragment">#ECECEC</color>
     <color name="transparent">#00000000</color>
     <color name="blue_add_gift">#002A45</color>
+    <color name="red">#FF0000</color>
+    <color name="meat">#FDDDCA</color>
 
 </resources>

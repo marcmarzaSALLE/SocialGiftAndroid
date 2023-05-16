@@ -8,7 +8,7 @@
     android:animateLayoutChanges="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/grey"
+    app:cardBackgroundColor="#FFE9DC"
     app:cardCornerRadius="5dp"
     app:cardElevation="10dp"
     app:cardUseCompatPadding="true">

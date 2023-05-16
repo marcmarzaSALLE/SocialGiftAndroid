@@ -58,7 +58,6 @@
                 android:hint="@string/end_date"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
-            />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSaveList"

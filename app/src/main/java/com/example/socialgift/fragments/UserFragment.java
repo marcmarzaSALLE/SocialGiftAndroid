@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,6 +32,8 @@ import com.example.socialgift.dao.VolleyRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private Button btnFriends, btnBooking, btnMyLists;
@@ -139,7 +142,7 @@ public class UserFragment extends Fragment {
                 try {
                     txtViewToolbar.setText(getResources().getString(R.string.username,response.getString("name") ,response.getString("last_name")));
                     txtViewEmailUser.setText(response.getString("email"));
-                    Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
+                    Glide.with(requireContext()).load(response.getString("image")).error(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.ic_person_24,null)).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -147,7 +150,6 @@ public class UserFragment extends Fragment {
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.wtf("error",error.toString());
                 Toast.makeText(requireActivity().getApplicationContext(), "Error al cargar la información del usuario", Toast.LENGTH_SHORT).show();
             }
         });

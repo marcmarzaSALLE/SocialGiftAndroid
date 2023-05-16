@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFragmentAdapter;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
 
 import org.json.JSONArray;
@@ -103,17 +105,23 @@ public class MyListUserFragment extends Fragment {
                         split = jsonObject.getString("end_date").split("T");
                         list.setEndDateList(split[0]);
                         JSONArray jsonArray = jsonObject.getJSONArray("gifts");
+                        ArrayList<GiftWishList> giftsWishLists = new ArrayList<>();
                         if (jsonArray.length() != 0) {
+                            Log.d("jsonArray", jsonArray.toString());
                             int booked = 0;
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 JSONObject giftObject = jsonArray.getJSONObject(j);
+                                GiftWishList giftWishList = new GiftWishList(giftObject.getInt("id"),giftObject.getInt("wishlist_id"),giftObject.getString("product_url"),giftObject.getInt("priority"));
                                 if (giftObject.getInt("booked")==1) {
+                                    giftWishList.setBooked(true);
                                     booked++;
                                 }
+                                giftsWishLists.add(giftWishList);
+                                getGiftsFromMercadoExpress(giftObject.getString("product_url"));
                                 //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
-
+                            list.setGifts(giftsWishLists);
                         }
                         wishlists.add(list);
                     } catch (JSONException e) {
@@ -121,6 +129,19 @@ public class MyListUserFragment extends Fragment {
                     }
                 }
                 setAdapterRecyclerview(wishlists);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+    public void getGiftsFromMercadoExpress(String product_url) {
+        volleyRequest.getGiftWishList(product_url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.wtf("REGALOOO", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override

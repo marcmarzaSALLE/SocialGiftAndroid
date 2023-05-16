@@ -62,4 +62,9 @@
     <string name="unfollow">Unfollow</string>
     <string name="no_friends">You don\'t have friends</string>
     <string name="delete">Delete</string>
+    <string name="gift_id">Gift id: %1$d</string>
+    <string name="wishlist_id">Wishlist id: %1$d</string>
+    <string name="gift_name">Gift name: %1$s</string>
+    <string name="booked_gift_wishlist">Booked: %1$s</string>
+    <string name="delete_gift">Delete gift</string>
 </resources>
