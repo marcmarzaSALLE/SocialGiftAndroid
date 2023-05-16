@@ -20,10 +20,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
+import com.example.socialgift.adapter.GridSpacingDecoration;
+import com.example.socialgift.adapter.ListGiftsWishListAdapter;
 import com.example.socialgift.dao.VolleyRequest;
 import com.example.socialgift.model.Wishlist;
 
@@ -37,9 +41,11 @@ import java.util.Objects;
 public class ListInfoFragment extends Fragment {
     private Toolbar toolbar;
     private ImageButton imgBtnBack, imgBtnAddGift, imgBtnAddList;
-    private TextView txtListName, txtDeleteList, txtAddGift;
+    private TextView txtListName, txtDeleteList, txtAddGift,txtNoGifts;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
     private Button btnSaveList, btnAddGift;
+    private RecyclerView recyclerViewGifts;
+    private Wishlist wishlist;
     private VolleyRequest volleyRequest;
 
     @Override
@@ -50,6 +56,7 @@ public class ListInfoFragment extends Fragment {
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         showInfoWidgets();
+        addDataRecyclerViewGift();
 
         imgBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,11 +107,13 @@ public class ListInfoFragment extends Fragment {
         edtTxtDescription = (EditText) view.findViewById(R.id.edtDescription);
         edtTxtDate = (EditText) view.findViewById(R.id.edtEndDate);
         btnSaveList = (Button) view.findViewById(R.id.btnSaveList);
+        recyclerViewGifts = (RecyclerView) view.findViewById(R.id.recyclerViewGiftsWishList);
+        txtNoGifts = (TextView) view.findViewById(R.id.txtListNoGifts);
     }
 
     private void showInfoWidgets(){
         Intent intent = requireActivity().getIntent();
-        Wishlist wishlist = (Wishlist) intent.getSerializableExtra("wishlist");
+        wishlist = (Wishlist) intent.getSerializableExtra("wishlist");
         Log.wtf("AddListFragment", "Wishlist: " + wishlist.toString());
         Log.wtf("AddListFragment", "Wishlist: ");
         txtListName.setText(wishlist.getNameList());
@@ -165,5 +174,30 @@ public class ListInfoFragment extends Fragment {
             e.printStackTrace();
         }
         return correctDate;
+    }
+
+    private void addDataRecyclerViewGift(){
+        if(wishlist.getGifts().isEmpty()){
+            txtNoGifts.setVisibility(View.VISIBLE);
+            recyclerViewGifts.setVisibility(View.GONE);
+        }else{
+            txtNoGifts.setVisibility(View.GONE);
+            recyclerViewGifts.setVisibility(View.VISIBLE);
+            recyclerViewGifts.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+
+            int spanCount = 1;
+            int spacing = 3;
+            GridSpacingDecoration itemDecoration = new GridSpacingDecoration(spanCount, spacing);
+            recyclerViewGifts.addItemDecoration(itemDecoration);
+            recyclerViewGifts.addItemDecoration(itemDecoration);
+            recyclerViewGifts.setHasFixedSize(true);
+            recyclerViewGifts.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            recyclerViewGifts.setAdapter(new ListGiftsWishListAdapter(wishlist, wishlist.getGifts(), requireActivity().getApplicationContext(), new ListGiftsWishListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Wishlist wishlist, int position) {
+
+                }
+            }));
+        }
     }
 }

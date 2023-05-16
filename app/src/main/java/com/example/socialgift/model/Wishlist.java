@@ -11,9 +11,9 @@ public class Wishlist implements Serializable {
     private String endDateList;
 
     private int bookedGifts;
-    private ArrayList<Gift>gifts;
+    private ArrayList<GiftWishList>gifts;
 
-    public Wishlist(int id, String nameList, String descriptionList, String createdDateList, String endDateList, ArrayList<Gift> gifts) {
+    public Wishlist(int id, String nameList, String descriptionList, String createdDateList, String endDateList, ArrayList<GiftWishList> gifts) {
         this.id = id;
         this.nameList = nameList;
         this.descriptionList = descriptionList;
@@ -47,7 +47,7 @@ public class Wishlist implements Serializable {
         return endDateList;
     }
 
-    public ArrayList<Gift> getGifts() {
+    public ArrayList<GiftWishList> getGifts() {
         return gifts;
     }
 
@@ -71,7 +71,7 @@ public class Wishlist implements Serializable {
         this.endDateList = endDateList;
     }
 
-    public void setGifts(ArrayList<Gift> gifts) {
+    public void setGifts(ArrayList<GiftWishList> gifts) {
         this.gifts = gifts;
     }
 

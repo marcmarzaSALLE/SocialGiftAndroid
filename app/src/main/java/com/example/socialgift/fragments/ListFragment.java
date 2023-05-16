@@ -26,6 +26,7 @@ import com.example.socialgift.adapter.ListFragmentAdapter;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.VolleyRequest;
 import com.example.socialgift.model.Gift;
+import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
 import com.google.gson.Gson;
 
@@ -127,17 +128,23 @@ public class ListFragment extends Fragment {
                         split = jsonObject.getString("end_date").split("T");
                         list.setEndDateList(split[0]);
                         JSONArray jsonArray = jsonObject.getJSONArray("gifts");
+                        ArrayList<GiftWishList> giftsWishLists = new ArrayList<>();
                         if (jsonArray.length() != 0) {
+                            Log.d("jsonArray", jsonArray.toString());
                             int booked = 0;
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 JSONObject giftObject = jsonArray.getJSONObject(j);
+                                GiftWishList giftWishList = new GiftWishList(giftObject.getInt("id"),giftObject.getInt("wishlist_id"),giftObject.getString("product_url"),giftObject.getInt("priority"));
                                 if (giftObject.getInt("booked")==1) {
+                                    giftWishList.setBooked(true);
                                     booked++;
                                 }
+                                giftsWishLists.add(giftWishList);
+                                getGiftsFromMercadoExpress(giftObject.getString("product_url"));
                                 //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
-
+                            list.setGifts(giftsWishLists);
                         }
                         wishlists.add(list);
                     } catch (JSONException e) {
@@ -154,30 +161,18 @@ public class ListFragment extends Fragment {
         });
     }
 
-    public void getGiftsFromMercadoExpress(ArrayList<Wishlist> wishlists, Wishlist list, String product_url) {
-        Gson gson = new Gson();
-        try {
-            // Crear una conexión HTTP a la URL de la API
-            URL url = new URL(product_url);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            // Leer la respuesta de la API
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+    public void getGiftsFromMercadoExpress(String product_url) {
+        volleyRequest.getGiftWishList(product_url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.wtf("REGALOOO", response.toString());
             }
-            reader.close();
-            Log.wtf("Holaaaaa","holaaaaaaa");
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-            // Analizar el JSON utilizando Gson
-            Gift gift=gson.fromJson(response.toString(), Gift.class);
-            Log.wtf("Gifts list", gift.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     private void setAdapterRecyclerview(ArrayList<Wishlist> wishlists) {

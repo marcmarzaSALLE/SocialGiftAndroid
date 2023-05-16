@@ -168,6 +168,11 @@ public class VolleyRequest {
         queue.add(jsonArrayRequest);
     }
 
+    public void getGiftWishList(String url, Response.Listener<JSONObject>giftWishList, Response.ErrorListener errorListener){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, giftWishList, errorListener);
+        queue.add(jsonObjectRequest);
+    }
+
     public void getGiftByUserMercadoExpress(int id, Response.Listener<JSONArray> getGiftByUserMercadoExpress, Response.ErrorListener errorListener) {
         String createUrl = this.urlMercadoExpress + this.productParameter + "/" + id;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getGiftByUserMercadoExpress, errorListener);
