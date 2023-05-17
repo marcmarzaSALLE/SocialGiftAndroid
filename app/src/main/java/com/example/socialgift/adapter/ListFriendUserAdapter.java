@@ -73,6 +73,12 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
                     Log.wtf("Unfollow", "Unfollow");
                 }
             });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(friend,friend.getId());
+                }
+            });
         }
     }
 }

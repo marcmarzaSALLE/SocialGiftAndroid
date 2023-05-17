@@ -67,4 +67,7 @@
     <string name="gift_name">Gift name: %1$s</string>
     <string name="booked_gift_wishlist">Booked: %1$s</string>
     <string name="delete_gift">Delete gift</string>
+    <string name="error_get_user_info">Error al cargar la información del usuario</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

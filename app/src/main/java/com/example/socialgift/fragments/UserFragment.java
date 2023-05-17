@@ -141,6 +141,7 @@ public class UserFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 try {
                     txtViewToolbar.setText(getResources().getString(R.string.username,response.getString("name") ,response.getString("last_name")));
+
                     txtViewEmailUser.setText(response.getString("email"));
                     Glide.with(requireContext()).load(response.getString("image")).error(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.ic_person_24,null)).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                 } catch (JSONException e) {
@@ -150,7 +151,7 @@ public class UserFragment extends Fragment {
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(requireActivity().getApplicationContext(), "Error al cargar la información del usuario", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity().getApplicationContext(), getResources().getString(R.string.error_get_user_info), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
+import com.example.socialgift.activities.FriendActivity;
 import com.example.socialgift.activities.FriendsRequestActivity;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFriendUserAdapter;
@@ -98,7 +99,9 @@ public class FriendsUserFragment extends Fragment {
             listFriendUserAdapter = new ListFriendUserAdapter(friends,requireContext(),new ListFriendUserAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
-                    Log.d("TAG", "onItemClick: "+friend.getName());
+                    Intent intent = new Intent(getActivity(),FriendActivity.class);
+                    intent.putExtra("friend",friend);
+                    startActivity(intent);
                 }
             });
             int spanCount = 1;

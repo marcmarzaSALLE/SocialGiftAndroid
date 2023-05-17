@@ -31,6 +31,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textSize="20sp"
+            android:textColor="@color/black"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeMaxTextSize="18sp"

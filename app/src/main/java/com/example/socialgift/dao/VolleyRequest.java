@@ -1,7 +1,10 @@
 package com.example.socialgift.dao;
 
+import static android.os.Environment.DIRECTORY_PICTURES;
+
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -190,7 +193,7 @@ public class VolleyRequest {
                 MediaType mediaType = MediaType.parse("text/plain");
                 RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                         .addFormDataPart("myFile", image.getName(),
-                                RequestBody.create(new File(image.getAbsolutePath()),MediaType.parse("application/octet-stream")))
+                                RequestBody.create(image.getAbsolutePath(),MediaType.parse("application/octet-stream")))
                         .build();
                 okhttp3.Request request = new okhttp3.Request.Builder()
                         .url("https://balandrau.salle.url.edu/i3/repositoryimages/uploadfile")

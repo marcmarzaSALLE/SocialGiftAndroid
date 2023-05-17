@@ -33,6 +33,7 @@
             android:textSize="20sp"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="12sp"
+            android:textColor="@color/black"
             android:autoSizeMaxTextSize="20sp"
             android:maxLines="1"
             android:layout_marginStart="15dp"
