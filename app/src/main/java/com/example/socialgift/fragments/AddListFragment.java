@@ -18,12 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 
 import org.json.JSONObject;
 
@@ -38,13 +37,13 @@ public class AddListFragment extends Fragment {
     private TextView txtListName, txtDeleteList, txtAddGift;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
     private Button btnSaveList, btnAddGift;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_list, container, false);
-        volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
+        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         showInfoToolbar();
@@ -64,7 +63,7 @@ public class AddListFragment extends Fragment {
                 Log.wtf("AddListFragment", "Save button clicked");
                 if(checkData()){
                     if(dateIsCorrect()){
-                        volleyRequest.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
+                        daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 requireActivity().finish();

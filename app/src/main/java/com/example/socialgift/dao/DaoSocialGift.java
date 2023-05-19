@@ -1,10 +1,6 @@
 package com.example.socialgift.dao;
 
-import static android.os.Environment.DIRECTORY_PICTURES;
-
 import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -15,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.SharedPreferencesController;
+import com.example.socialgift.model.GiftWishList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +29,8 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
-public class VolleyRequest {
+public class DaoSocialGift {
     private final String urlSocialGift = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
-    private final String urlMercadoExpress = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1";
     private final String userParameter = "/users";
     private final String productParameter = "/products";
 
@@ -43,13 +39,16 @@ public class VolleyRequest {
     private final String friendParameter = "/friends";
     private final String requestParameter = "/requests";
     private final String whishlistParameter = "/wishlists";
+
+    private final String giftsParameter = "/gifts";
+    private final String bookParameter = "/book";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
 
     private final SharedPreferencesController sharedPreferencesController;
 
-    public VolleyRequest(Context context) {
+    public DaoSocialGift(Context context) {
         this.context = context;
         queue = Volley.newRequestQueue(context);
         jsonBody = new JSONObject();
@@ -171,53 +170,14 @@ public class VolleyRequest {
         queue.add(jsonArrayRequest);
     }
 
-    public void getGiftWishList(String url, Response.Listener<JSONObject>giftWishList, Response.ErrorListener errorListener){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, giftWishList, errorListener);
-        queue.add(jsonObjectRequest);
-    }
-
-    public void getGiftByUserMercadoExpress(int id, Response.Listener<JSONArray> getGiftByUserMercadoExpress, Response.ErrorListener errorListener) {
-        String createUrl = this.urlMercadoExpress + this.productParameter + "/" + id;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getGiftByUserMercadoExpress, errorListener);
-        queue.add(jsonArrayRequest);
-    }
-
-    public void uploadFile(File image) {
-        Log.wtf("IMAGE NAME", image.getName());
-        Log.wtf("IMAGE PATH", image.getAbsolutePath());
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient().newBuilder().build();
-                MediaType mediaType = MediaType.parse("text/plain");
-                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("myFile", image.getName(),
-                                RequestBody.create(image.getAbsolutePath(),MediaType.parse("application/octet-stream")))
-                        .build();
-                okhttp3.Request request = new okhttp3.Request.Builder()
-                        .url("https://balandrau.salle.url.edu/i3/repositoryimages/uploadfile")
-                        .method("POST", body)
-                        .build();
-
-                try {
-                    okhttp3.Response response = client.newCall(request).execute();
-                    Log.wtf("RESPONSE", response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     public void getFriendRequest(Response.Listener<JSONArray> getFriendRequest, Response.ErrorListener errorListener) {
         String createUrl = this.urlSocialGift + this.friendParameter + this.requestParameter;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,createUrl,null,getFriendRequest,errorListener){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, createUrl, null, getFriendRequest, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
                 return headers;
             }
         };
@@ -226,44 +186,74 @@ public class VolleyRequest {
 
     public void acceptRequestFriend(int idFriendRequest, Response.Listener<JSONObject> acceptRequestFriend, Response.ErrorListener errorListener) {
         String url = this.urlSocialGift + this.friendParameter + "/" + idFriendRequest;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,url,null,acceptRequestFriend,errorListener){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null, acceptRequestFriend, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
                 return headers;
             }
         };
         queue.add(jsonObjectRequest);
     }
 
-    public void declineRequestFriend(int id, Response.Listener<JSONObject>declineRequestFriend, Response.ErrorListener errorListener){
+    public void declineRequestFriend(int id, Response.Listener<JSONObject> declineRequestFriend, Response.ErrorListener errorListener) {
         String url = this.urlSocialGift + this.friendParameter + "/" + id;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE,url,null,declineRequestFriend,errorListener){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, declineRequestFriend, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
                 return headers;
             }
         };
         queue.add(jsonObjectRequest);
     }
 
-    public void getMyFriends(Response.Listener<JSONArray> getMyFriends, Response.ErrorListener errorListener){
+    public void getMyFriends(Response.Listener<JSONArray> getMyFriends, Response.ErrorListener errorListener) {
         String url = this.urlSocialGift + this.friendParameter;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,getMyFriends,errorListener){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, getMyFriends, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization","Bearer "+sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
                 return headers;
             }
         };
         queue.add(jsonArrayRequest);
     }
+
+    public void createReservationGift(GiftWishList giftWishList, Response.Listener<JSONObject> createReservationGift, Response.ErrorListener errorListener) {
+        String createReservationUrl = this.urlSocialGift + this.giftsParameter + "/" + giftWishList.getId() + this.bookParameter;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, createReservationUrl, null, createReservationGift, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public void deleteReservationGift(int giftId, Response.Listener<JSONObject> deleteReservationGift, Response.ErrorListener errorListener) {
+        String deleteReservationUrl = this.urlSocialGift + this.giftsParameter + "/" + giftId + this.bookParameter;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteReservationUrl, null, deleteReservationGift, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
 }
+
 

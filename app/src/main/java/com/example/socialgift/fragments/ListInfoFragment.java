@@ -28,7 +28,7 @@ import com.android.volley.VolleyError;
 import com.example.socialgift.R;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListGiftsWishListAdapter;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Wishlist;
 
 import org.json.JSONObject;
@@ -46,13 +46,13 @@ public class ListInfoFragment extends Fragment {
     private Button btnSaveList, btnAddGift;
     private RecyclerView recyclerViewGifts;
     private Wishlist wishlist;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_list, container, false);
-        volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
+        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         showInfoWidgets();
@@ -73,7 +73,7 @@ public class ListInfoFragment extends Fragment {
                 Log.wtf("AddListFragment", "Save button clicked");
                 if(checkData()){
                     if(dateIsCorrect()){
-                        volleyRequest.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
+                        daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Toast.makeText(requireActivity().getApplicationContext(), "Lista creada correctamente", Toast.LENGTH_SHORT).show();

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.example.socialgift.activities.FriendActivity;
 import com.example.socialgift.activities.FriendsRequestActivity;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFriendUserAdapter;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
 
 import org.json.JSONArray;
@@ -34,7 +33,7 @@ public class FriendsUserFragment extends Fragment {
     private TextView txtNoFriends;
     private RecyclerView recyclerViewFriends;
     ArrayList<Friend>friends;
-    VolleyRequest volleyRequest;
+    DaoSocialGift daoSocialGift;
     ListFriendUserAdapter listFriendUserAdapter;
     private SearchView searchView;
     @Override
@@ -42,7 +41,7 @@ public class FriendsUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_friends_user, container, false);
         syncronizeView(view);
-        volleyRequest = new VolleyRequest(requireContext());
+        daoSocialGift = new DaoSocialGift(requireContext());
         addData();
         imgBtnFriendsRequest.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FriendsRequestActivity.class);
@@ -62,7 +61,7 @@ public class FriendsUserFragment extends Fragment {
     }
 
     private void addData(){
-        volleyRequest.getMyFriends(new Response.Listener<JSONArray>() {
+        daoSocialGift.getMyFriends(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 friends = new ArrayList<>();
@@ -80,7 +79,7 @@ public class FriendsUserFragment extends Fragment {
                 }
                 setAdapterRecyclerView(friends);
             }
-        },new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -96,7 +95,7 @@ public class FriendsUserFragment extends Fragment {
             txtNoFriends.setVisibility(View.GONE);
             recyclerViewFriends.setVisibility(View.VISIBLE);
 
-            listFriendUserAdapter = new ListFriendUserAdapter(friends,requireContext(),new ListFriendUserAdapter.OnItemClickListener() {
+            listFriendUserAdapter = new ListFriendUserAdapter(friends,getActivity(),new ListFriendUserAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
                     Intent intent = new Intent(getActivity(),FriendActivity.class);

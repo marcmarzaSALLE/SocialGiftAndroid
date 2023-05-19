@@ -1,6 +1,5 @@
 package com.example.socialgift.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,18 +19,14 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.Manager;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.controller.UserData;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class EditPasswordFragment extends Fragment {
     private Toolbar toolbar;
@@ -41,7 +36,7 @@ public class EditPasswordFragment extends Fragment {
 
     UserData userData;
 
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
 
     private SharedPreferencesController sharedPreferencesController;
     private Manager manager;
@@ -55,7 +50,7 @@ public class EditPasswordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_password, container, false);
         sharedPreferencesController = new SharedPreferencesController();
         manager = new Manager();
-        volleyRequest = new VolleyRequest(requireContext());
+        daoSocialGift = new DaoSocialGift(requireContext());
         syncronizeView(view);
         imgBtnBack.setOnClickListener(v -> {
             Log.wtf("EditPasswordFragment", "onClick: ");
@@ -90,7 +85,7 @@ public class EditPasswordFragment extends Fragment {
         if (checkData()) {
 
             if (userData.isInitialized()) {
-                volleyRequest.editMyUser(userData.getName(), userData.getLast_name(), userData.getEmail(), edtNewPassword.getText().toString(), userData.getImage(), new Response.Listener<JSONObject>() {
+                daoSocialGift.editMyUser(userData.getName(), userData.getLast_name(), userData.getEmail(), edtNewPassword.getText().toString(), userData.getImage(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         String passwordHash = manager.passwordEncrypt(edtNewPassword.getText().toString());
@@ -107,7 +102,7 @@ public class EditPasswordFragment extends Fragment {
 
             } else {
 
-                volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONObject>() {
+                daoSocialGift.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -132,7 +127,7 @@ public class EditPasswordFragment extends Fragment {
     }
 
     public void editMyUser(String name, String lastName, String email, String password, String urlImage){
-        volleyRequest.editMyUser(name, lastName, email, password, urlImage, new Response.Listener<JSONObject>() {
+        daoSocialGift.editMyUser(name, lastName, email, password, urlImage, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 String passwordHash = manager.passwordEncrypt(password);

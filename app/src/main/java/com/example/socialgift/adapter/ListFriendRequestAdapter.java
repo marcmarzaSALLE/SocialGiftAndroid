@@ -1,7 +1,6 @@
 package com.example.socialgift.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
 
 import org.json.JSONObject;
@@ -62,10 +61,10 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
         ImageView imgFriendRequest;
         TextView txtEmailFriendRequest;
         ImageButton btnAcceptFriendRequest, btnDeclineFriendRequest;
-        VolleyRequest volleyRequest;
+        DaoSocialGift daoSocialGift;
         public ViewHolder(android.view.View itemView) {
             super(itemView);
-            volleyRequest = new VolleyRequest(context);
+            daoSocialGift = new DaoSocialGift(context);
             imgFriendRequest = itemView.findViewById(R.id.imgBtnFriendRequest);
             txtEmailFriendRequest = itemView.findViewById(R.id.txtViewFriendName);
             btnAcceptFriendRequest = itemView.findViewById(R.id.imgBtnAccept);
@@ -77,7 +76,7 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
             btnAcceptFriendRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    volleyRequest.acceptRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
+                    daoSocialGift.acceptRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             notifyItemRemoved(getAdapterPosition());
@@ -94,7 +93,7 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
             btnDeclineFriendRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    volleyRequest.declineRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
+                    daoSocialGift.declineRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             notifyItemRemoved(getAdapterPosition());

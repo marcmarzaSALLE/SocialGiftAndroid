@@ -1,7 +1,6 @@
 package com.example.socialgift.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
-import com.example.socialgift.dao.VolleyRequest;
-import com.example.socialgift.model.Gift;
+import com.example.socialgift.dao.DaoMercadoExpress;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
 
@@ -35,7 +33,7 @@ public class ListGiftsWishListAdapter extends RecyclerView.Adapter<ListGiftsWish
     private LayoutInflater inflater;
     private ListGiftsWishListAdapter.OnItemClickListener listener;
     private Context context;
-    private VolleyRequest volleyRequest;
+    private DaoMercadoExpress daoMercadoExpress;
 
     public interface OnItemClickListener{
         void onItemClick(Wishlist wishlist, int position);
@@ -47,7 +45,7 @@ public class ListGiftsWishListAdapter extends RecyclerView.Adapter<ListGiftsWish
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
-        this.volleyRequest = new VolleyRequest(context);
+        this.daoMercadoExpress = new DaoMercadoExpress(context);
     }
 
     @Override
@@ -82,7 +80,7 @@ public class ListGiftsWishListAdapter extends RecyclerView.Adapter<ListGiftsWish
         }
 
         public void bindData(GiftWishList giftWishList) {
-            volleyRequest.getGiftWishList(giftWishList.getProductLink(), new Response.Listener<JSONObject>() {
+            daoMercadoExpress.getGiftWishList(giftWishList.getProductLink(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {

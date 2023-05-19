@@ -16,7 +16,7 @@ import com.example.socialgift.MainActivity;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.Manager;
 import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText edtEmail, edtPassword;
 
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
     private SharedPreferencesController sharedPreferencesController;
     private Manager manager;
 
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void login() {
         if(checkData()){
-            volleyRequest.loginUser(edtEmail.getText().toString(), edtPassword.getText().toString(), new Response.Listener<JSONObject>() {
+            daoSocialGift.loginUser(edtEmail.getText().toString(), edtPassword.getText().toString(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Toast.makeText(getApplicationContext(), "Login correcte", Toast.LENGTH_SHORT).show();
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveUserId(){
-        volleyRequest.getMyUserId(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
+        daoSocialGift.getMyUserId(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         edtEmail = (EditText) findViewById(R.id.emailText);
         edtPassword = (EditText) findViewById(R.id.passwordText);
 
-        volleyRequest = new VolleyRequest(getApplicationContext());
+        daoSocialGift = new DaoSocialGift(getApplicationContext());
         sharedPreferencesController = new SharedPreferencesController();
 
     }

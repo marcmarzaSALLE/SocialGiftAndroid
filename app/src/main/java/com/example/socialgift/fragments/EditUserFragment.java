@@ -36,15 +36,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.controller.UserData;
-import com.example.socialgift.dao.VolleyRequest;
-import com.example.socialgift.model.User;
+import com.example.socialgift.dao.DaoRepositoryImages;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.Objects;
 
 public class EditUserFragment extends Fragment {
 
@@ -53,7 +52,8 @@ public class EditUserFragment extends Fragment {
     private ImageView imgViewProfile;
     private TextInputLayout txtInputLayoutName, txtInputLayoutLastName, txtInputLayoutEmail;
     private TextView txtViewEditImage;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
+    private DaoRepositoryImages daoRepositoryImages;
     private SharedPreferencesController sharedPreferencesController;
     private ImageButton imgBtnBack;
     private Button btnSaveEdit;
@@ -152,7 +152,7 @@ public class EditUserFragment extends Fragment {
                 if (!edtTxtEmail.getText().toString().isEmpty()) {
                     email = edtTxtEmail.getText().toString();
                 }
-                volleyRequest.editMyUser(name, lastName, email, "password", urlImage, new Response.Listener<JSONObject>() {
+                daoSocialGift.editMyUser(name, lastName, email, "password", urlImage, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         requireActivity().finish();
@@ -192,12 +192,12 @@ public class EditUserFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
 
-        volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
+        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
         sharedPreferencesController = new SharedPreferencesController();
     }
 
     private void getInformationUser() {
-        volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity().getApplicationContext()), new Response.Listener<JSONObject>() {
+        daoSocialGift.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity().getApplicationContext()), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -230,16 +230,16 @@ public class EditUserFragment extends Fragment {
         });
     }
 
-    private ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri selectedImage = result.getData().getData();
-                        imgViewProfile.setImageURI(selectedImage);
+                        Glide.with(requireContext()).load(selectedImage).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                         String path = getFileFromUri(selectedImage);
-                        volleyRequest.uploadFile(new File(path));
+                        daoRepositoryImages.uploadFile(new File(path));
                     }
                 }
             });

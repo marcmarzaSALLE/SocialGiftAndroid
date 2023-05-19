@@ -1,7 +1,6 @@
 package com.example.socialgift.fragments;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +9,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +26,10 @@ import com.example.socialgift.R;
 import com.example.socialgift.activities.EditProfileActivity;
 import com.example.socialgift.activities.LoginActivity;
 import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private Button btnFriends, btnBooking, btnMyLists;
@@ -41,7 +37,7 @@ public class UserFragment extends Fragment {
     private TextView txtViewToolbar,txtAddList,txtViewEmailUser,txtViewEditProfile;
     private ImageButton imgBtnLogOut;
     private ImageView imgViewProfile;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
     private SharedPreferencesController sharedPreferencesController;
 
     @Override
@@ -113,7 +109,7 @@ public class UserFragment extends Fragment {
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
         sharedPreferencesController = new SharedPreferencesController();
-        volleyRequest = new VolleyRequest(requireContext());
+        daoSocialGift = new DaoSocialGift(requireContext());
     }
     private void changeBackgroundPressButton(Button button){
         button.setBackgroundResource(R.drawable.btn_background_menu_user_press);
@@ -136,7 +132,7 @@ public class UserFragment extends Fragment {
     }
 
     private void getInformationUser(){
-        volleyRequest.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity().getApplicationContext()), new Response.Listener<JSONObject>() {
+        daoSocialGift.getMyUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity().getApplicationContext()), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

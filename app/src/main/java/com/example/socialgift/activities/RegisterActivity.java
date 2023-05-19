@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 
 import org.json.JSONObject;
 
@@ -22,7 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     Button btnRegister;
     TextView edtEmail, edtPassword, edtConfirmPassword, edtName, edtLastName;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
         if (checkData()) {
             String image ="https://balandrau.salle.url.edu/i3/repositoryimages/photo/e17ef3a4-f2f0-494a-9584-8190492eb6c8.png";
-            volleyRequest.registerUser(edtName.getText().toString(), edtLastName.getText().toString(), edtEmail.getText().toString(), edtPassword.getText().toString(),image ,new Response.Listener<JSONObject>() {
+            daoSocialGift.registerUser(edtName.getText().toString(), edtLastName.getText().toString(), edtEmail.getText().toString(), edtPassword.getText().toString(),image ,new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Toast.makeText(getApplicationContext(), "Register correcte", Toast.LENGTH_SHORT).show();
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void syncronizedWigets() {
-        volleyRequest = new VolleyRequest(getApplicationContext());
+        daoSocialGift = new DaoSocialGift(getApplicationContext());
         btnRegister = (Button) findViewById(R.id.registerButton);
         edtEmail = (EditText) findViewById(R.id.emailText);
         edtPassword = (EditText) findViewById(R.id.passwordText);

@@ -24,26 +24,14 @@ import com.example.socialgift.activities.AddListActivity;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFragmentAdapter;
 import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.dao.VolleyRequest;
-import com.example.socialgift.model.Gift;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -55,13 +43,13 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerViewList;
     private ImageButton imgBtnToolbar, imgBtnBackToolbar;
     private ArrayList<Wishlist> wishlists;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
+        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         changeInformationToolbar();
@@ -111,7 +99,7 @@ public class ListFragment extends Fragment {
 
     private void addData() {
         SharedPreferencesController sharedPreferencesController = new SharedPreferencesController();
-        volleyRequest.getWishListUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONArray>() {
+        daoSocialGift.getWishListUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 wishlists = new ArrayList<>();
@@ -140,7 +128,6 @@ public class ListFragment extends Fragment {
                                     booked++;
                                 }
                                 giftsWishLists.add(giftWishList);
-                                getGiftsFromMercadoExpress(giftObject.getString("product_url"));
                                 //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
@@ -152,20 +139,6 @@ public class ListFragment extends Fragment {
                     }
                 }
                 setAdapterRecyclerview(wishlists);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
-
-    public void getGiftsFromMercadoExpress(String product_url) {
-        volleyRequest.getGiftWishList(product_url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.wtf("REGALOOO", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override

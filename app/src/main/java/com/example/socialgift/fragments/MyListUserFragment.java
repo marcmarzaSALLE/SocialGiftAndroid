@@ -3,8 +3,6 @@ package com.example.socialgift.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -23,7 +20,8 @@ import com.example.socialgift.activities.AddListActivity;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFragmentAdapter;
 import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoMercadoExpress;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
 
@@ -40,7 +38,8 @@ public class MyListUserFragment extends Fragment {
     private TextView txtNoList;
 
     private ArrayList<Wishlist> wishlists;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
+    private DaoMercadoExpress daoMercadoExpress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +47,8 @@ public class MyListUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         syncronizeViewWidgets(view);
-        volleyRequest = new VolleyRequest(requireActivity().getApplicationContext());
+        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
+        daoMercadoExpress = new DaoMercadoExpress(requireActivity().getApplicationContext());
         addData();
 
         return view;
@@ -88,7 +88,7 @@ public class MyListUserFragment extends Fragment {
 
     private void addData() {
         SharedPreferencesController sharedPreferencesController = new SharedPreferencesController();
-        volleyRequest.getWishListUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONArray>() {
+        daoSocialGift.getWishListUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 wishlists = new ArrayList<>();
@@ -117,7 +117,6 @@ public class MyListUserFragment extends Fragment {
                                     booked++;
                                 }
                                 giftsWishLists.add(giftWishList);
-                                getGiftsFromMercadoExpress(giftObject.getString("product_url"));
                                 //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
@@ -129,19 +128,6 @@ public class MyListUserFragment extends Fragment {
                     }
                 }
                 setAdapterRecyclerview(wishlists);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
-    public void getGiftsFromMercadoExpress(String product_url) {
-        volleyRequest.getGiftWishList(product_url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.wtf("REGALOOO", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override

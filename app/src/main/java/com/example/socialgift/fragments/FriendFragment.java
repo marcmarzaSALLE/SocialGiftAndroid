@@ -1,8 +1,5 @@
 package com.example.socialgift.fragments;
 
-import static android.content.Intent.getIntent;
-
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -28,10 +25,9 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
-import com.example.socialgift.activities.AddListActivity;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFragmentAdapter;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
 import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
@@ -46,7 +42,7 @@ public class FriendFragment extends Fragment {
     ImageView imgFriend;
     ImageButton imgBtnBackToolbar;
     TextView txtFriendName, txtListFriend, txtNoListFriend, txtNameListToolbar;
-    VolleyRequest volleyRequest;
+    DaoSocialGift daoSocialGift;
     Friend friend;
     RecyclerView recyclerViewListFriend;
     Toolbar toolbar;
@@ -95,8 +91,8 @@ public class FriendFragment extends Fragment {
     }
 
     private void loadData() {
-        volleyRequest = new VolleyRequest(requireContext());
-        volleyRequest.getWishListUser(friend.getId(), new Response.Listener<JSONArray>() {
+        daoSocialGift = new DaoSocialGift(requireContext());
+        daoSocialGift.getWishListUser(friend.getId(), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 txtListFriend.setText(getResources().getString(R.string.list_friend, response.length()));
@@ -126,7 +122,6 @@ public class FriendFragment extends Fragment {
                                     booked++;
                                 }
                                 giftsWishLists.add(giftWishList);
-                                getGiftsFromMercadoExpress(giftObject.getString("product_url"));
                                 //getGiftsFromMercadoExpress(wishlists, list, giftObject.getString("product_url"));
                             }
                             list.setBookedGifts(booked);
@@ -146,21 +141,6 @@ public class FriendFragment extends Fragment {
             }
         });
     }
-
-    private void getGiftsFromMercadoExpress(String product_url) {
-        volleyRequest.getGiftWishList(product_url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.wtf("REGALOOO", response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
-
 
     private void setAdapterRecyclerview(ArrayList<Wishlist> wishlists) {
         if (wishlists.isEmpty()) {

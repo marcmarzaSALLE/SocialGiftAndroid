@@ -16,8 +16,7 @@ import com.android.volley.VolleyError;
 import com.example.socialgift.R;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFriendRequestAdapter;
-import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.dao.VolleyRequest;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
 
 import org.json.JSONArray;
@@ -29,7 +28,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
     private TextView txtViewToolbar,txtNoFriendsRequest;
     private ImageButton imgBtnBack;
     private RecyclerView recyclerViewFriendsRequest;
-    private VolleyRequest volleyRequest;
+    private DaoSocialGift daoSocialGift;
     private ArrayList<Friend> friendsRequestList;
     ListFriendRequestAdapter listFriendRequestAdapter;
 
@@ -37,7 +36,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_request);
-        volleyRequest = new VolleyRequest(this);
+        daoSocialGift = new DaoSocialGift(this);
         syncronizeView();
         addData();
         imgBtnBack.setOnClickListener(v -> {
@@ -57,7 +56,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
     }
 
     private void addData() {
-        volleyRequest.getFriendRequest(new Response.Listener<JSONArray>() {
+        daoSocialGift.getFriendRequest(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 friendsRequestList = new ArrayList<>();

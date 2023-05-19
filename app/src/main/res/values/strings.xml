@@ -71,5 +71,14 @@
     <string name="error_get_user_info">Error al cargar la información del usuario</string>
     <string name="list_gift_empty">This wishlist doesn\'t have any gifts</string>
     <string name="gifts_list_friend">Gifts: %1$d</string>
+    <string name="gift_booked">Booked</string>
+    <string name="reserve">Reserve</string>
+    <string name="confirm_reservation">Confirm reservation?</string>
+    <string name="confirm_delete_reservation">Confirm delete reservation?</string>
+    <string name="reservation_not_belong_you">This reservation does not belong to you</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="reservation_deleted">Reservation deleted!</string>
+    <string name="reservation_created">Reservation created!</string>
 
 </resources>
