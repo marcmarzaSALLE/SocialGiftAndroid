@@ -91,7 +91,7 @@ public class FriendFragment extends Fragment {
     }
 
     private void loadData() {
-        daoSocialGift = new DaoSocialGift(requireContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         daoSocialGift.getWishListUser(friend.getId(), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

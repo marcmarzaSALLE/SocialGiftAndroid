@@ -3,6 +3,7 @@ package com.example.socialgift.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -36,6 +38,7 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
     private ListGiftsWishListAdapter.OnItemClickListener listener;
     private Context context;
     private DaoSocialGift daoSocialGift;
+    RequestQueue requestQueue;
 
     public interface OnItemClickListener {
         void onItemClick(Wishlist wishlist, int position);
@@ -47,7 +50,7 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
-        this.daoSocialGift = new DaoSocialGift(context);
+        daoSocialGift = DaoSocialGift.getInstance(context);
     }
 
     @Override
@@ -81,13 +84,15 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
             txtWishlistId = itemView.findViewById(R.id.txtWishlistName);
             txtGiftBooked = itemView.findViewById(R.id.txtGiftBooked);
             btnReserveGift = itemView.findViewById(R.id.btnDeleteGift);
-            daoMercadoExpress = new DaoMercadoExpress(context);
+            daoMercadoExpress = DaoMercadoExpress.getInstance(context);
         }
 
         public void bindData(GiftWishList giftWishList) {
             daoMercadoExpress.getGiftWishList(giftWishList.getProductLink(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Log.wtf("GiftFriendAdapter", "REGALO SOCIALGIFT: " + giftWishList.getProductLink());
+                    Log.wtf("GiftFriendAdapter", "REGALO MERCADO EXPRESS: " + response.toString());
                     try {
                         Glide.with(context).load(response.getString("photo")).error(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_giftcard_green_24, null)).into(imgGift);
                         txtGiftId.setText(context.getResources().getString(R.string.gift_id, giftWishList.getId()));
@@ -114,9 +119,9 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
             btnReserveGift.setOnClickListener(v -> {
                 if (giftWishList.isBooked()) {
                     confirmDeleteReservation(giftWishList);
-                    } else {
+                } else {
                     confirmReservation(giftWishList);
-              }
+                }
             });
 
         }
@@ -175,7 +180,7 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
             }
         }
 
-        private void confirmDeleteReservation(GiftWishList giftWishList){
+        private void confirmDeleteReservation(GiftWishList giftWishList) {
             if (context != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage(context.getResources().getString(R.string.confirm_delete_reservation))

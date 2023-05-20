@@ -4,13 +4,19 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.SharedPreferencesController;
+import com.example.socialgift.controller.UserData;
 import com.example.socialgift.model.GiftWishList;
 
 import org.json.JSONArray;
@@ -45,14 +51,30 @@ public class DaoSocialGift {
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
+    private static DaoSocialGift daoSocialGift;
+    Cache cache;
+    Network network;
 
     private final SharedPreferencesController sharedPreferencesController;
+    public static DaoSocialGift getInstance(Context context){
+        if(daoSocialGift == null){
+            synchronized (DaoSocialGift.class) {
+                if (daoSocialGift == null) {
+                    daoSocialGift = new DaoSocialGift(context);
+                }
+            }
+        }
+        return daoSocialGift;
+    }
 
     public DaoSocialGift(Context context) {
         this.context = context;
-        queue = Volley.newRequestQueue(context);
         jsonBody = new JSONObject();
         sharedPreferencesController = new SharedPreferencesController();
+        cache = new DiskBasedCache(context.getCacheDir(), 1024 * 1024);
+        network = new BasicNetwork(new HurlStack());
+        queue = new RequestQueue(cache, network);
+        queue.start();
     }
 
 

@@ -38,24 +38,25 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         manager = new Manager();
         syncronizedWigets();
-        btnLogin.setOnClickListener(new View.OnClickListener(){
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
             }
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener(){
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
             }
         });
 
     }
+
     private void login() {
-        if(checkData()){
+        if (checkData()) {
             daoSocialGift.loginUser(edtEmail.getText().toString(), edtPassword.getText().toString(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -71,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-            },new Response.ErrorListener(){
+            }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "Login incorrecte", Toast.LENGTH_SHORT).show();
@@ -81,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUserId(){
-        daoSocialGift.getMyUserId(edtEmail.getText().toString(),new Response.Listener<JSONArray>() {
+    private void saveUserId() {
+        daoSocialGift.getMyUserId(edtEmail.getText().toString(), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             }
-        },new Response.ErrorListener(){
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "Login incorrecte", Toast.LENGTH_SHORT).show();
@@ -101,32 +102,33 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveCurrentPassword(){
+    private void saveCurrentPassword() {
         String passwordHash = manager.passwordEncrypt(edtPassword.getText().toString());
         sharedPreferencesController.savePasswordSharedPreferences(passwordHash, getApplicationContext());
 
     }
 
-    private boolean checkData(){
-        if(edtEmail.getText().toString().matches("") ){
+    private boolean checkData() {
+        if (edtEmail.getText().toString().matches("")) {
             edtEmail.setError(getResources().getString(R.string.email_required));
             return false;
 
-        }else{
-            if(edtPassword.getText().toString().matches("")){
+        } else {
+            if (edtPassword.getText().toString().matches("")) {
                 edtPassword.setError(getResources().getString(R.string.password_required));
                 return false;
             }
         }
         return true;
     }
+
     private void syncronizedWigets() {
         btnLogin = (Button) findViewById(R.id.loginButton);
         btnRegister = (Button) findViewById(R.id.SignUpButton);
         edtEmail = (EditText) findViewById(R.id.emailText);
         edtPassword = (EditText) findViewById(R.id.passwordText);
 
-        daoSocialGift = new DaoSocialGift(getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(getApplicationContext());
         sharedPreferencesController = new SharedPreferencesController();
 
     }

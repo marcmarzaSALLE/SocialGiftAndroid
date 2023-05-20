@@ -50,7 +50,7 @@ public class EditPasswordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_password, container, false);
         sharedPreferencesController = new SharedPreferencesController();
         manager = new Manager();
-        daoSocialGift = new DaoSocialGift(requireContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         syncronizeView(view);
         imgBtnBack.setOnClickListener(v -> {
             Log.wtf("EditPasswordFragment", "onClick: ");

@@ -57,7 +57,7 @@ public class EditUserFragment extends Fragment {
     private SharedPreferencesController sharedPreferencesController;
     private ImageButton imgBtnBack;
     private Button btnSaveEdit;
-
+    private UserData userData;
     private Toolbar toolbar;
 
     private String name, lastName, email, password, urlImage;
@@ -66,6 +66,7 @@ public class EditUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
+        daoRepositoryImages = new DaoRepositoryImages();
         syncronizeWidgets(view);
         getInformationUser();
 
@@ -74,6 +75,8 @@ public class EditUserFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 someActivityResultLauncher.launch(intent);
+                String imageUser = userData.getImage();
+                Log.d("TAG", "onClick: " + imageUser);
             }
         });
         edtTxtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -152,7 +155,8 @@ public class EditUserFragment extends Fragment {
                 if (!edtTxtEmail.getText().toString().isEmpty()) {
                     email = edtTxtEmail.getText().toString();
                 }
-                daoSocialGift.editMyUser(name, lastName, email, "password", urlImage, new Response.Listener<JSONObject>() {
+                Log.e("URL","URL: "+ userData.getImage());
+                daoSocialGift.editMyUser(name, lastName, email, "password", userData.getImage(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         requireActivity().finish();
@@ -192,7 +196,7 @@ public class EditUserFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_edit_button_back);
 
-        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         sharedPreferencesController = new SharedPreferencesController();
     }
 
@@ -211,7 +215,7 @@ public class EditUserFragment extends Fragment {
 
                     Glide.with(requireContext()).load(response.getString("image")).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
 
-                    UserData userData = UserData.getInstance();
+                    userData = UserData.getInstance();
                     userData.setName(name);
                     userData.setLast_name(lastName);
                     userData.setEmail(email);
@@ -231,15 +235,26 @@ public class EditUserFragment extends Fragment {
     }
 
     private final ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                String imageUrl = "";
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri selectedImage = result.getData().getData();
-                        Glide.with(requireContext()).load(selectedImage).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
                         String path = getFileFromUri(selectedImage);
-                        daoRepositoryImages.uploadFile(new File(path));
+                        Glide.with(requireContext()).load(path).apply(RequestOptions.circleCropTransform()).into(imgViewProfile);
+                        daoRepositoryImages.uploadFile(new File(path),new DaoRepositoryImages.DaoRepositoryImagesListener() {
+                            @Override
+                            public void onSuccess(String url) {
+                                EditUserFragment.this.setImage(url);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e("Error", error);
+                            }
+                        });
+
                     }
                 }
             });
@@ -256,5 +271,9 @@ public class EditUserFragment extends Fragment {
             cursor.close();
             return path;
         }
+    }
+
+    public void setImage(String url){
+        userData.setImage(url);
     }
 }

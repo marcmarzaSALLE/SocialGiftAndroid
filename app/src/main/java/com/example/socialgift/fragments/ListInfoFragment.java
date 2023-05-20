@@ -52,7 +52,7 @@ public class ListInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_list, container, false);
-        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         showInfoWidgets();

@@ -47,7 +47,7 @@ public class MyListUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         syncronizeViewWidgets(view);
-        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         daoMercadoExpress = new DaoMercadoExpress(requireActivity().getApplicationContext());
         addData();
 

@@ -36,7 +36,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_request);
-        daoSocialGift = new DaoSocialGift(this);
+        daoSocialGift = DaoSocialGift.getInstance(this);
         syncronizeView();
         addData();
         imgBtnBack.setOnClickListener(v -> {

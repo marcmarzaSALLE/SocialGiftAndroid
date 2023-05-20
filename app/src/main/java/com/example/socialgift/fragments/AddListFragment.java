@@ -43,7 +43,7 @@ public class AddListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_list, container, false);
-        daoSocialGift = new DaoSocialGift(requireActivity().getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         syncronizeViewToolbar();
         syncronizeViewWidgets(view);
         showInfoToolbar();
@@ -54,15 +54,15 @@ public class AddListFragment extends Fragment {
                 requireActivity().finish();
             }
         });
-        edtTxtDate.setOnClickListener(v ->{
-                showDateDialog();
+        edtTxtDate.setOnClickListener(v -> {
+            showDateDialog();
         });
         btnSaveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.wtf("AddListFragment", "Save button clicked");
-                if(checkData()){
-                    if(dateIsCorrect()){
+                if (checkData()) {
+                    if (dateIsCorrect()) {
                         daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -88,12 +88,13 @@ public class AddListFragment extends Fragment {
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
     }
 
-    private void syncronizeViewWidgets(View view){
+    private void syncronizeViewWidgets(View view) {
         edtTxtListName = (EditText) view.findViewById(R.id.edtNameList);
         edtTxtDescription = (EditText) view.findViewById(R.id.edtDescription);
         edtTxtDate = (EditText) view.findViewById(R.id.edtEndDate);
         btnSaveList = (Button) view.findViewById(R.id.btnSaveList);
     }
+
     private void showDateDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -109,15 +110,16 @@ public class AddListFragment extends Fragment {
 
         newFragment.show(getParentFragmentManager(), "datePicker");
     }
+
     private void showInfoToolbar() {
 
     }
 
-    private boolean checkData(){
-        if(edtTxtListName.getText().toString().isEmpty()){
+    private boolean checkData() {
+        if (edtTxtListName.getText().toString().isEmpty()) {
             edtTxtListName.setError(getResources().getText(R.string.name_list_required));
             return false;
-        }else if(edtTxtDescription.getText().toString().isEmpty()){
+        } else if (edtTxtDescription.getText().toString().isEmpty()) {
             edtTxtDescription.setError(getResources().getString(R.string.description_required));
             return false;
 
@@ -129,7 +131,7 @@ public class AddListFragment extends Fragment {
         }
     }
 
-    private boolean dateIsCorrect(){
+    private boolean dateIsCorrect() {
         boolean correctDate = false;
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

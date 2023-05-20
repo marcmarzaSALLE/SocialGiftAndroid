@@ -109,7 +109,7 @@ public class UserFragment extends Fragment {
         txtAddList = (TextView) requireActivity().findViewById(R.id.txtAddList);
 
         sharedPreferencesController = new SharedPreferencesController();
-        daoSocialGift = new DaoSocialGift(requireContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
     }
     private void changeBackgroundPressButton(Button button){
         button.setBackgroundResource(R.drawable.btn_background_menu_user_press);

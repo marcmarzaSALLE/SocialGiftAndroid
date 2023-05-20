@@ -32,16 +32,17 @@ public class FriendsUserFragment extends Fragment {
     private ImageButton imgBtnFriendsRequest;
     private TextView txtNoFriends;
     private RecyclerView recyclerViewFriends;
-    ArrayList<Friend>friends;
+    ArrayList<Friend> friends;
     DaoSocialGift daoSocialGift;
     ListFriendUserAdapter listFriendUserAdapter;
     private SearchView searchView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_friends_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_friends_user, container, false);
         syncronizeView(view);
-        daoSocialGift = new DaoSocialGift(requireContext());
+        daoSocialGift = DaoSocialGift.getInstance(requireContext());
         addData();
         imgBtnFriendsRequest.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FriendsRequestActivity.class);
@@ -60,7 +61,7 @@ public class FriendsUserFragment extends Fragment {
 
     }
 
-    private void addData(){
+    private void addData() {
         daoSocialGift.getMyFriends(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -87,19 +88,19 @@ public class FriendsUserFragment extends Fragment {
         });
     }
 
-    private void setAdapterRecyclerView(ArrayList<Friend>friends){
-        if(friends.isEmpty()){
+    private void setAdapterRecyclerView(ArrayList<Friend> friends) {
+        if (friends.isEmpty()) {
             txtNoFriends.setVisibility(View.VISIBLE);
             recyclerViewFriends.setVisibility(View.GONE);
-        }else{
+        } else {
             txtNoFriends.setVisibility(View.GONE);
             recyclerViewFriends.setVisibility(View.VISIBLE);
 
-            listFriendUserAdapter = new ListFriendUserAdapter(friends,getActivity(),new ListFriendUserAdapter.OnItemClickListener() {
+            listFriendUserAdapter = new ListFriendUserAdapter(friends, getActivity(), new ListFriendUserAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
-                    Intent intent = new Intent(getActivity(),FriendActivity.class);
-                    intent.putExtra("friend",friend);
+                    Intent intent = new Intent(getActivity(), FriendActivity.class);
+                    intent.putExtra("friend", friend);
                     startActivity(intent);
                 }
             });

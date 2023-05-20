@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.socialgift.controller.UserData;
 
 import org.json.JSONObject;
 
@@ -15,7 +16,17 @@ public class DaoMercadoExpress {
     private final RequestQueue requestQueue;
     private final JSONObject jsonBody;
     private Context context;
-
+    private static  DaoMercadoExpress daoMercadoExpress;
+    public static DaoMercadoExpress getInstance(Context context) {
+        if (daoMercadoExpress == null) {
+            synchronized (DaoMercadoExpress.class) {
+                if (daoMercadoExpress == null) {
+                    daoMercadoExpress = new DaoMercadoExpress(context);
+                }
+            }
+        }
+        return daoMercadoExpress;
+    }
     public DaoMercadoExpress(Context context) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);

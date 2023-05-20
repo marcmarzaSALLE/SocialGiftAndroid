@@ -64,7 +64,7 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
         DaoSocialGift daoSocialGift;
         public ViewHolder(android.view.View itemView) {
             super(itemView);
-            daoSocialGift = new DaoSocialGift(context);
+            daoSocialGift = DaoSocialGift.getInstance(context);
             imgFriendRequest = itemView.findViewById(R.id.imgBtnFriendRequest);
             txtEmailFriendRequest = itemView.findViewById(R.id.txtViewFriendName);
             btnAcceptFriendRequest = itemView.findViewById(R.id.imgBtnAccept);

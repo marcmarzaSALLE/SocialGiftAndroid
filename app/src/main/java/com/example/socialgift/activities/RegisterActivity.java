@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void syncronizedWigets() {
-        daoSocialGift = new DaoSocialGift(getApplicationContext());
+        daoSocialGift = DaoSocialGift.getInstance(getApplicationContext());
         btnRegister = (Button) findViewById(R.id.registerButton);
         edtEmail = (EditText) findViewById(R.id.emailText);
         edtPassword = (EditText) findViewById(R.id.passwordText);
