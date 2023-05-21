@@ -36,7 +36,7 @@ public class AddListFragment extends Fragment {
     private ImageButton imgBtnBack, imgBtnAddGift, imgBtnAddList;
     private TextView txtListName, txtDeleteList, txtAddGift;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
-    private Button btnSaveList, btnAddGift;
+    private Button btnSaveList;
     private DaoSocialGift daoSocialGift;
 
     @Override
@@ -60,7 +60,6 @@ public class AddListFragment extends Fragment {
         btnSaveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.wtf("AddListFragment", "Save button clicked");
                 if (checkData()) {
                     if (dateIsCorrect()) {
                         daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
@@ -78,6 +77,19 @@ public class AddListFragment extends Fragment {
                 }
             }
         });
+
+        imgBtnAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new AddGiftFragment());
+            }
+        });
+        txtAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new AddGiftFragment());
+            }
+        });
         return view;
     }
 
@@ -93,6 +105,8 @@ public class AddListFragment extends Fragment {
         edtTxtDescription = (EditText) view.findViewById(R.id.edtDescription);
         edtTxtDate = (EditText) view.findViewById(R.id.edtEndDate);
         btnSaveList = (Button) view.findViewById(R.id.btnSaveList);
+        imgBtnAddGift = (ImageButton) view.findViewById(R.id.btnAddGift);
+        txtAddGift = (TextView) view.findViewById(R.id.txtAddGift);
     }
 
     private void showDateDialog() {
@@ -150,5 +164,11 @@ public class AddListFragment extends Fragment {
             e.printStackTrace();
         }
         return correctDate;
+    }
+
+    private void replace(Fragment fragment){
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameAddList, fragment)
+                .commit();
     }
 }

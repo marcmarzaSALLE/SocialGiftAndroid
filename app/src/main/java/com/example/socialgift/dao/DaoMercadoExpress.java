@@ -5,14 +5,17 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.UserData;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class DaoMercadoExpress {
     private final String urlMercadoExpress = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1";
+    private final String categoryParameter = "/categories";
     private final RequestQueue requestQueue;
     private final JSONObject jsonBody;
     private Context context;
@@ -36,5 +39,11 @@ public class DaoMercadoExpress {
     public void getGiftWishList(String url, Response.Listener<JSONObject> giftWishList, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, giftWishList, errorListener);
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void getCategories(Response.Listener<JSONArray> categories, Response.ErrorListener errorListener) {
+        String categoriesUrl = this.urlMercadoExpress + this.categoryParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, categoriesUrl, null, categories, errorListener);
+        requestQueue.add(jsonArrayRequest);
     }
 }

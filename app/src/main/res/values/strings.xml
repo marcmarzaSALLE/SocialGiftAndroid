@@ -83,5 +83,8 @@
     <string name="user_no_gift_reserved">This user has no gift reserved</string>
     <string name="error_get_reserved_gift">Error getting reserved gifts</string>
     <string name="unbook">Unbook</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_gift">Search gift by name or description</string>
 
 </resources>

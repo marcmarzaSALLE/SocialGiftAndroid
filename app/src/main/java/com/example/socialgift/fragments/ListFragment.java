@@ -118,7 +118,6 @@ public class ListFragment extends Fragment {
                         JSONArray jsonArray = jsonObject.getJSONArray("gifts");
                         ArrayList<GiftWishList> giftsWishLists = new ArrayList<>();
                         if (jsonArray.length() != 0) {
-                            Log.d("jsonArray", jsonArray.toString());
                             int booked = 0;
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 JSONObject giftObject = jsonArray.getJSONObject(j);
