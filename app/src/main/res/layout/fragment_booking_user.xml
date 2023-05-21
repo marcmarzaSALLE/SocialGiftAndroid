@@ -4,7 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.BookingUserFragment"
+    android:background="@color/background_fragment"
     android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_booking_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/txt_no_booking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/user_no_gift_reserved"
+        android:textSize="20sp"
+        android:gravity="center"/>
 
 
 </LinearLayout>

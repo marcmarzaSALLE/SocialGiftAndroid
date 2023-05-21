@@ -17,6 +17,9 @@ public class GiftWishList implements Serializable {
         this.booked = false;
     }
 
+    public GiftWishList() {
+    }
+
     public int getId() {
         return id;
     }

@@ -48,6 +48,7 @@ public class DaoSocialGift {
 
     private final String giftsParameter = "/gifts";
     private final String bookParameter = "/book";
+    private final String reservedParameter = "/reserved";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
@@ -274,6 +275,20 @@ public class DaoSocialGift {
             }
         };
         queue.add(jsonObjectRequest);
+    }
+
+    public void getMyGiftsBooked(Response.Listener<JSONArray> listener,Response.ErrorListener errorListener){
+        String getMyGiftsBookedUrl = this.urlSocialGift +this.userParameter+"/"+sharedPreferencesController.loadUserIdSharedPreferences(context)+ this.giftsParameter + this.reservedParameter;
+        Log.wtf("URL","URL"+getMyGiftsBookedUrl);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getMyGiftsBookedUrl, null, listener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
     }
 
 }

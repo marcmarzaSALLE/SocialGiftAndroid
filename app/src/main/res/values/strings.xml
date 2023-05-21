@@ -80,5 +80,8 @@
     <string name="no">No</string>
     <string name="reservation_deleted">Reservation deleted!</string>
     <string name="reservation_created">Reservation created!</string>
+    <string name="user_no_gift_reserved">This user has no gift reserved</string>
+    <string name="error_get_reserved_gift">Error getting reserved gifts</string>
+    <string name="unbook">Unbook</string>
 
 </resources>
