@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.socialgift.R;
 import com.example.socialgift.dao.DaoMercadoExpress;
 import com.example.socialgift.dao.DaoSocialGift;
+import com.example.socialgift.fragments.BookingUserFragment;
 import com.example.socialgift.model.GiftWishList;
 import com.example.socialgift.model.Wishlist;
 
@@ -33,6 +34,8 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
     private ArrayList<GiftWishList> giftWishLists;
     private LayoutInflater inflater;
     private ListGiftBookedAdapter.OnItemClickListener listener;
+
+    private BookingUserFragment bookingUserFragment;
     private Context context;
     private DaoMercadoExpress daoMercadoExpress;
     private DaoSocialGift daoSocialGift;
@@ -41,14 +44,17 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
         void onItemClick(Wishlist wishlist, int position);
     }
 
-    public ListGiftBookedAdapter(ArrayList<GiftWishList> giftWishLists, Context context, ListGiftBookedAdapter.OnItemClickListener listener) {
+    public ListGiftBookedAdapter(ArrayList<GiftWishList> giftWishLists, Context context, OnItemClickListener listener) {
         this.giftWishLists = giftWishLists;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
         this.daoMercadoExpress = new DaoMercadoExpress(context);
         this.daoSocialGift = new DaoSocialGift(context);
+        this.bookingUserFragment = new BookingUserFragment();
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -116,6 +122,7 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
                     .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             deleteReservation(giftWishList);
+
                         }
                     })
                     .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -136,6 +143,7 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
                 giftWishLists.remove(giftWishList);
                 notifyItemRemoved(giftWishLists.indexOf(giftWishList));
                 notifyItemRangeChanged(giftWishLists.indexOf(giftWishList), getItemCount());
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -144,4 +152,13 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
             }
         });
     }
+
+    private void updateFragment(){
+        if (bookingUserFragment != null) {
+            bookingUserFragment.refreshFragment();
+        }
+    }
+
+
+
 }

@@ -187,6 +187,7 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
                         .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 deleteReservation(giftWishList);
+
                             }
                         })
                         .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {

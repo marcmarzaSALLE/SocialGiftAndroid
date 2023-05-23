@@ -40,6 +40,8 @@ public class BookingUserFragment extends Fragment {
         syncronizedData(view);
         daoSocialGift = new DaoSocialGift(requireContext());
         getData();
+
+
         return view;
     }
     private void syncronizedData(View view){
@@ -96,6 +98,10 @@ public class BookingUserFragment extends Fragment {
             rvBookings.setHasFixedSize(true);
             rvBookings.setLayoutManager(new LinearLayoutManager(requireActivity()));
             rvBookings.setAdapter(listGiftBookedAdapter);
+
         }
+    }
+    public void refreshFragment(){
+        getData();
     }
 }
