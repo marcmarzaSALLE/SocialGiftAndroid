@@ -78,17 +78,12 @@ public class AddListFragment extends Fragment {
             }
         });
 
-        imgBtnAddGift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imgBtnAddGift.setOnClickListener(v-> {
                 replace(new AddGiftFragment());
-            }
+
         });
-        txtAddGift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replace(new AddGiftFragment());
-            }
+        txtAddGift.setOnClickListener(v -> {
+            replace(new AddGiftFragment());
         });
         return view;
     }
@@ -98,6 +93,8 @@ public class AddListFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle("");
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
+        txtListName = (TextView) toolbar.findViewById(R.id.toolbar_title_add_list);
+        txtDeleteList = (TextView) toolbar.findViewById(R.id.txtDeleteList);
     }
 
     private void syncronizeViewWidgets(View view) {
@@ -126,7 +123,9 @@ public class AddListFragment extends Fragment {
     }
 
     private void showInfoToolbar() {
-
+        txtListName.setText(getResources().getString(R.string.add_list));
+        txtDeleteList.setText(getResources().getString(R.string.delete_list));
+        txtDeleteList.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
 
     private boolean checkData() {
@@ -166,9 +165,15 @@ public class AddListFragment extends Fragment {
         return correctDate;
     }
 
-    private void replace(Fragment fragment){
+    private void replace(Fragment fragment) {
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameAddList, fragment)
                 .commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        syncronizeViewToolbar();
     }
 }

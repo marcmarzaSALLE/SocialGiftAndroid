@@ -43,7 +43,7 @@
     <string name="description">Description</string>
     <string name="end_date">End date</string>
     <string name="gifts">Gifts</string>
-    <string name="add_gift">Add_gift</string>
+    <string name="add_gift">Add gift</string>
     <string name="list_not_saved_gifts">This wishlist doesn\'t have any saved gifts</string>
     <string name="delete_list">Delete wishlist</string>
     <string name="name_list_required">Name wishlist is required</string>
@@ -65,6 +65,7 @@
     <string name="gift_id">Gift id: %1$d</string>
     <string name="wishlist_id">Wishlist id: %1$d</string>
     <string name="gift_name">Gift name: %1$s</string>
+    <string name="gift_description">Gift description: %1$s</string>
     <string name="booked_gift_wishlist">Booked: %1$s</string>
     <string name="list_friend">Lists: %1$d</string>
     <string name="delete_gift">Delete gift</string>
@@ -83,8 +84,12 @@
     <string name="user_no_gift_reserved">This user has no gift reserved</string>
     <string name="error_get_reserved_gift">Error getting reserved gifts</string>
     <string name="unbook">Unbook</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_gift">Search gift by name or description</string>
+    <string name="create_gift">Create gift</string>
+    <string name="error_load_gifts">Error loading gifts</string>
+    <string name="id_gift">Gift id: %1$d</string>
+    <string name="price_gift">Price: %1$.2f€</string>
+    <string name="gift_deleted_list">Gift deleted from wishlist</string>
+    <string name="error_delete_gift">Error deleting gift</string>
 
 </resources>

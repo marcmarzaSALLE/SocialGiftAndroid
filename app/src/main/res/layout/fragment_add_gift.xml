@@ -26,6 +26,7 @@
             android:drawablePadding="5dp"
             android:hint="@string/search_gift"
             android:paddingStart="10dp"
+            android:textColorHint="@color/grey"
             android:paddingEnd="10dp"
             android:textColor="@color/black" />
     </LinearLayout>
@@ -45,5 +46,9 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGifts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

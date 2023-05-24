@@ -139,7 +139,7 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
         daoSocialGift.deleteReservationGift(giftWishList.getId(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(context, "Se ha eliminado el regalo de la lista", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.gift_deleted_list), Toast.LENGTH_SHORT).show();
                 giftWishLists.remove(giftWishList);
                 notifyItemRemoved(giftWishLists.indexOf(giftWishList));
                 notifyItemRangeChanged(giftWishLists.indexOf(giftWishList), getItemCount());
@@ -148,7 +148,7 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error al eliminar el regalo de la lista", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.error_delete_gift), Toast.LENGTH_SHORT).show();
             }
         });
     }

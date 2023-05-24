@@ -9,6 +9,7 @@ public class Gift implements Serializable {
     private String link;
     private String urlImage;
     private double price;
+    private boolean isAdded;
     private int idCategory;
 
     public Gift(int id, String name, String description, String link, String urlImage, double price, int idCategory) {
@@ -22,6 +23,7 @@ public class Gift implements Serializable {
     }
 
     public Gift() {
+        this.isAdded = false;
     }
 
     public int getId() {
@@ -78,5 +80,13 @@ public class Gift implements Serializable {
 
     public void setIdCategory(int idCategory) {
         this.idCategory = idCategory;
+    }
+
+    public boolean isAdded() {
+        return isAdded;
+    }
+
+    public void setAdded(boolean added) {
+        isAdded = added;
     }
 }

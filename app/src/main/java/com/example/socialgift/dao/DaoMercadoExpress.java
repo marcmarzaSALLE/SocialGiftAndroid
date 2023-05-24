@@ -46,4 +46,10 @@ public class DaoMercadoExpress {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, categoriesUrl, null, categories, errorListener);
         requestQueue.add(jsonArrayRequest);
     }
+
+    public void getAllGift(Response.Listener<JSONArray>gifts,Response.ErrorListener errorListener){
+        String allGiftsUrl = this.urlMercadoExpress + "/products";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, allGiftsUrl, null, gifts, errorListener);
+        requestQueue.add(jsonArrayRequest);
+    }
 }
