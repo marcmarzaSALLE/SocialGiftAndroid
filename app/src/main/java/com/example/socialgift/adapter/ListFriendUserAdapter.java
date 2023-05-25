@@ -64,7 +64,7 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgFriend;
-        TextView txtNameFriend;
+        TextView txtNameFriend, txtEmailFriend;
         Button btnUnfollowFriend;
         DaoSocialGift daoSocialGift;
         public ViewHolder(android.view.View itemView) {
@@ -72,11 +72,13 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
             imgFriend = itemView.findViewById(R.id.imgBtnFriend);
             txtNameFriend = itemView.findViewById(R.id.txtViewFriendName);
             btnUnfollowFriend = itemView.findViewById(R.id.btnUnfollowFriend);
+            txtEmailFriend = itemView.findViewById(R.id.txtViewFriendEmail);
             daoSocialGift = DaoSocialGift.getInstance(context);
         }
         public void bindData(Friend friend) {
             Glide.with(context).load(friend.getImage()).apply(RequestOptions.circleCropTransform()).into(imgFriend);
-            txtNameFriend.setText(friend.getEmail());
+            txtNameFriend.setText(context.getResources().getString(R.string.username,friend.getName() ,friend.getLast_name()));
+            txtEmailFriend.setText(friend.getEmail());
             btnUnfollowFriend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

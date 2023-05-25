@@ -326,6 +326,10 @@ public class DaoSocialGift {
         queue.add(jsonObjectRequest);
     }
 
+
+    public void updateWishlist(){
+
+    }
 }
 
 

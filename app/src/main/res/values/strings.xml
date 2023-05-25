@@ -45,7 +45,7 @@
     <string name="gifts">Gifts</string>
     <string name="add_gift">Add gift</string>
     <string name="list_not_saved_gifts">This wishlist doesn\'t have any saved gifts</string>
-    <string name="delete_list">Delete wishlist</string>
+    <string name="delete_list">Delete list</string>
     <string name="name_list_required">Name wishlist is required</string>
     <string name="description_required">Description is required</string>
     <string name="end_date_required">End date is required</string>
@@ -92,8 +92,8 @@
     <string name="gift_deleted_list">Gift deleted from wishlist</string>
     <string name="error_delete_gift">Error deleting gift</string>
     <string name="confirm_delete_friend">Confirm delete this friend</string>
-    <string name="friend_deleted">If you change your mind, you will need to resubmit a request to follow %1$s</string>
-    <string name="delete_wishlist">Are you sure you want to delete the list %1$s</string>
+    <string name="friend_deleted">If you change your mind, you will need to resubmit a request to follow: %1$s</string>
+    <string name="delete_wishlist">Are you sure you want to delete the list: %1$s</string>
     <string name="wishlist_deleted">Wishlist deleted successfully</string>
     <string name="error_delete_wishlist">A wishlist with gifts cannot be deleted</string>
     <string name="list_created">List created successfully</string>

@@ -60,7 +60,7 @@ public class EditUserFragment extends Fragment {
     private UserData userData;
     private Toolbar toolbar;
 
-    private String name, lastName, email, password, urlImage;
+    private String name, lastName, email, urlImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,7 +155,6 @@ public class EditUserFragment extends Fragment {
                 if (!edtTxtEmail.getText().toString().isEmpty()) {
                     email = edtTxtEmail.getText().toString();
                 }
-                Log.e("URL","URL: "+ userData.getImage());
                 daoSocialGift.editMyUser(name, lastName, email, userData.getImage(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -236,7 +235,6 @@ public class EditUserFragment extends Fragment {
 
     private final ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                String imageUrl = "";
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
