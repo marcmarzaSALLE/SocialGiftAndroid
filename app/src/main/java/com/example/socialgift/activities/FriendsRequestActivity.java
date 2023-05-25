@@ -91,7 +91,7 @@ public class FriendsRequestActivity extends AppCompatActivity {
         } else {
             recyclerViewFriendsRequest.setVisibility(View.VISIBLE);
             txtNoFriendsRequest.setVisibility(View.GONE);
-            listFriendRequestAdapter = new ListFriendRequestAdapter(friendsRequestList, this, new ListFriendRequestAdapter.OnItemClickListener() {
+            listFriendRequestAdapter = new ListFriendRequestAdapter(recyclerViewFriendsRequest,txtNoFriendsRequest,friendsRequestList, this, new ListFriendRequestAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
                     friendsRequestList.remove(position);
@@ -106,5 +106,16 @@ public class FriendsRequestActivity extends AppCompatActivity {
             recyclerViewFriendsRequest.setHasFixedSize(true);
             recyclerViewFriendsRequest.setAdapter(listFriendRequestAdapter);
         }
+    }
+
+    public void reloadActivity() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addData();
     }
 }

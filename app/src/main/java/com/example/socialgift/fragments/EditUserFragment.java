@@ -156,7 +156,7 @@ public class EditUserFragment extends Fragment {
                     email = edtTxtEmail.getText().toString();
                 }
                 Log.e("URL","URL: "+ userData.getImage());
-                daoSocialGift.editMyUser(name, lastName, email, "password", userData.getImage(), new Response.Listener<JSONObject>() {
+                daoSocialGift.editMyUser(name, lastName, email, userData.getImage(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         requireActivity().finish();

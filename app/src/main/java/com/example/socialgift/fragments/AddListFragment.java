@@ -124,7 +124,7 @@ public class AddListFragment extends Fragment {
 
     private void showInfoToolbar() {
         txtListName.setText(getResources().getString(R.string.add_list));
-        txtDeleteList.setText(getResources().getString(R.string.delete_list));
+        txtDeleteList.setVisibility(View.GONE);
         txtDeleteList.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
 

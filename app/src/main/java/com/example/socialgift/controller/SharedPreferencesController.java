@@ -5,16 +5,13 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 
 public class SharedPreferencesController {
 
     public SharedPreferencesController() {
     }
 
-    public String loadDateSharedPreferences(Context context) {
+    public String loadTokenSharedPreferences(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("tokens", MODE_PRIVATE);
         return sharedPref.getString("token", null);
     }

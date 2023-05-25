@@ -113,5 +113,9 @@ public class FriendsUserFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        addData();
+    }
 }

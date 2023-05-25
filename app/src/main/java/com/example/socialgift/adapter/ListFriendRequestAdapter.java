@@ -17,7 +17,9 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
+import com.example.socialgift.activities.FriendsRequestActivity;
 import com.example.socialgift.dao.DaoSocialGift;
+import com.example.socialgift.fragments.BookingUserFragment;
 import com.example.socialgift.model.Friend;
 
 import org.json.JSONObject;
@@ -28,16 +30,22 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
     private ArrayList<Friend>friendsRequestList;
     private LayoutInflater inflater;
     private ListFriendRequestAdapter.OnItemClickListener listener;
+    private FriendsRequestActivity friendsRequestActivity;
+    private RecyclerView recyclerView;
+    private TextView txtViewNoFriendRequest;
+
     private Context context;
     public interface OnItemClickListener{
         void onItemClick(Friend friend, int position);
     }
 
-    public ListFriendRequestAdapter(ArrayList<Friend> friendsRequestList,Context context ,ListFriendRequestAdapter.OnItemClickListener listener) {
+    public ListFriendRequestAdapter(RecyclerView recyclerView,TextView textView,ArrayList<Friend> friendsRequestList,Context context ,ListFriendRequestAdapter.OnItemClickListener listener) {
         this.friendsRequestList = friendsRequestList;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
+        this.recyclerView = recyclerView;
+        this.txtViewNoFriendRequest = textView;
     }
 
     @Override
@@ -79,8 +87,14 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
                     daoSocialGift.acceptRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            notifyItemRemoved(getAdapterPosition());
+                            friendsRequestList.remove(friend);
+                            notifyItemRemoved(friendsRequestList.indexOf(friend));
+                            notifyItemRangeChanged(friendsRequestList.indexOf(friend),getItemCount());
                             Toast.makeText(context, "You are now friend with "+friend.getEmail(), Toast.LENGTH_SHORT).show();
+                            if(friendsRequestList.isEmpty()){
+                                recyclerView.setVisibility(View.GONE);
+                                txtViewNoFriendRequest.setVisibility(View.VISIBLE);
+                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -96,9 +110,14 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
                     daoSocialGift.declineRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            notifyItemRemoved(getAdapterPosition());
-                            notifyItemChanged(getAdapterPosition());
+                            friendsRequestList.remove(friend);
+                            notifyItemRemoved(friendsRequestList.indexOf(friend));
+                            notifyItemRangeChanged(friendsRequestList.indexOf(friend),getItemCount());
                             Toast.makeText(context, "You declined "+friend.getEmail()+"'s friend request", Toast.LENGTH_SHORT).show();
+                            if(friendsRequestList.isEmpty()){
+                                recyclerView.setVisibility(View.GONE);
+                                txtViewNoFriendRequest.setVisibility(View.VISIBLE);
+                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override

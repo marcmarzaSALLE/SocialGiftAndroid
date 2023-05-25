@@ -14,26 +14,15 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.SharedPreferencesController;
-import com.example.socialgift.controller.UserData;
 import com.example.socialgift.model.GiftWishList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
 public class DaoSocialGift {
     private final String urlSocialGift = "https://balandrau.salle.url.edu/i3/socialgift/api/v1";
@@ -114,7 +103,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -128,7 +117,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -148,7 +137,7 @@ public class DaoSocialGift {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = new HashMap<>();
 
-                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                     return headers;
                 }
             };
@@ -157,7 +146,27 @@ public class DaoSocialGift {
             throw new RuntimeException(e);
         }
     }
+    public void editMyUser(String name, String last_name, String email, String image, Response.Listener<JSONObject> editMyUser, Response.ErrorListener errorListener) {
+        String createUrl = this.urlSocialGift + this.userParameter;
+        try {
+            jsonBody.put("name", name);
+            jsonBody.put("last_name", last_name);
+            jsonBody.put("email", email);
+            jsonBody.put("image", image);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, createUrl, jsonBody, editMyUser, errorListener) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
 
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                    return headers;
+                }
+            };
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void addNewList(String name, String description, String date, Response.Listener<JSONObject> addNewList, Response.ErrorListener errorListener) {
         String createUrl = this.urlSocialGift + this.whishlistParameter;
@@ -169,7 +178,7 @@ public class DaoSocialGift {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = new HashMap<>();
-                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                     return headers;
                 }
             };
@@ -186,7 +195,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -200,7 +209,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -214,7 +223,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -228,7 +237,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -242,7 +251,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -256,7 +265,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -270,7 +279,7 @@ public class DaoSocialGift {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
 
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
@@ -284,11 +293,37 @@ public class DaoSocialGift {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadDateSharedPreferences(context));
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
                 return headers;
             }
         };
         queue.add(jsonArrayRequest);
+    }
+
+    public void deleteFriend(int friendId,Response.Listener<JSONObject> deleteFriendListener,Response.ErrorListener errorListener){
+        String deleteFriendUrl = this.urlSocialGift +this.friendParameter+"/"+friendId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteFriendUrl, null, deleteFriendListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public void deleteWishlist(int id, Response.Listener<JSONObject>deleteWishlistListener,Response.ErrorListener errorListener){
+        String deleteWishlistUrl = this.urlSocialGift +this.whishlistParameter+"/"+id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteWishlistUrl, null, deleteWishlistListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
     }
 
 }

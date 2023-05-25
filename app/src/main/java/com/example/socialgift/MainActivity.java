@@ -1,6 +1,5 @@
 package com.example.socialgift;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         sharedPreferencesController = new SharedPreferencesController();
-        if(sharedPreferencesController.loadDateSharedPreferences(getApplicationContext()) != null){
+        if(sharedPreferencesController.loadTokenSharedPreferences(getApplicationContext()) != null){
             replace(new ListFragment());
             bottomNavigationView.setOnItemSelectedListener(new OnItemSelectedListener() {
                 @Override

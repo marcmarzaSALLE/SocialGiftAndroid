@@ -1,6 +1,8 @@
 package com.example.socialgift.fragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,6 +33,7 @@ import com.example.socialgift.adapter.ListGiftsWishListAdapter;
 import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Wishlist;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -41,7 +44,7 @@ import java.util.Objects;
 public class ListInfoFragment extends Fragment {
     private Toolbar toolbar;
     private ImageButton imgBtnBack, imgBtnAddGift, imgBtnAddList;
-    private TextView txtListName, txtDeleteList, txtAddGift,txtNoGifts;
+    private TextView txtListName, txtDeleteList, txtAddGift, txtNoGifts;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
     private Button btnSaveList, btnAddGift;
     private RecyclerView recyclerViewGifts;
@@ -64,31 +67,55 @@ public class ListInfoFragment extends Fragment {
                 requireActivity().finish();
             }
         });
-        edtTxtDate.setOnClickListener(v ->{
+        edtTxtDate.setOnClickListener(v -> {
             showDateDialog();
         });
         btnSaveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.wtf("AddListFragment", "Save button clicked");
-                if(checkData()){
-                    if(dateIsCorrect()){
+                if (checkData()) {
+                    if (dateIsCorrect()) {
                         daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(requireActivity().getApplicationContext(), "Lista creada correctamente", Toast.LENGTH_SHORT).show();
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.frame, new ListFragment()).commit();
+                                Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.list_updated), Toast.LENGTH_SHORT).show();
+                                requireActivity().finish();
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(requireActivity().getApplicationContext(), "Error al crear la lista", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.error_update_list), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 }
             }
+        });
+        txtDeleteList.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setMessage(requireContext().getResources().getString(R.string.delete_wishlist, wishlist.getNameList()))
+                    .setPositiveButton(requireContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            daoSocialGift.deleteWishlist(wishlist.getId(), new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.wishlist_deleted), Toast.LENGTH_SHORT).show();
+                                    requireActivity().finish();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.error_delete_wishlist), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton(requireContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Acciones al hacer clic en el botón "Cancelar"
+                        }
+                    });
+            builder.create().show();
         });
         return view;
     }
@@ -100,9 +127,11 @@ public class ListInfoFragment extends Fragment {
         txtListName = (TextView) toolbar.findViewById(R.id.toolbar_title_add_list);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
         txtDeleteList = (TextView) toolbar.findViewById(R.id.txtDeleteList);
+        txtDeleteList.setVisibility(View.VISIBLE);
+
     }
 
-    private void syncronizeViewWidgets(View view){
+    private void syncronizeViewWidgets(View view) {
         edtTxtListName = (EditText) view.findViewById(R.id.edtNameList);
         edtTxtDescription = (EditText) view.findViewById(R.id.edtDescription);
         edtTxtDate = (EditText) view.findViewById(R.id.edtEndDate);
@@ -111,7 +140,7 @@ public class ListInfoFragment extends Fragment {
         txtNoGifts = (TextView) view.findViewById(R.id.txtListNoGifts);
     }
 
-    private void showInfoWidgets(){
+    private void showInfoWidgets() {
         Intent intent = requireActivity().getIntent();
         wishlist = (Wishlist) intent.getSerializableExtra("wishlist");
         Log.wtf("AddListFragment", "Wishlist: " + wishlist.toString());
@@ -122,6 +151,7 @@ public class ListInfoFragment extends Fragment {
         edtTxtDate.setHint(wishlist.getEndDateList());
 
     }
+
     private void showDateDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -139,11 +169,11 @@ public class ListInfoFragment extends Fragment {
     }
 
 
-    private boolean checkData(){
-        if(edtTxtListName.getText().toString().isEmpty()){
+    private boolean checkData() {
+        if (edtTxtListName.getText().toString().isEmpty()) {
             edtTxtListName.setError(getResources().getText(R.string.name_list_required));
             return false;
-        }else if(edtTxtDescription.getText().toString().isEmpty()){
+        } else if (edtTxtDescription.getText().toString().isEmpty()) {
             edtTxtDescription.setError(getResources().getString(R.string.description_required));
             return false;
 
@@ -155,7 +185,7 @@ public class ListInfoFragment extends Fragment {
         }
     }
 
-    private boolean dateIsCorrect(){
+    private boolean dateIsCorrect() {
         boolean correctDate = false;
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -176,11 +206,11 @@ public class ListInfoFragment extends Fragment {
         return correctDate;
     }
 
-    private void addDataRecyclerViewGift(){
-        if(wishlist.getGifts().isEmpty()){
+    private void addDataRecyclerViewGift() {
+        if (wishlist.getGifts().isEmpty()) {
             txtNoGifts.setVisibility(View.VISIBLE);
             recyclerViewGifts.setVisibility(View.GONE);
-        }else{
+        } else {
             txtNoGifts.setVisibility(View.GONE);
             recyclerViewGifts.setVisibility(View.VISIBLE);
             recyclerViewGifts.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));

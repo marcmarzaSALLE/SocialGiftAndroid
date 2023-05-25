@@ -81,7 +81,7 @@ public class AddGiftFragment extends Fragment {
 
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_add_green_24, null);
         txtCreateGiftToolbar.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
-
+        txtCreateGiftToolbar.setVisibility(View.VISIBLE);
 
     }
     private void syncronizedWidgets(View view) {

@@ -91,5 +91,14 @@
     <string name="price_gift">Price: %1$.2f€</string>
     <string name="gift_deleted_list">Gift deleted from wishlist</string>
     <string name="error_delete_gift">Error deleting gift</string>
+    <string name="confirm_delete_friend">Confirm delete this friend</string>
+    <string name="friend_deleted">If you change your mind, you will need to resubmit a request to follow %1$s</string>
+    <string name="delete_wishlist">Are you sure you want to delete the list %1$s</string>
+    <string name="wishlist_deleted">Wishlist deleted successfully</string>
+    <string name="error_delete_wishlist">A wishlist with gifts cannot be deleted</string>
+    <string name="list_created">List created successfully</string>
+    <string name="list_updated">List updated successfully</string>
+    <string name="error_create_list">Error creating list</string>
+    <string name="error_update_list">Error updating list</string>
 
 </resources>

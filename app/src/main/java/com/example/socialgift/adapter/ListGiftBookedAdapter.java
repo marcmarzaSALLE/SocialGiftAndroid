@@ -143,7 +143,6 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
                 giftWishLists.remove(giftWishList);
                 notifyItemRemoved(giftWishLists.indexOf(giftWishList));
                 notifyItemRangeChanged(giftWishLists.indexOf(giftWishList), getItemCount());
-
             }
         }, new Response.ErrorListener() {
             @Override
