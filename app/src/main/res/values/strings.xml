@@ -100,5 +100,6 @@
     <string name="list_updated">List updated successfully</string>
     <string name="error_create_list">Error creating list</string>
     <string name="error_update_list">Error updating list</string>
+    <string name="delete_gift_confirmation">Are you sure you want to delete the gift: %1$s</string>
 
 </resources>

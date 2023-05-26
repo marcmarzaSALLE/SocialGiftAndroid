@@ -30,6 +30,8 @@ import java.util.ArrayList;
 public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAdapter.ViewHolder> {
     private ArrayList<Friend> friendsList;
     private LayoutInflater inflater;
+    private RecyclerView recyclerView;
+    private TextView txtNoFriends;
     private ListFriendUserAdapter.OnItemClickListener listener;
     private Context context;
 
@@ -38,11 +40,13 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
         void onItemClick(Friend friend, int position);
     }
 
-    public ListFriendUserAdapter(ArrayList<Friend> friendsList, Context context, ListFriendUserAdapter.OnItemClickListener listener) {
+    public ListFriendUserAdapter(TextView txtNoFriends,RecyclerView recyclerView,ArrayList<Friend> friendsList, Context context, ListFriendUserAdapter.OnItemClickListener listener) {
         this.friendsList = friendsList;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
+        this.recyclerView = recyclerView;
+        this.txtNoFriends = txtNoFriends;
     }
 
     @Override
@@ -82,34 +86,37 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
             btnUnfollowFriend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    daoSocialGift.deleteFriend(friend.getId(), new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setMessage(context.getResources().getString(R.string.friend_deleted,friend.getName() + " " + friend.getLast_name()))
-                                    .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage(context.getResources().getString(R.string.friend_deleted,friend.getName() + " " + friend.getLast_name()))
+                            .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    daoSocialGift.deleteFriend(friend.getId(), new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
 
-                                            friendsList.remove(friend);
                                             notifyItemRemoved(friendsList.indexOf(friend));
                                             notifyItemRangeChanged(friendsList.indexOf(friend),getItemCount());
-
+                                            friendsList.remove(friend);
+                                            if(friendsList.isEmpty()){
+                                                recyclerView.setVisibility(View.GONE);
+                                                txtNoFriends.setVisibility(View.VISIBLE);
+                                            }
                                         }
-                                    })
-                                    .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // Acciones al hacer clic en el botón "Cancelar"
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(context, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                            // Crear el diálogo y mostrarlo
-                            builder.create().show();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                }
+                            })
+                            .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // Acciones al hacer clic en el botón "Cancelar"
+                                }
+                            });
+                    // Crear el diálogo y mostrarlo
+                    builder.create().show();
 
                 }
             });

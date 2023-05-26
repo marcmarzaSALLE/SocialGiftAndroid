@@ -87,10 +87,10 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
                     daoSocialGift.acceptRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            friendsRequestList.remove(friend);
                             notifyItemRemoved(friendsRequestList.indexOf(friend));
                             notifyItemRangeChanged(friendsRequestList.indexOf(friend),getItemCount());
                             Toast.makeText(context, "You are now friend with "+friend.getEmail(), Toast.LENGTH_SHORT).show();
+                            friendsRequestList.remove(friend);
                             if(friendsRequestList.isEmpty()){
                                 recyclerView.setVisibility(View.GONE);
                                 txtViewNoFriendRequest.setVisibility(View.VISIBLE);

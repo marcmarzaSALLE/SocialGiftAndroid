@@ -326,8 +326,21 @@ public class DaoSocialGift {
         queue.add(jsonObjectRequest);
     }
 
+    public void deleteGiftWishlist(int id , Response.Listener<JSONObject> deleteGiftListener,Response.ErrorListener errorListener){
+        String deleteGiftUrl = this.urlSocialGift +this.giftsParameter+"/"+id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteGiftUrl, null, deleteGiftListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
 
-    public void updateWishlist(){
+
+    public void updateWishlist(String nameList, String descriptionList, String endDate, Response.Listener<JSONObject>updateListListener, Response.ErrorListener errorListener){
 
     }
 }

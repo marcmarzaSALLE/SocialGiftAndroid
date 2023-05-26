@@ -96,7 +96,7 @@ public class FriendsUserFragment extends Fragment {
             txtNoFriends.setVisibility(View.GONE);
             recyclerViewFriends.setVisibility(View.VISIBLE);
 
-            listFriendUserAdapter = new ListFriendUserAdapter(friends, getActivity(), new ListFriendUserAdapter.OnItemClickListener() {
+            listFriendUserAdapter = new ListFriendUserAdapter(txtNoFriends,recyclerViewFriends,friends, getActivity(), new ListFriendUserAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
                     Intent intent = new Intent(getActivity(), FriendActivity.class);

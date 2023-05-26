@@ -73,22 +73,16 @@ public class ListInfoFragment extends Fragment {
         btnSaveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkData()) {
-                    if (dateIsCorrect()) {
-                        daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.list_updated), Toast.LENGTH_SHORT).show();
-                                requireActivity().finish();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.error_update_list), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                if(!edtTxtListName.getText().toString().isEmpty()){
+                    wishlist.setNameList(edtTxtListName.getText().toString());
                 }
+                if(!edtTxtDescription.getText().toString().isEmpty()){
+                    wishlist.setDescriptionList(edtTxtDescription.getText().toString());
+                }
+                if(!edtTxtDate.getText().toString().isEmpty()){
+                    wishlist.setEndDateList(edtTxtDate.getText().toString());
+                }
+
             }
         });
         txtDeleteList.setOnClickListener(v -> {
@@ -222,7 +216,7 @@ public class ListInfoFragment extends Fragment {
             recyclerViewGifts.addItemDecoration(itemDecoration);
             recyclerViewGifts.setHasFixedSize(true);
             recyclerViewGifts.setLayoutManager(new LinearLayoutManager(requireActivity()));
-            recyclerViewGifts.setAdapter(new ListGiftsWishListAdapter(wishlist, wishlist.getGifts(), requireActivity().getApplicationContext(), new ListGiftsWishListAdapter.OnItemClickListener() {
+            recyclerViewGifts.setAdapter(new ListGiftsWishListAdapter(txtNoGifts,recyclerViewGifts,wishlist, wishlist.getGifts(), requireActivity(), new ListGiftsWishListAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Wishlist wishlist, int position) {
 

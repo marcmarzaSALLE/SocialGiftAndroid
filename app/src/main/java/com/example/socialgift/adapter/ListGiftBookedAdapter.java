@@ -140,9 +140,9 @@ public class ListGiftBookedAdapter extends RecyclerView.Adapter<ListGiftBookedAd
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(context, context.getResources().getString(R.string.gift_deleted_list), Toast.LENGTH_SHORT).show();
-                giftWishLists.remove(giftWishList);
                 notifyItemRemoved(giftWishLists.indexOf(giftWishList));
                 notifyItemRangeChanged(giftWishLists.indexOf(giftWishList), getItemCount());
+                giftWishLists.remove(giftWishList);
             }
         }, new Response.ErrorListener() {
             @Override
