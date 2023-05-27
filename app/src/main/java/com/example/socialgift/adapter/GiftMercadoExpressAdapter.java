@@ -23,18 +23,34 @@ public class GiftMercadoExpressAdapter extends RecyclerView.Adapter<GiftMercadoE
     LayoutInflater inflater;
     GiftMercadoExpressAdapter.OnItemClickListener listener;
     DaoMercadoExpress daoMercadoExpress;
+    TextView txtNoGifts;
+    RecyclerView recyclerView;
     Context context;
     public interface OnItemClickListener {
         void onItemClick(Gift gift, int position);
     }
 
-    public GiftMercadoExpressAdapter(ArrayList<Gift> gifts, Context context, GiftMercadoExpressAdapter.OnItemClickListener listener) {
+    public GiftMercadoExpressAdapter(TextView textView,RecyclerView recyclerView,ArrayList<Gift> gifts, Context context, GiftMercadoExpressAdapter.OnItemClickListener listener) {
         this.gifts = gifts;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
         daoMercadoExpress = DaoMercadoExpress.getInstance(context);
+        this.txtNoGifts = textView;
+        this.recyclerView = recyclerView;
     }
+    public void setGifts(ArrayList<Gift> gifts) {
+        if(gifts.isEmpty()){
+            txtNoGifts.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            txtNoGifts.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            this.gifts = gifts;
+            notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public int getItemCount() {

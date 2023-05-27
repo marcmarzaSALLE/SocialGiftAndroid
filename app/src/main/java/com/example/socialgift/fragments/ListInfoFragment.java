@@ -82,7 +82,18 @@ public class ListInfoFragment extends Fragment {
                 if(!edtTxtDate.getText().toString().isEmpty()){
                     wishlist.setEndDateList(edtTxtDate.getText().toString());
                 }
-
+                daoSocialGift.updateWishlist(wishlist.getId(), wishlist.getNameList(), wishlist.getDescriptionList(), wishlist.getEndDateList(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.wishlist_updated), Toast.LENGTH_SHORT).show();
+                        requireActivity().finish();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.error_update_wishlist), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         txtDeleteList.setOnClickListener(v -> {

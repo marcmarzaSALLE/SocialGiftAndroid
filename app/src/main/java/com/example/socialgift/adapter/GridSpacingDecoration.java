@@ -22,6 +22,5 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
         int height = width / spanCount;
         view.getLayoutParams().width = width;
         //view.getLayoutParams().height = height;
-        outRect.bottom = spacing;
     }
 }

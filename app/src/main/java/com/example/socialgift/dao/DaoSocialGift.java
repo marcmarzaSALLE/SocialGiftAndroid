@@ -340,8 +340,24 @@ public class DaoSocialGift {
     }
 
 
-    public void updateWishlist(String nameList, String descriptionList, String endDate, Response.Listener<JSONObject>updateListListener, Response.ErrorListener errorListener){
-
+    public void updateWishlist(int id,String nameList, String descriptionList, String endDate, Response.Listener<JSONObject>updateListListener, Response.ErrorListener errorListener){
+        String updateListUrl = this.urlSocialGift +this.whishlistParameter+"/"+id;
+        try {
+            jsonBody.put("name",nameList);
+            jsonBody.put("description",descriptionList);
+            jsonBody.put("end_date",endDate);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateListUrl, jsonBody, updateListListener, errorListener) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                    return headers;
+                }
+            };
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

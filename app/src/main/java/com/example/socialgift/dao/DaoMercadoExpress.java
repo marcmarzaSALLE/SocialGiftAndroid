@@ -16,6 +16,8 @@ import org.json.JSONObject;
 public class DaoMercadoExpress {
     private final String urlMercadoExpress = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1";
     private final String categoryParameter = "/categories";
+    private final String giftParameter = "/products";
+    private final String searchParameter= "/search?s=";
     private final RequestQueue requestQueue;
     private final JSONObject jsonBody;
     private Context context;
@@ -49,6 +51,18 @@ public class DaoMercadoExpress {
 
     public void getAllGift(Response.Listener<JSONArray>gifts,Response.ErrorListener errorListener){
         String allGiftsUrl = this.urlMercadoExpress + "/products";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, allGiftsUrl, null, gifts, errorListener);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getGiftsByCategory(String category, Response.Listener<JSONArray>gifts,Response.ErrorListener errorListener){
+        String allGiftsUrl = this.urlMercadoExpress + "/products?category=" + category;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, allGiftsUrl, null, gifts, errorListener);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void getGiftsBySearch(String search, Response.Listener<JSONArray>gifts,Response.ErrorListener errorListener){
+        String allGiftsUrl = this.urlMercadoExpress + giftParameter + searchParameter + search;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, allGiftsUrl, null, gifts, errorListener);
         requestQueue.add(jsonArrayRequest);
     }

@@ -7,19 +7,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,10 +51,13 @@ public class AddGiftFragment extends Fragment {
     DaoMercadoExpress daoMercadoExpress;
     ArrayList<String> nameCategories;
     Toolbar toolbar;
+    TextView txtNoGifts;
     ImageButton imgBtnBack;
-    TextView txtAddGiftToolbar,txtCreateGiftToolbar;
+    TextView txtAddGiftToolbar, txtCreateGiftToolbar;
     RecyclerView rvGifts;
-    ArrayList<Gift>gifts;
+    ArrayList<Gift> gifts;
+    GiftMercadoExpressAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_gift, container, false);
@@ -59,15 +68,47 @@ public class AddGiftFragment extends Fragment {
         getCategory();
         showAllGifts();
 
-        imgBtnBack.setOnClickListener(v->{
+        imgBtnBack.setOnClickListener(v -> {
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.frameAddList, new AddListFragment());
             transaction.commit();
 
         });
+        edtSearchGift.setSingleLine(true);
+        edtSearchGift.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_NULL) {
+                    if (edtSearchGift.getText().toString().isEmpty()) {
+                        showAllGifts();
+                    } else {
+                        showGiftsBySearch(edtSearchGift.getText().toString());
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        edtSearchGift.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                showAllGifts();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //showGiftsBySearch(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                showGiftsBySearch(s.toString());
+            }
+        });
         return view;
     }
-    private void syncronizedToolbar(){
+
+    private void syncronizedToolbar() {
         toolbar = requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         imgBtnBack = (ImageButton) toolbar.findViewById(R.id.toolbar_button_back_add_list);
@@ -75,7 +116,7 @@ public class AddGiftFragment extends Fragment {
         txtAddGiftToolbar = (TextView) toolbar.findViewById(R.id.toolbar_title_add_list);
     }
 
-    private void setInfoToolbar(){
+    private void setInfoToolbar() {
         txtAddGiftToolbar.setText(requireContext().getResources().getString(R.string.add_gift));
         txtCreateGiftToolbar.setText(requireContext().getResources().getString(R.string.create_gift));
 
@@ -84,13 +125,16 @@ public class AddGiftFragment extends Fragment {
         txtCreateGiftToolbar.setVisibility(View.VISIBLE);
 
     }
+
     private void syncronizedWidgets(View view) {
         edtSearchGift = view.findViewById(R.id.edtSearchGift);
         spnCategory = view.findViewById(R.id.spnCategory);
         rvGifts = view.findViewById(R.id.rvGifts);
+        txtNoGifts = view.findViewById(R.id.txtNoGiftMercadoExpress);
     }
-    private void setCategorySpinner(){
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),R.layout.spinner_layout, nameCategories);
+
+    private void setCategorySpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_layout, nameCategories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategory.setAdapter(adapter);
     }
@@ -124,7 +168,7 @@ public class AddGiftFragment extends Fragment {
         });
     }
 
-    private void showAllGifts(){
+    private void showAllGifts() {
         daoMercadoExpress.getAllGift(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -156,14 +200,50 @@ public class AddGiftFragment extends Fragment {
         });
     }
 
-    private void setAdapterGifts(ArrayList<Gift>gifts){
-        ArrayList<Gift>giftsSelected = new ArrayList<>();
-        GiftMercadoExpressAdapter adapter = new GiftMercadoExpressAdapter(gifts, requireActivity(), new GiftMercadoExpressAdapter.OnItemClickListener() {
+
+    private void showGiftsBySearch(String search) {
+        ArrayList<Gift> giftsSearch = new ArrayList<>();
+        daoMercadoExpress.getGiftsBySearch(search, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                gifts = new ArrayList<>();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        Gift gift = new Gift();
+                        gift.setId(jsonObject.getInt("id"));
+                        gift.setName(jsonObject.getString("name"));
+                        gift.setDescription(jsonObject.getString("description"));
+                        gift.setLink(jsonObject.getString("link"));
+                        gift.setUrlImage(jsonObject.getString("photo"));
+                        gift.setPrice(jsonObject.getDouble("price"));
+                        //gift.setIdCategory(jsonObject.getInt("categoryIds"));
+
+                        gifts.add(gift);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.setGifts(gifts);
+                //setAdapterGifts(gifts);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(requireContext(), requireContext().getResources().getString(R.string.error_load_gifts), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setAdapterGifts(ArrayList<Gift> gifts) {
+        ArrayList<Gift> giftsSelected = new ArrayList<>();
+        rvGifts.setAdapter(null);
+        adapter = new GiftMercadoExpressAdapter(txtNoGifts,rvGifts,gifts, requireActivity(), new GiftMercadoExpressAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Gift gift, int position) {
-                if(gift.isAdded()){
+                if (gift.isAdded()) {
                     giftsSelected.add(gift);
-                }else{
+                } else {
                     giftsSelected.remove(gift);
                 }
 
@@ -175,9 +255,8 @@ public class AddGiftFragment extends Fragment {
         rvGifts.addItemDecoration(itemDecoration);
         rvGifts.addItemDecoration(itemDecoration);
         rvGifts.setHasFixedSize(true);
-        rvGifts.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        rvGifts.setLayoutManager(new GridLayoutManager(requireActivity(), 1));
+        rvGifts.setRecycledViewPool(new RecyclerView.RecycledViewPool());
         rvGifts.setAdapter(adapter);
     }
-
-
 }
