@@ -104,5 +104,6 @@
     <string name="wishlist_updated">Wishlist update successfully</string>
     <string name="error_update_wishlist">Error with the wishlist updated</string>
     <string name="no_gift_found">No gift found</string>
+    <string name="all_categories">Todos</string>
 
 </resources>

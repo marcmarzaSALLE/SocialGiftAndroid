@@ -1,6 +1,7 @@
 package com.example.socialgift.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Gift implements Serializable {
     private int id;
@@ -10,16 +11,16 @@ public class Gift implements Serializable {
     private String urlImage;
     private double price;
     private boolean isAdded;
-    private int idCategory;
+    private ArrayList<Category> categories;
 
-    public Gift(int id, String name, String description, String link, String urlImage, double price, int idCategory) {
+    public Gift(int id, String name, String description, String link, String urlImage, double price, ArrayList<Category> idCategory) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.link = link;
         this.urlImage = urlImage;
         this.price = price;
-        this.idCategory = idCategory;
+        this.categories = idCategory;
     }
 
     public Gift() {
@@ -74,12 +75,12 @@ public class Gift implements Serializable {
         this.price = price;
     }
 
-    public int getIdCategory() {
-        return idCategory;
+    public ArrayList<Category> getCategories() {
+        return categories;
     }
 
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+    public void setIdCategory(ArrayList<Category> idCategory) {
+        this.categories = idCategory;
     }
 
     public boolean isAdded() {

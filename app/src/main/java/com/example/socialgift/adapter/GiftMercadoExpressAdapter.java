@@ -38,6 +38,12 @@ public class GiftMercadoExpressAdapter extends RecyclerView.Adapter<GiftMercadoE
         daoMercadoExpress = DaoMercadoExpress.getInstance(context);
         this.txtNoGifts = textView;
         this.recyclerView = recyclerView;
+        defaultRecyclerText();
+    }
+
+    private void defaultRecyclerText(){
+        txtNoGifts.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
     public void setGifts(ArrayList<Gift> gifts) {
         if(gifts.isEmpty()){
