@@ -38,6 +38,7 @@ public class DaoSocialGift {
     private final String giftsParameter = "/gifts";
     private final String bookParameter = "/book";
     private final String reservedParameter = "/reserved";
+    private final String messageParameter = "/messages";
     private final RequestQueue queue;
     private final JSONObject jsonBody;
     private final Context context;
@@ -46,8 +47,9 @@ public class DaoSocialGift {
     Network network;
 
     private final SharedPreferencesController sharedPreferencesController;
-    public static DaoSocialGift getInstance(Context context){
-        if(daoSocialGift == null){
+
+    public static DaoSocialGift getInstance(Context context) {
+        if (daoSocialGift == null) {
             synchronized (DaoSocialGift.class) {
                 if (daoSocialGift == null) {
                     daoSocialGift = new DaoSocialGift(context);
@@ -146,6 +148,7 @@ public class DaoSocialGift {
             throw new RuntimeException(e);
         }
     }
+
     public void editMyUser(String name, String last_name, String email, String image, Response.Listener<JSONObject> editMyUser, Response.ErrorListener errorListener) {
         String createUrl = this.urlSocialGift + this.userParameter;
         try {
@@ -286,9 +289,9 @@ public class DaoSocialGift {
         queue.add(jsonObjectRequest);
     }
 
-    public void getMyGiftsBooked(Response.Listener<JSONArray> listener,Response.ErrorListener errorListener){
-        String getMyGiftsBookedUrl = this.urlSocialGift +this.userParameter+"/"+sharedPreferencesController.loadUserIdSharedPreferences(context)+ this.giftsParameter + this.reservedParameter;
-        Log.wtf("URL","URL"+getMyGiftsBookedUrl);
+    public void getMyGiftsBooked(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        String getMyGiftsBookedUrl = this.urlSocialGift + this.userParameter + "/" + sharedPreferencesController.loadUserIdSharedPreferences(context) + this.giftsParameter + this.reservedParameter;
+        Log.wtf("URL", "URL" + getMyGiftsBookedUrl);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getMyGiftsBookedUrl, null, listener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -300,8 +303,8 @@ public class DaoSocialGift {
         queue.add(jsonArrayRequest);
     }
 
-    public void deleteFriend(int friendId,Response.Listener<JSONObject> deleteFriendListener,Response.ErrorListener errorListener){
-        String deleteFriendUrl = this.urlSocialGift +this.friendParameter+"/"+friendId;
+    public void deleteFriend(int friendId, Response.Listener<JSONObject> deleteFriendListener, Response.ErrorListener errorListener) {
+        String deleteFriendUrl = this.urlSocialGift + this.friendParameter + "/" + friendId;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteFriendUrl, null, deleteFriendListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -313,8 +316,8 @@ public class DaoSocialGift {
         queue.add(jsonObjectRequest);
     }
 
-    public void deleteWishlist(int id, Response.Listener<JSONObject>deleteWishlistListener,Response.ErrorListener errorListener){
-        String deleteWishlistUrl = this.urlSocialGift +this.whishlistParameter+"/"+id;
+    public void deleteWishlist(int id, Response.Listener<JSONObject> deleteWishlistListener, Response.ErrorListener errorListener) {
+        String deleteWishlistUrl = this.urlSocialGift + this.whishlistParameter + "/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteWishlistUrl, null, deleteWishlistListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -326,8 +329,8 @@ public class DaoSocialGift {
         queue.add(jsonObjectRequest);
     }
 
-    public void deleteGiftWishlist(int id , Response.Listener<JSONObject> deleteGiftListener,Response.ErrorListener errorListener){
-        String deleteGiftUrl = this.urlSocialGift +this.giftsParameter+"/"+id;
+    public void deleteGiftWishlist(int id, Response.Listener<JSONObject> deleteGiftListener, Response.ErrorListener errorListener) {
+        String deleteGiftUrl = this.urlSocialGift + this.giftsParameter + "/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, deleteGiftUrl, null, deleteGiftListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -340,12 +343,12 @@ public class DaoSocialGift {
     }
 
 
-    public void updateWishlist(int id,String nameList, String descriptionList, String endDate, Response.Listener<JSONObject>updateListListener, Response.ErrorListener errorListener){
-        String updateListUrl = this.urlSocialGift +this.whishlistParameter+"/"+id;
+    public void updateWishlist(int id, String nameList, String descriptionList, String endDate, Response.Listener<JSONObject> updateListListener, Response.ErrorListener errorListener) {
+        String updateListUrl = this.urlSocialGift + this.whishlistParameter + "/" + id;
         try {
-            jsonBody.put("name",nameList);
-            jsonBody.put("description",descriptionList);
-            jsonBody.put("end_date",endDate);
+            jsonBody.put("name", nameList);
+            jsonBody.put("description", descriptionList);
+            jsonBody.put("end_date", endDate);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateListUrl, jsonBody, updateListListener, errorListener) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -360,15 +363,15 @@ public class DaoSocialGift {
         }
     }
 
-    public void createGift(int idGift,int idWishlist,Response.Listener<JSONObject>createGift,Response.ErrorListener errorListener ){
-        String urlCreateGift = this.urlSocialGift +this.giftsParameter;
-        String urlGift = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1/products/"+idGift;
-        Log.wtf("URL","URL"+urlGift + " Wishlist: "+idWishlist);
+    public void createGift(int idGift, int idWishlist, Response.Listener<JSONObject> createGift, Response.ErrorListener errorListener) {
+        String urlCreateGift = this.urlSocialGift + this.giftsParameter;
+        String urlGift = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1/products/" + idGift;
+        Log.wtf("URL", "URL" + urlGift + " Wishlist: " + idWishlist);
 
         try {
-            jsonBody.put("wishlist_id",idWishlist);
-            jsonBody.put("product_url",urlGift);
-            jsonBody.put("priority",33);
+            jsonBody.put("wishlist_id", idWishlist);
+            jsonBody.put("product_url", urlGift);
+            jsonBody.put("priority", 33);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlCreateGift, jsonBody, createGift, errorListener) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -384,8 +387,8 @@ public class DaoSocialGift {
         }
     }
 
-    public void getWishlistById(int id, Response.Listener<JSONObject>getWishlist,Response.ErrorListener errorListener){
-        String urlWishlist = urlSocialGift +whishlistParameter+"/"+id;
+    public void getWishlistById(int id, Response.Listener<JSONObject> getWishlist, Response.ErrorListener errorListener) {
+        String urlWishlist = urlSocialGift + whishlistParameter + "/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWishlist, null, getWishlist, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -396,6 +399,41 @@ public class DaoSocialGift {
             }
         };
         queue.add(jsonObjectRequest);
+    }
+
+    public void sendMessage(String content, int idFriend, Response.Listener<JSONObject> sendMessageListener, Response.ErrorListener errorListener) {
+        String urlSendMessage = urlSocialGift + messageParameter;
+        try {
+            jsonBody.put("content", content);
+            jsonBody.put("user_id_send", sharedPreferencesController.loadUserIdSharedPreferences(context));
+            jsonBody.put("user_id_recived", idFriend);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlSendMessage, jsonBody, sendMessageListener, errorListener) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                    return headers;
+                }
+            };
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void getMessagesFriend(int idFriend,Response.Listener<JSONArray>jsonArrayListener,Response.ErrorListener errorListener){
+        String urlMessagesFriend = urlSocialGift + messageParameter + "/" + idFriend;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlMessagesFriend, null, jsonArrayListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
     }
 }
 

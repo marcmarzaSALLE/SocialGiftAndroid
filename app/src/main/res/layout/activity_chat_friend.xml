@@ -18,10 +18,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/desc_toolbar_button"
             android:src="@drawable/ic_arrow_back_24" />
+
+        <ImageView
+            android:id="@+id/toolbar_image_chat_friend"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp" />
 
         <TextView
             android:id="@+id/toolbar_name_chat_friend"
@@ -39,8 +45,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -50,14 +56,15 @@
             android:layout_weight="1" />
 
         <EditText
+            android:id="@+id/edit_text_chat_friend"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/background_cardview_chat"
             android:drawableStart="@drawable/ic_send_chat_grey"
             android:drawablePadding="2dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:hint="Send message"
             android:paddingStart="5dp"
             android:paddingEnd="5dp" />
