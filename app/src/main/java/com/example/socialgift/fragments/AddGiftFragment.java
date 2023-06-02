@@ -34,8 +34,11 @@ import com.example.socialgift.R;
 import com.example.socialgift.adapter.GiftMercadoExpressAdapter;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.dao.DaoMercadoExpress;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Category;
 import com.example.socialgift.model.Gift;
+import com.example.socialgift.model.GiftWishList;
+import com.example.socialgift.model.Wishlist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +58,10 @@ public class AddGiftFragment extends Fragment {
     RecyclerView rvGifts;
     ArrayList<Gift> gifts;
     GiftMercadoExpressAdapter adapter;
+    ArrayList<Gift> giftsSelected;
+    DaoSocialGift daoSocialGift;
+    ArrayList<GiftWishList> giftWishLists;
+    private int idWishlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,13 +71,47 @@ public class AddGiftFragment extends Fragment {
         syncronizedToolbar();
         setInfoToolbar();
         getCategory();
-        //showAllGifts();
+        daoSocialGift = DaoSocialGift.getInstance(requireActivity());
+        giftsSelected = new ArrayList<>();
 
         imgBtnBack.setOnClickListener(v -> {
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frameAddList, new AddListFragment());
-            transaction.commit();
+            Bundle wishlistBundle = getArguments();
+            if (wishlistBundle != null) {
+                Wishlist wishlist = (Wishlist) wishlistBundle.getSerializable("wishlist");
+                if (wishlist != null) {
+                    giftWishLists = new ArrayList<>();
+                    for (Gift g : giftsSelected) {
 
+                        daoSocialGift.createGift(g.getId(), wishlist.getId(), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    GiftWishList giftWishList = new GiftWishList();
+                                    giftWishList.setIdWishList(response.getInt("wishlist_id"));
+                                    giftWishList.setId(response.getInt("id"));
+                                    giftWishList.setProductLink(response.getString("product_url"));
+                                    giftWishList.setPriority(response.getInt("priority"));
+                                    giftWishList.setBooked(false);
+                                    giftWishLists.add(giftWishList);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+
+                    }
+
+                    setInfoWishlist(wishlist);
+
+                }
+            }else{
+                Toast.makeText(requireContext(), "No se pudo agregar el regalo", Toast.LENGTH_SHORT).show();
+            }
         });
 
         edittextAction();
@@ -79,6 +120,17 @@ public class AddGiftFragment extends Fragment {
         return view;
     }
 
+    public void setInfoWishlist(Wishlist wishlist){
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("wishlist", wishlist);
+
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        AddListFragment addListFragment = new AddListFragment();
+        addListFragment.setArguments(bundle);
+        transaction.replace(R.id.frameAddList, addListFragment);
+        transaction.commit();
+    }
     private void syncronizedToolbar() {
         toolbar = requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -95,9 +147,9 @@ public class AddGiftFragment extends Fragment {
                     Category categorySelected = (Category) parent.getItemAtPosition(position);
                     ArrayList<Gift> aux = new ArrayList<>();
                     for (Gift g : gifts) {
-                        if(g.getCategories()!=null){
+                        if (g.getCategories() != null) {
                             for (int i = 0; i < g.getCategories().size(); i++) {
-                                for(Category c : g.getCategories()){
+                                for (Category c : g.getCategories()) {
                                     if (c.getId() == categorySelected.getId()) {
                                         aux.add(g);
                                     }
@@ -314,7 +366,6 @@ public class AddGiftFragment extends Fragment {
     }
 
     private void setAdapterGifts(ArrayList<Gift> gifts) {
-        ArrayList<Gift> giftsSelected = new ArrayList<>();
         rvGifts.setAdapter(null);
         adapter = new GiftMercadoExpressAdapter(txtNoGifts, rvGifts, gifts, requireActivity(), new GiftMercadoExpressAdapter.OnItemClickListener() {
             @Override
@@ -337,4 +388,6 @@ public class AddGiftFragment extends Fragment {
         rvGifts.setRecycledViewPool(new RecyclerView.RecycledViewPool());
         rvGifts.setAdapter(adapter);
     }
+
+
 }

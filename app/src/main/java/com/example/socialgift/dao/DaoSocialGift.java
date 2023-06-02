@@ -359,6 +359,44 @@ public class DaoSocialGift {
             throw new RuntimeException(e);
         }
     }
+
+    public void createGift(int idGift,int idWishlist,Response.Listener<JSONObject>createGift,Response.ErrorListener errorListener ){
+        String urlCreateGift = this.urlSocialGift +this.giftsParameter;
+        String urlGift = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1/products/"+idGift;
+        Log.wtf("URL","URL"+urlGift + " Wishlist: "+idWishlist);
+
+        try {
+            jsonBody.put("wishlist_id",idWishlist);
+            jsonBody.put("product_url",urlGift);
+            jsonBody.put("priority",33);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlCreateGift, jsonBody, createGift, errorListener) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                    return headers;
+                }
+            };
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void getWishlistById(int id, Response.Listener<JSONObject>getWishlist,Response.ErrorListener errorListener){
+        String urlWishlist = urlSocialGift +whishlistParameter+"/"+id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWishlist, null, getWishlist, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
 }
 
 

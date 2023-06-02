@@ -82,4 +82,13 @@ public class Wishlist implements Serializable {
     public void setBookedGifts(int bookedGifts) {
         this.bookedGifts = bookedGifts;
     }
+
+    @Override
+    public String toString() {
+        return "Wishlist{" +
+                "id=" + id +
+                ", nameList='" + nameList + '\'' +
+                ", descriptionList='" + descriptionList + '\'' +
+                '}';
+    }
 }

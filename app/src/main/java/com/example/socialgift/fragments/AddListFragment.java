@@ -18,26 +18,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
+import com.example.socialgift.adapter.GridSpacingDecoration;
+import com.example.socialgift.adapter.ListGiftsWishListAdapter;
 import com.example.socialgift.dao.DaoSocialGift;
+import com.example.socialgift.model.Gift;
+import com.example.socialgift.model.GiftWishList;
+import com.example.socialgift.model.Wishlist;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
 public class AddListFragment extends Fragment {
     private Toolbar toolbar;
     private ImageButton imgBtnBack, imgBtnAddGift, imgBtnAddList;
-    private TextView txtListName, txtDeleteList, txtAddGift;
+    private TextView txtListName, txtDeleteList, txtAddGift, txtNoGifts;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
     private Button btnSaveList;
     private DaoSocialGift daoSocialGift;
+    private ArrayList<GiftWishList> giftWishLists;
+    private RecyclerView rvGifts;
+    private Wishlist wishlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,30 +76,59 @@ public class AddListFragment extends Fragment {
             public void onClick(View v) {
                 if (checkData()) {
                     if (dateIsCorrect()) {
+                        wishlist = new Wishlist();
                         daoSocialGift.addNewList(edtTxtListName.getText().toString(), edtTxtDescription.getText().toString(), edtTxtDate.getText().toString(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                requireActivity().finish();
+                                try {
+                                    wishlist.setId(response.getInt("id"));
+                                    wishlist.setNameList(response.getString("name"));
+                                    wishlist.setDescriptionList(response.getString("description"));
+                                    wishlist.setEndDateList(response.getString("end_date"));
+                                    AddListFragment.this.setWishlist(wishlist);
+                                    Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.wishlist_created), Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(requireActivity().getApplicationContext(), "Error al crear la lista", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.error_create_wishlist), Toast.LENGTH_SHORT).show();
                             }
                         });
+
                     }
                 }
             }
         });
 
-        imgBtnAddGift.setOnClickListener(v-> {
-                replace(new AddGiftFragment());
-
+        imgBtnAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wishlist == null) {
+                    Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.have_create_wishlist), Toast.LENGTH_SHORT).show();
+                } else {
+                    replace(new AddGiftFragment());
+                }
+            }
         });
-        txtAddGift.setOnClickListener(v -> {
-            replace(new AddGiftFragment());
+
+        txtAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wishlist == null) {
+                    Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.have_create_wishlist), Toast.LENGTH_SHORT).show();
+                } else {
+                    replace(new AddGiftFragment());
+                }
+            }
         });
         return view;
+    }
+
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 
     private void syncronizeViewToolbar() {
@@ -104,6 +147,9 @@ public class AddListFragment extends Fragment {
         btnSaveList = (Button) view.findViewById(R.id.btnSaveList);
         imgBtnAddGift = (ImageButton) view.findViewById(R.id.btnAddGift);
         txtAddGift = (TextView) view.findViewById(R.id.txtAddGift);
+        rvGifts = (RecyclerView) view.findViewById(R.id.recyclerViewGiftsWishList);
+        txtNoGifts = (TextView) view.findViewById(R.id.txtListNoGifts);
+
     }
 
     private void showDateDialog() {
@@ -166,14 +212,86 @@ public class AddListFragment extends Fragment {
     }
 
     private void replace(Fragment fragment) {
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameAddList, fragment)
-                .commit();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("wishlist", wishlist);
+
+        AddGiftFragment addGiftFragment = (AddGiftFragment) fragment;
+        addGiftFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameAddList, fragment);
+        transaction.commit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         syncronizeViewToolbar();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            wishlist = (Wishlist) bundle.getSerializable("wishlist");
+            daoSocialGift.getWishlistById(wishlist.getId(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        giftWishLists = new ArrayList<>();
+                        JSONArray gifts = response.getJSONArray("gifts");
+                        for (int i = 0; i < gifts.length(); i++) {
+                            JSONObject gift = gifts.getJSONObject(i);
+                            GiftWishList gift1 = new GiftWishList();
+                            gift1.setId(gift.getInt("id"));
+                            gift1.setIdWishList(gift.getInt("idWishlist"));
+                            gift1.setId(gift.getInt("id"));
+                            gift1.setPriority(gift.getInt("priority"));
+                            gift1.setBooked(false);
+                            gift1.setProductLink(gift.getString("product_url"));
+                            giftWishLists.add(gift1);
+                        }
+                        wishlist.setGifts(giftWishLists);
+                        setInfoWishlist(wishlist);
+                        addDataRecyclerViewGift(wishlist);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            // Utiliza el itemList como desees
+        }
+    }
+
+    private void setInfoWishlist(Wishlist wishlist) {
+        edtTxtListName.setText(wishlist.getNameList());
+        edtTxtDescription.setText(wishlist.getDescriptionList());
+        edtTxtDate.setText(wishlist.getEndDateList());
+    }
+
+    private void addDataRecyclerViewGift(Wishlist wishlist) {
+        if (wishlist.getGifts().isEmpty()) {
+            txtNoGifts.setVisibility(View.VISIBLE);
+            rvGifts.setVisibility(View.GONE);
+        } else {
+            txtNoGifts.setVisibility(View.GONE);
+            rvGifts.setVisibility(View.VISIBLE);
+            rvGifts.setLayoutManager(new LinearLayoutManager(requireActivity().getApplicationContext()));
+
+            int spanCount = 1;
+            int spacing = 3;
+            GridSpacingDecoration itemDecoration = new GridSpacingDecoration(spanCount, spacing);
+            rvGifts.addItemDecoration(itemDecoration);
+            rvGifts.addItemDecoration(itemDecoration);
+            rvGifts.setHasFixedSize(true);
+            rvGifts.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            rvGifts.setAdapter(new ListGiftsWishListAdapter(txtNoGifts, rvGifts, wishlist, wishlist.getGifts(), requireActivity(), new ListGiftsWishListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Wishlist wishlist, int position) {
+
+                }
+            }));
+        }
     }
 }

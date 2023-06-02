@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.AddListActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarChatFriend"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#D1D1D1">
+
+        <ImageButton
+            android:id="@+id/toolbar_button_back_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginEnd="15dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/desc_toolbar_button"
+            android:src="@drawable/ic_arrow_back_24" />
+
+        <TextView
+            android:id="@+id/toolbar_name_chat_friend"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:maxLines="2"
+            android:text="@string/username"
+            android:textColor="@color/blue_whis"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_chat_friend"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/background_cardview_chat"
+            android:drawableStart="@drawable/ic_send_chat_grey"
+            android:drawablePadding="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:hint="Send message"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp" />
+    </LinearLayout>
+</LinearLayout>

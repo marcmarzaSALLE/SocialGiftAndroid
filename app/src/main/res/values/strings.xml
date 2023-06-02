@@ -85,6 +85,7 @@
     <string name="error_get_reserved_gift">Error getting reserved gifts</string>
     <string name="unbook">Unbook</string>
     <string name="search_gift">Search gift by name or description</string>
+    <string name="search_friend">Search friend </string>
     <string name="create_gift">Create gift</string>
     <string name="error_load_gifts">Error loading gifts</string>
     <string name="id_gift">Gift id: %1$d</string>
@@ -105,5 +106,9 @@
     <string name="error_update_wishlist">Error with the wishlist updated</string>
     <string name="no_gift_found">No gift found</string>
     <string name="all_categories">Todos</string>
+    <string name="wishlist_created">Wishlist created succesfully</string>
+    <string name="error_create_wishlist">Error creating wishlist</string>
+    <string name="have_create_wishlist">You have created a wishlist</string>
+    <string name="goChat">Go chat</string>
 
 </resources>
