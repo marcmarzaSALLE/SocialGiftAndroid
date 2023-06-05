@@ -326,7 +326,6 @@ public class AddGiftFragment extends Fragment {
 
 
     private void showGiftsBySearch(String search) {
-        ArrayList<Gift> giftsSearch = new ArrayList<>();
         daoMercadoExpress.getGiftsBySearch(search, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

@@ -291,7 +291,6 @@ public class DaoSocialGift {
 
     public void getMyGiftsBooked(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         String getMyGiftsBookedUrl = this.urlSocialGift + this.userParameter + "/" + sharedPreferencesController.loadUserIdSharedPreferences(context) + this.giftsParameter + this.reservedParameter;
-        Log.wtf("URL", "URL" + getMyGiftsBookedUrl);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getMyGiftsBookedUrl, null, listener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -366,8 +365,6 @@ public class DaoSocialGift {
     public void createGift(int idGift, int idWishlist, Response.Listener<JSONObject> createGift, Response.ErrorListener errorListener) {
         String urlCreateGift = this.urlSocialGift + this.giftsParameter;
         String urlGift = "https://balandrau.salle.url.edu/i3/mercadoexpress/api/v1/products/" + idGift;
-        Log.wtf("URL", "URL" + urlGift + " Wishlist: " + idWishlist);
-
         try {
             jsonBody.put("wishlist_id", idWishlist);
             jsonBody.put("product_url", urlGift);
@@ -425,6 +422,20 @@ public class DaoSocialGift {
     public void getMessagesFriend(int idFriend,Response.Listener<JSONArray>jsonArrayListener,Response.ErrorListener errorListener){
         String urlMessagesFriend = urlSocialGift + messageParameter + "/" + idFriend;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlMessagesFriend, null, jsonArrayListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
+    }
+
+    public void getAllUsers(Response.Listener<JSONArray>jsonArrayListenerUsers,Response.ErrorListener errorListener){
+        String urlAllUsers = urlSocialGift + userParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlAllUsers, null, jsonArrayListenerUsers, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();

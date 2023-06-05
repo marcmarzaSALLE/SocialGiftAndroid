@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,10 +20,12 @@ import com.android.volley.VolleyError;
 import com.example.socialgift.R;
 import com.example.socialgift.activities.FriendActivity;
 import com.example.socialgift.activities.FriendsRequestActivity;
+import com.example.socialgift.adapter.AllUsersAdapter;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFriendUserAdapter;
 import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
+import com.example.socialgift.model.User;
 
 import org.json.JSONArray;
 
@@ -31,11 +34,13 @@ import java.util.ArrayList;
 public class FriendsUserFragment extends Fragment {
     private ImageButton imgBtnFriendsRequest;
     private TextView txtNoFriends;
-    private RecyclerView recyclerViewFriends;
+    private RecyclerView recyclerViewFriends, recyclerViewAllUsers;
     ArrayList<Friend> friends;
+    ArrayList<User>allUsers;
     DaoSocialGift daoSocialGift;
     ListFriendUserAdapter listFriendUserAdapter;
-    private SearchView searchView;
+    AllUsersAdapter allUsersAdapter;
+    EditText searchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +49,7 @@ public class FriendsUserFragment extends Fragment {
         syncronizeView(view);
         daoSocialGift = DaoSocialGift.getInstance(requireContext());
         addData();
+        addDataAllUsers();
         imgBtnFriendsRequest.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FriendsRequestActivity.class);
             startActivity(intent);
@@ -54,10 +60,12 @@ public class FriendsUserFragment extends Fragment {
 
     private void syncronizeView(View view) {
         imgBtnFriendsRequest = (ImageButton) view.findViewById(R.id.imgBtnFriendRequest);
-        searchView = (SearchView) view.findViewById(R.id.searchView);
+        searchView = (EditText) view.findViewById(R.id.edtSearchFriendUser);
         txtNoFriends = (TextView) view.findViewById(R.id.txtNoFriends);
         recyclerViewFriends = (RecyclerView) view.findViewById(R.id.recyclerViewFriends);
         recyclerViewFriends.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerViewAllUsers = (RecyclerView) view.findViewById(R.id.recyclerViewUsers);
+        recyclerViewAllUsers.setLayoutManager(new LinearLayoutManager(requireContext()));
 
     }
 
@@ -88,6 +96,49 @@ public class FriendsUserFragment extends Fragment {
         });
     }
 
+    private void addDataAllUsers(){
+        daoSocialGift.getAllUsers(new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                allUsers = new ArrayList<>();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        allUsers.add(new User(response.getJSONObject(i).getInt("id"),
+                                response.getJSONObject(i).getString("name"),
+                                response.getJSONObject(i).getString("last_name"),
+                                response.getJSONObject(i).getString("email"),
+                                response.getJSONObject(i).getString("image")));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                setAdapterRecyclerViewAllUsers(allUsers);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+    private void setAdapterRecyclerViewAllUsers(ArrayList<User> users){
+        recyclerViewAllUsers.setVisibility(View.VISIBLE);
+        allUsersAdapter = new AllUsersAdapter(users, getActivity(), new AllUsersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Friend friend, int position) {
+
+            }
+        });
+        int spanCount = 1;
+        int spacing = 3;
+        GridSpacingDecoration itemDecoration = new GridSpacingDecoration(spanCount, spacing);
+        recyclerViewAllUsers.addItemDecoration(itemDecoration);
+        recyclerViewAllUsers.setHasFixedSize(true);
+        recyclerViewAllUsers.setAdapter(allUsersAdapter);
+
+    }
     private void setAdapterRecyclerView(ArrayList<Friend> friends) {
         if (friends.isEmpty()) {
             txtNoFriends.setVisibility(View.VISIBLE);

@@ -60,7 +60,9 @@
     <string name="error">Error changing password</string>
     <string name="no_friends_request">You don\'t have any friend requests</string>
     <string name="unfollow">Unfollow</string>
+    <string name="follow">Follow</string>
     <string name="no_friends">You don\'t have friends</string>
+    <string name="all_users">All users: </string>
     <string name="delete">Delete</string>
     <string name="gift_id">Gift id: %1$d</string>
     <string name="wishlist_id">Wishlist id: %1$d</string>
@@ -86,6 +88,7 @@
     <string name="unbook">Unbook</string>
     <string name="search_gift">Search gift by name or description</string>
     <string name="search_friend">Search friend </string>
+    <string name="search_friend_user">Search friend or user</string>
     <string name="create_gift">Create gift</string>
     <string name="error_load_gifts">Error loading gifts</string>
     <string name="id_gift">Gift id: %1$d</string>
