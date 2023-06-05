@@ -1,5 +1,6 @@
 package com.example.socialgift.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -181,6 +183,7 @@ public class FriendsUserFragment extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_NULL) {
+                    hideKeyboard();
                     if (searchUser.getText().toString().isEmpty()) {
                         addDataAllUsers();
                         addData();
@@ -212,6 +215,11 @@ public class FriendsUserFragment extends Fragment {
                 ;
             }
         });
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchUser.getWindowToken(), 0);
     }
 
     private void showUsersBySearch(String search) {

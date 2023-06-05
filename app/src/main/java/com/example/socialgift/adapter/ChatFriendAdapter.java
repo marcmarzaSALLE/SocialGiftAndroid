@@ -41,11 +41,31 @@ public class ChatFriendAdapter extends RecyclerView.Adapter<ChatFriendAdapter.Vi
         void onItemClick(Friend friend, int position);
     }
 
-    public ChatFriendAdapter(ArrayList<Friend> friendsList, Context context, ChatFriendAdapter.OnItemClickListener listener) {
+    public ChatFriendAdapter(TextView txtNoFriends,RecyclerView recyclerView,ArrayList<Friend> friendsList, Context context, ChatFriendAdapter.OnItemClickListener listener) {
         this.friendsList = friendsList;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
+        this.recyclerView = recyclerView;
+        this.txtNoFriends = txtNoFriends;
+    }
+
+    public void setFriendsList(String name) {
+        ArrayList<Friend> friends = new ArrayList<>();
+        for (Friend friend: friendsList) {
+            if(friend.getName().toLowerCase().contains(name.toLowerCase()) || friend.getLast_name().toLowerCase().contains(name.toLowerCase()) || friend.getEmail().toLowerCase().contains(name.toLowerCase())){
+                friends.add(friend);
+            }
+        }
+        if(friends.isEmpty()){
+            txtNoFriends.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            txtNoFriends.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            friendsList = friends;
+            notifyDataSetChanged();
+        }
     }
 
     @Override

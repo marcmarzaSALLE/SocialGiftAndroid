@@ -418,21 +418,6 @@ public class DaoSocialGift {
             throw new RuntimeException(e);
         }
     }
-
-    public void getMessagesFriend(int idFriend,Response.Listener<JSONArray>jsonArrayListener,Response.ErrorListener errorListener){
-        String urlMessagesFriend = urlSocialGift + messageParameter + "/" + idFriend;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlMessagesFriend, null, jsonArrayListener, errorListener) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-
-                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
-                return headers;
-            }
-        };
-        queue.add(jsonArrayRequest);
-    }
-
     public void getAllUsers(Response.Listener<JSONArray>jsonArrayListenerUsers,Response.ErrorListener errorListener){
         String urlAllUsers = urlSocialGift + userParameter;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlAllUsers, null, jsonArrayListenerUsers, errorListener) {
@@ -464,6 +449,20 @@ public class DaoSocialGift {
     public void searchUser(String name,Response.Listener<JSONArray>jsonArrayListenerSearch,Response.ErrorListener errorListener){
         String urlSearchUser = urlSocialGift + userParameter + searchParameter + name;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlSearchUser, null, jsonArrayListenerSearch, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonArrayRequest);
+    }
+
+    public void getUsersChat(Response.Listener<JSONArray>jsonArrayListenerMessage,Response.ErrorListener errorListener) {
+        String urlUsersChat = urlSocialGift + messageParameter + "/" + userParameter;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlUsersChat, null, jsonArrayListenerMessage, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();

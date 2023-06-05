@@ -1,5 +1,6 @@
 package com.example.socialgift.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,9 +10,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -34,6 +41,7 @@ public class ChatFragment extends Fragment {
     private Toolbar toolbar;
     private TextView txtViewToolbar,txtAddList;
     private ImageButton imgBtnToolbar;
+    EditText edtSearchFriend;
     RecyclerView recyclerViewFriends;
     TextView txtNoFriends;
     DaoSocialGift daoSocialGift;
@@ -50,11 +58,53 @@ public class ChatFragment extends Fragment {
         syncronizeView(view);
         changeInformationToolbar();
         loadFriends();
+        searchFriend();
         return view;
+    }
+
+    private void searchFriend(){
+        edtSearchFriend.setSingleLine(true);
+        edtSearchFriend.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (keyCode == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_NULL) {
+                        hideKeyboard();
+                        if (edtSearchFriend.getText().toString().isEmpty()) {
+                            loadFriends();
+                        } else {
+                            chatFriendAdapter.setFriendsList(edtSearchFriend.getText().toString());
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        edtSearchFriend.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    loadFriends();
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //showGiftsBySearch(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    chatFriendAdapter.setFriendsList(edtSearchFriend.getText().toString());
+                }
+            });
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtSearchFriend.getWindowToken(), 0);
     }
     private void syncronizeView(View view) {
         recyclerViewFriends = (RecyclerView) view.findViewById(R.id.rvFriendsChat);
         txtNoFriends = (TextView) view.findViewById(R.id.txtNoFriendsChat);
+        edtSearchFriend = (EditText) view.findViewById(R.id.edtSearchFriend);
 
     }
     private void syncronizedToolbar(){
@@ -71,7 +121,7 @@ public class ChatFragment extends Fragment {
         txtAddList.setVisibility(View.GONE);
     }
     private void loadFriends(){
-        daoSocialGift.getMyFriends(new Response.Listener<JSONArray>() {
+        daoSocialGift.getUsersChat(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 friends = new ArrayList<>();
@@ -104,7 +154,7 @@ public class ChatFragment extends Fragment {
             txtNoFriends.setVisibility(View.GONE);
             recyclerViewFriends.setVisibility(View.VISIBLE);
 
-            chatFriendAdapter = new ChatFriendAdapter(friends, requireActivity(), new ChatFriendAdapter.OnItemClickListener() {
+            chatFriendAdapter = new ChatFriendAdapter(txtNoFriends,recyclerViewFriends,friends, requireActivity(), new ChatFriendAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Friend friend, int position) {
                     Intent intent = new Intent(getActivity(), FriendActivity.class);
