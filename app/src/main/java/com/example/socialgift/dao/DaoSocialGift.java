@@ -446,6 +446,20 @@ public class DaoSocialGift {
         };
         queue.add(jsonArrayRequest);
     }
+
+    public void sendRequestUser(int id, Response.Listener<JSONObject>jsonObjectListenerRequest,Response.ErrorListener errorListener){
+        String urlFriendRequest = urlSocialGift + friendParameter + "/" + id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, urlFriendRequest, null, jsonObjectListenerRequest, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+
+                headers.put("Authorization", "Bearer " + sharedPreferencesController.loadTokenSharedPreferences(context));
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
 }
 
 

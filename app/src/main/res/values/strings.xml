@@ -113,5 +113,7 @@
     <string name="error_create_wishlist">Error creating wishlist</string>
     <string name="have_create_wishlist">You have created a wishlist</string>
     <string name="goChat">Go chat</string>
+    <string name="send_request">Request sent!</string>
+    <string name="error_send_request">You have already sent a request to this user</string>
 
 </resources>

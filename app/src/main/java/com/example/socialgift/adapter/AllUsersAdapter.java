@@ -82,6 +82,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.ViewHo
             daoSocialGift = DaoSocialGift.getInstance(context);
         }
 
+
         public void bindData(User user) {
             Glide.with(context).load(user.getImage()).apply(RequestOptions.circleCropTransform()).into(imgFriend);
             txtNameFriend.setText(context.getResources().getString(R.string.username, user.getName(), user.getLast_name()));
@@ -90,6 +91,25 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.ViewHo
                 btnFollowFriend.setVisibility(View.GONE);
             }
             checkFriendUser(user.getEmail());
+
+            btnFollowFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    daoSocialGift.sendRequestUser(user.getId(), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            btnFollowFriend.setVisibility(View.GONE);
+                            Toast.makeText(context, context.getResources().getString(R.string.send_request), Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            btnFollowFriend.setVisibility(View.GONE);
+                            Toast.makeText(context, context.getResources().getString(R.string.error_send_request), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
         }
 
         private void checkFriendUser(String email) {
