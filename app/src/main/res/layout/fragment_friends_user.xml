@@ -38,11 +38,12 @@
 
             <ImageButton
                 android:id="@+id/imgBtnFriendRequest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="20dp"
+                android:scaleType="fitCenter"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/desc_toolbar_button"
                 android:src="@drawable/ic_person_add_24" />
@@ -62,6 +63,10 @@
             android:id="@+id/recyclerViewFriends"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
             android:clipToPadding="false" />
 
         <TextView

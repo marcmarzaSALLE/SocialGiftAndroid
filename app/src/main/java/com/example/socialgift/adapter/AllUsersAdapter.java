@@ -22,6 +22,7 @@ import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
+import com.example.socialgift.model.Gift;
 import com.example.socialgift.model.User;
 
 import org.json.JSONArray;
@@ -59,6 +60,11 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.ViewHo
     public AllUsersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.box_recyclerview_all_users, null);
         return new AllUsersAdapter.ViewHolder(view);
+    }
+
+    public void setAllUsers(ArrayList<User> users) {
+        this.userArrayList = users;
+        notifyDataSetChanged();
     }
 
     @Override

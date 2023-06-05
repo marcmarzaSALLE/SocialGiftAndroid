@@ -65,6 +65,24 @@ public class ListFriendUserAdapter extends RecyclerView.Adapter<ListFriendUserAd
         holder.bindData(friendsList.get(position));
     }
 
+    public void searchFriend(String name){
+        ArrayList<Friend> friends = new ArrayList<>();
+        for (Friend friend: friendsList) {
+            if(friend.getName().toLowerCase().contains(name.toLowerCase()) || friend.getLast_name().toLowerCase().contains(name.toLowerCase()) || friend.getEmail().toLowerCase().contains(name.toLowerCase())){
+                friends.add(friend);
+            }
+        }
+        if(friends.isEmpty()){
+            txtNoFriends.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            txtNoFriends.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            friendsList = friends;
+            notifyDataSetChanged();
+        }
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgFriend;
