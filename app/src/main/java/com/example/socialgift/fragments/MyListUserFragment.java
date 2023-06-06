@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -40,6 +41,7 @@ public class MyListUserFragment extends Fragment {
     private ArrayList<Wishlist> wishlists;
     private DaoSocialGift daoSocialGift;
     private DaoMercadoExpress daoMercadoExpress;
+    private ProgressBar progressBarMyList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,14 +59,18 @@ public class MyListUserFragment extends Fragment {
     private void syncronizeViewWidgets(View view) {
         recyclerViewList = (RecyclerView) view.findViewById(R.id.recyclerViewList);
         txtNoList = (TextView) view.findViewById(R.id.txtNoList);
+        progressBarMyList = (ProgressBar) view.findViewById(R.id.progressBarMyList);
     }
 
     private void setAdapterRecyclerview(ArrayList<Wishlist> wishlists) {
         if (wishlists.isEmpty()) {
             recyclerViewList.setVisibility(View.GONE);
+            txtNoList.setVisibility(View.VISIBLE);
+            progressBarMyList.setVisibility(View.GONE);
         } else {
             recyclerViewList.setVisibility(View.VISIBLE);
             txtNoList.setVisibility(View.GONE);
+            progressBarMyList.setVisibility(View.GONE);
             ListFragmentAdapter listFragmentAdapter = new ListFragmentAdapter(wishlists, requireActivity(), new ListFragmentAdapter.OnItemClickListener() {
 
                 @Override
@@ -87,6 +93,7 @@ public class MyListUserFragment extends Fragment {
     }
 
     private void addData() {
+        progressBarMyList.setVisibility(View.VISIBLE);
         SharedPreferencesController sharedPreferencesController = new SharedPreferencesController();
         daoSocialGift.getWishListUser(sharedPreferencesController.loadUserIdSharedPreferences(requireActivity()), new Response.Listener<JSONArray>() {
             @Override
@@ -127,12 +134,13 @@ public class MyListUserFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                progressBarMyList.setVisibility(View.GONE);
                 setAdapterRecyclerview(wishlists);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progressBarMyList.setVisibility(View.GONE);
             }
         });
     }

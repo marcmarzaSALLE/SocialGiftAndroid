@@ -75,8 +75,6 @@ public class EditUserFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 someActivityResultLauncher.launch(intent);
-                String imageUser = userData.getImage();
-                Log.d("TAG", "onClick: " + imageUser);
             }
         });
         edtTxtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -227,7 +225,6 @@ public class EditUserFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.wtf("error", error.toString());
                 Toast.makeText(requireActivity().getApplicationContext(), "Error al cargar la información del usuario", Toast.LENGTH_SHORT).show();
             }
         });

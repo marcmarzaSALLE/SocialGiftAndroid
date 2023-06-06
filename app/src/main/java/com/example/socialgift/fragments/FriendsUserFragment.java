@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +31,7 @@ import com.example.socialgift.adapter.AllUsersAdapter;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.adapter.ListFriendUserAdapter;
 import com.example.socialgift.dao.DaoSocialGift;
-import com.example.socialgift.model.Category;
 import com.example.socialgift.model.Friend;
-import com.example.socialgift.model.Gift;
 import com.example.socialgift.model.User;
 
 import org.json.JSONArray;
@@ -52,6 +50,8 @@ public class FriendsUserFragment extends Fragment {
     ListFriendUserAdapter listFriendUserAdapter;
     AllUsersAdapter allUsersAdapter;
     EditText searchUser;
+    ProgressBar progressBarFriends;
+    ProgressBar progressBarAllUsers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +59,7 @@ public class FriendsUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends_user, container, false);
         syncronizeView(view);
         daoSocialGift = DaoSocialGift.getInstance(requireContext());
-        addData();
+        addDataFriends();
         addDataAllUsers();
         imgBtnFriendsRequest.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), FriendsRequestActivity.class);
@@ -78,10 +78,13 @@ public class FriendsUserFragment extends Fragment {
         recyclerViewFriends.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerViewAllUsers = (RecyclerView) view.findViewById(R.id.recyclerViewUsers);
         recyclerViewAllUsers.setLayoutManager(new LinearLayoutManager(requireContext()));
-
+        progressBarFriends = (ProgressBar) view.findViewById(R.id.progressBarFriends);
+        progressBarAllUsers = (ProgressBar) view.findViewById(R.id.progressBarAllUsers);
     }
 
-    private void addData() {
+    private void addDataFriends() {
+        progressBarFriends.setVisibility(View.VISIBLE);
+        txtNoFriends.setVisibility(View.GONE);
         daoSocialGift.getMyFriends(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -98,17 +101,19 @@ public class FriendsUserFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                progressBarFriends.setVisibility(View.GONE);
                 setAdapterRecyclerView(friends);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progressBarFriends.setVisibility(View.GONE);
             }
         });
     }
 
     private void addDataAllUsers() {
+        progressBarAllUsers.setVisibility(View.VISIBLE);
         daoSocialGift.getAllUsers(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -125,12 +130,13 @@ public class FriendsUserFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                progressBarAllUsers.setVisibility(View.GONE);
                 setAdapterRecyclerViewAllUsers(allUsers);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progressBarAllUsers.setVisibility(View.GONE);
             }
         });
     }
@@ -186,7 +192,7 @@ public class FriendsUserFragment extends Fragment {
                     hideKeyboard();
                     if (searchUser.getText().toString().isEmpty()) {
                         addDataAllUsers();
-                        addData();
+                        addDataFriends();
                     } else {
                         showUsersBySearch(searchUser.getText().toString());
                         listFriendUserAdapter.searchFriend(searchUser.getText().toString());
@@ -200,7 +206,7 @@ public class FriendsUserFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 addDataAllUsers();
-                addData();
+                addDataFriends();
             }
 
             @Override
@@ -253,7 +259,7 @@ public class FriendsUserFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        addData();
+        addDataFriends();
         addDataAllUsers();
     }
 }
