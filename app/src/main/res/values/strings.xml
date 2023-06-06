@@ -94,6 +94,7 @@
     <string name="id_gift">Gift id: %1$d</string>
     <string name="price_gift">Price: %1$.2f€</string>
     <string name="gift_deleted_list">Gift deleted from wishlist</string>
+    <string name="delete_gift_booked">Gift booked from your bookings</string>
     <string name="error_delete_gift">Error deleting gift</string>
     <string name="confirm_delete_friend">Confirm delete this friend</string>
     <string name="friend_deleted">If you change your mind, you will need to resubmit a request to follow: %1$s</string>

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class BookingUserFragment extends Fragment {
     RecyclerView rvBookings;
     DaoSocialGift daoSocialGift;
     ArrayList<GiftWishList>giftsBooked;
+    ProgressBar progressBarBooking;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,9 +49,11 @@ public class BookingUserFragment extends Fragment {
     private void syncronizedData(View view){
         txtNoBookings = view.findViewById(R.id.txt_no_booking);
         rvBookings = view.findViewById(R.id.recycler_view_booking_user);
+        progressBarBooking = view.findViewById(R.id.progressBarBookingUser);
     }
 
     private void getData(){
+        progressBarBooking.setVisibility(View.VISIBLE);
         daoSocialGift.getMyGiftsBooked(new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -68,11 +72,13 @@ public class BookingUserFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                progressBarBooking.setVisibility(View.GONE);
                 setAdapterRecyclerView(giftsBooked);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressBarBooking.setVisibility(View.GONE);
                 Toast.makeText(requireContext(), requireContext().getResources().getString(R.string.error_get_reserved_gift), Toast.LENGTH_SHORT).show();
             }
         });

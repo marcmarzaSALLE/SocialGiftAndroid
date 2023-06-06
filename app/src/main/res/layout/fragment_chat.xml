@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_fragment"
     android:orientation="vertical"
     tools:context=".fragments.ChatFragment">
 
@@ -46,6 +47,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFriendsChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp" />
 
 </LinearLayout>

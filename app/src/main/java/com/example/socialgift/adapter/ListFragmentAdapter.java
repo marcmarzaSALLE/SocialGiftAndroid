@@ -62,10 +62,8 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
             txtDescriptionList.setText(wishlist.getDescriptionList());
             txtDateList.setText(itemView.getResources().getString(R.string.date_list, wishlist.getCreatedDateList(), wishlist.getEndDateList()));
             if(wishlist.getGifts().isEmpty()){
-                Log.d("TAG", "bindData: " + wishlist.getGifts().size());
                 txtBookedGiftsList.setText(itemView.getResources().getString(R.string.booked_gift_list,wishlist.getBookedGifts()));
             }else {
-                Log.d("TAG", "bindData: " + wishlist.getGifts().size());
                 txtBookedGiftsList.setText(itemView.getResources().getString(R.string.booked_gift_list, wishlist.getBookedGifts()));
             }
             itemView.setOnClickListener(new View.OnClickListener() {

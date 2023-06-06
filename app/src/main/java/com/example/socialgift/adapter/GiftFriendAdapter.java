@@ -38,7 +38,6 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
     private ListGiftsWishListAdapter.OnItemClickListener listener;
     private Context context;
     private DaoSocialGift daoSocialGift;
-    RequestQueue requestQueue;
 
     public interface OnItemClickListener {
         void onItemClick(Wishlist wishlist, int position);
@@ -91,8 +90,6 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
             daoMercadoExpress.getGiftWishList(giftWishList.getProductLink(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.wtf("GiftFriendAdapter", "REGALO SOCIALGIFT: " + giftWishList.getProductLink());
-                    Log.wtf("GiftFriendAdapter", "REGALO MERCADO EXPRESS: " + response.toString());
                     try {
                         Glide.with(context).load(response.getString("photo")).error(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_giftcard_green_24, null)).into(imgGift);
                         txtGiftId.setText(context.getResources().getString(R.string.gift_id, giftWishList.getId()));
@@ -148,7 +145,7 @@ public class GiftFriendAdapter extends RecyclerView.Adapter<GiftFriendAdapter.Vi
             daoSocialGift.deleteReservationGift(giftWishList.getId(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(context, context.getResources().getString(R.string.reservation_created), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getResources().getString(R.string.delete_gift_booked), Toast.LENGTH_SHORT).show();
                     giftWishList.setBooked(false);
                     btnReserveGift.setText(context.getResources().getString(R.string.reserve));
                     btnReserveGift.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.background_reserve_gift_button, null));

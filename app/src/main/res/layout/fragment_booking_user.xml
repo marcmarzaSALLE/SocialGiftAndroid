@@ -6,6 +6,11 @@
     tools:context=".fragments.BookingUserFragment"
     android:background="@color/background_fragment"
     android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/progressBarBookingUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_booking_user"
         android:layout_width="match_parent"
