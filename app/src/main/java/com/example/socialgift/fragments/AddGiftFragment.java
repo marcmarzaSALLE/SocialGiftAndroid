@@ -1,5 +1,6 @@
 package com.example.socialgift.fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.socialgift.R;
+import com.example.socialgift.activities.AddGiftMercadoExpressActivity;
 import com.example.socialgift.adapter.GiftMercadoExpressAdapter;
 import com.example.socialgift.adapter.GridSpacingDecoration;
 import com.example.socialgift.dao.DaoMercadoExpress;
@@ -67,60 +69,49 @@ public class AddGiftFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_gift, container, false);
         daoMercadoExpress = DaoMercadoExpress.getInstance(requireContext());
+        getIdWishlistBundle();
         syncronizedWidgets(view);
         syncronizedToolbar();
         setInfoToolbar();
         getCategory();
         daoSocialGift = DaoSocialGift.getInstance(requireActivity());
         giftsSelected = new ArrayList<>();
+        edittextAction();
+        spinnerAction();
 
         imgBtnBack.setOnClickListener(v -> {
             Bundle wishlistBundle = getArguments();
             if (wishlistBundle != null) {
                 Wishlist wishlist = (Wishlist) wishlistBundle.getSerializable("wishlist");
                 if (wishlist != null) {
-                    giftWishLists = new ArrayList<>();
-                    for (Gift g : giftsSelected) {
-
-                        daoSocialGift.createGift(g.getId(), wishlist.getId(), new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    GiftWishList giftWishList = new GiftWishList();
-                                    giftWishList.setIdWishList(response.getInt("wishlist_id"));
-                                    giftWishList.setId(response.getInt("id"));
-                                    giftWishList.setProductLink(response.getString("product_url"));
-                                    giftWishList.setPriority(response.getInt("priority"));
-                                    giftWishList.setBooked(false);
-                                    giftWishLists.add(giftWishList);
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        });
-
-                    }
-
                     setInfoWishlist(wishlist);
-
                 }
-            }else{
+            } else {
                 Toast.makeText(requireContext(), "No se pudo agregar el regalo", Toast.LENGTH_SHORT).show();
             }
         });
 
-        edittextAction();
-        spinnerAction();
-
+        txtCreateGiftToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireActivity(), AddGiftMercadoExpressActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
-    public void setInfoWishlist(Wishlist wishlist){
+    private void getIdWishlistBundle() {
+        Bundle wishlistBundle = getArguments();
+        if (wishlistBundle != null) {
+            Wishlist wishlist = (Wishlist) wishlistBundle.getSerializable("wishlist");
+            if (wishlist != null) {
+                idWishlist = wishlist.getId();
+            }
+        }
+    }
+
+    public void setInfoWishlist(Wishlist wishlist) {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("wishlist", wishlist);
@@ -131,6 +122,7 @@ public class AddGiftFragment extends Fragment {
         transaction.replace(R.id.frameAddList, addListFragment);
         transaction.commit();
     }
+
     private void syncronizedToolbar() {
         toolbar = requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -366,15 +358,12 @@ public class AddGiftFragment extends Fragment {
 
     private void setAdapterGifts(ArrayList<Gift> gifts) {
         rvGifts.setAdapter(null);
-        adapter = new GiftMercadoExpressAdapter(txtNoGifts, rvGifts, gifts, requireActivity(), new GiftMercadoExpressAdapter.OnItemClickListener() {
+        adapter = new GiftMercadoExpressAdapter(idWishlist, txtNoGifts, rvGifts, gifts, requireActivity(), new GiftMercadoExpressAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Gift gift, int position) {
                 if (gift.isAdded()) {
                     giftsSelected.add(gift);
-                } else {
-                    giftsSelected.remove(gift);
                 }
-
             }
         });
         int spanCount = 1;
@@ -389,4 +378,9 @@ public class AddGiftFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        spinnerAction();
+    }
 }

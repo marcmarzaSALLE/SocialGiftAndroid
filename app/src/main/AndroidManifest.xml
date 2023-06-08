@@ -18,6 +18,9 @@
         android:theme="@style/Theme.SocialGift"
         tools:targetApi="31">
         <activity
+            android:name=".activities.AddGiftMercadoExpressActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ChatFriendActivity"
             android:exported="false" />
         <activity

@@ -7,14 +7,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.example.socialgift.R;
 import com.example.socialgift.dao.DaoMercadoExpress;
+import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Gift;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -26,11 +32,13 @@ public class GiftMercadoExpressAdapter extends RecyclerView.Adapter<GiftMercadoE
     TextView txtNoGifts;
     RecyclerView recyclerView;
     Context context;
+    int wishListId;
+    DaoSocialGift daoSocialGift;
     public interface OnItemClickListener {
         void onItemClick(Gift gift, int position);
     }
 
-    public GiftMercadoExpressAdapter(TextView textView,RecyclerView recyclerView,ArrayList<Gift> gifts, Context context, GiftMercadoExpressAdapter.OnItemClickListener listener) {
+    public GiftMercadoExpressAdapter(int wishList,TextView textView,RecyclerView recyclerView,ArrayList<Gift> gifts, Context context, GiftMercadoExpressAdapter.OnItemClickListener listener) {
         this.gifts = gifts;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
@@ -39,6 +47,8 @@ public class GiftMercadoExpressAdapter extends RecyclerView.Adapter<GiftMercadoE
         this.txtNoGifts = textView;
         this.recyclerView = recyclerView;
         defaultRecyclerText();
+        daoSocialGift = DaoSocialGift.getInstance(context);
+        this.wishListId = wishList;
     }
 
     private void defaultRecyclerText(){
@@ -98,14 +108,22 @@ public class GiftMercadoExpressAdapter extends RecyclerView.Adapter<GiftMercadoE
         }
 
         private void selectGift(Gift gift) {
-            if (gift.isAdded()){
-                btnAddGift.setBackground(ResourcesCompat.getDrawable(context.getResources(),R.drawable.btn_background_save,null));
-                gift.setAdded(false);
-                listener.onItemClick(gift,getAdapterPosition());
-            }else{
-                btnAddGift.setBackground(ResourcesCompat.getDrawable(context.getResources(),R.drawable.background_reserve_gift_button,null));
-                gift.setAdded(true);
-                listener.onItemClick(gift,getAdapterPosition());
+            if (!gift.isAdded()){
+                daoSocialGift.createGift(gift.getId(), wishListId, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        btnAddGift.setClickable(false);
+                        btnAddGift.setBackground(ResourcesCompat.getDrawable(context.getResources(),R.drawable.background_reserve_gift_button,null));
+                        gift.setAdded(true);
+                        listener.onItemClick(gift,getAdapterPosition());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Error al agregar el regalo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         }
     }

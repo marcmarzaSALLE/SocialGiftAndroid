@@ -116,5 +116,9 @@
     <string name="goChat">Go chat</string>
     <string name="send_request">Request sent!</string>
     <string name="error_send_request">You have already sent a request to this user</string>
-
+    <string name="name_gift">Name gift:</string>
+    <string name="description_gift">Description: </string>
+    <string name="price_gift_mercado_express">Price </string>
+    <string name="link_gift">Link: </string>
+    <string name="add_gift_image">Add gift image</string>
 </resources>

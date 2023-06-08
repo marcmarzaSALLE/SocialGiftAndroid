@@ -240,8 +240,7 @@ public class AddListFragment extends Fragment {
                             JSONObject gift = gifts.getJSONObject(i);
                             GiftWishList gift1 = new GiftWishList();
                             gift1.setId(gift.getInt("id"));
-                            gift1.setIdWishList(gift.getInt("idWishlist"));
-                            gift1.setId(gift.getInt("id"));
+                            gift1.setIdWishList(gift.getInt("wishlist_id"));
                             gift1.setPriority(gift.getInt("priority"));
                             gift1.setBooked(false);
                             gift1.setProductLink(gift.getString("product_url"));
@@ -265,9 +264,10 @@ public class AddListFragment extends Fragment {
     }
 
     private void setInfoWishlist(Wishlist wishlist) {
-        edtTxtListName.setText(wishlist.getNameList());
-        edtTxtDescription.setText(wishlist.getDescriptionList());
-        edtTxtDate.setText(wishlist.getEndDateList());
+        edtTxtListName.setHint(wishlist.getNameList());
+        edtTxtDescription.setHint(wishlist.getDescriptionList());
+        edtTxtDate.setHint(wishlist.getEndDateList());
+        btnSaveList.setVisibility(View.GONE);
     }
 
     private void addDataRecyclerViewGift(Wishlist wishlist) {
