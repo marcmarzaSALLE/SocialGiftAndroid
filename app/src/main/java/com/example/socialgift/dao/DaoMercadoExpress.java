@@ -9,8 +9,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.socialgift.controller.UserData;
+import com.example.socialgift.model.Gift;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DaoMercadoExpress {
@@ -65,5 +67,22 @@ public class DaoMercadoExpress {
         String allGiftsUrl = this.urlMercadoExpress + giftParameter + searchParameter + search;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, allGiftsUrl, null, gifts, errorListener);
         requestQueue.add(jsonArrayRequest);
+    }
+
+    public void createGiftMercadoExpress(Gift gift, Response.Listener<JSONObject>createGiftListener,Response.ErrorListener errorListener){
+        String urlCreateProduct = this.urlMercadoExpress + this.giftParameter;
+        try {
+            jsonBody.put("name", gift.getName());
+            jsonBody.put("description",gift.getDescription());
+            jsonBody.put("link",gift.getLink());
+            jsonBody.put("photo",gift.getUrlImage());
+            jsonBody.put("price",gift.getPrice());
+            jsonBody.put("categoryIds",gift.getIdCategory());
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,urlCreateProduct,jsonBody,createGiftListener,errorListener);
+            requestQueue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

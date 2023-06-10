@@ -11,6 +11,7 @@ public class Gift implements Serializable {
     private String urlImage;
     private double price;
     private boolean isAdded;
+    private int idCategory;
     private ArrayList<Category> categories;
 
     public Gift(int id, String name, String description, String link, String urlImage, double price, ArrayList<Category> idCategory) {
@@ -81,6 +82,14 @@ public class Gift implements Serializable {
 
     public void setIdCategory(ArrayList<Category> idCategory) {
         this.categories = idCategory;
+    }
+
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
+    }
+
+    public int getIdCategory() {
+        return idCategory;
     }
 
     public boolean isAdded() {

@@ -86,6 +86,7 @@ public class AddListFragment extends Fragment {
                                     wishlist.setDescriptionList(response.getString("description"));
                                     wishlist.setEndDateList(response.getString("end_date"));
                                     AddListFragment.this.setWishlist(wishlist);
+                                    btnSaveList.setVisibility(View.GONE);
                                     Toast.makeText(requireActivity().getApplicationContext(), requireContext().getResources().getString(R.string.wishlist_created), Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
