@@ -66,11 +66,11 @@
 
         <EditText
             android:id="@+id/edit_text_chat_friend"
-            android:layout_width="320dp"
+            android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/background_cardview_chat"
             android:hint="@string/send_message"

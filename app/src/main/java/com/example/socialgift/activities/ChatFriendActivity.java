@@ -142,17 +142,19 @@ public class ChatFriendActivity extends AppCompatActivity {
     }
 
     private void sendMessage(){
-        daoSocialGift.sendMessage(edtMessage.getText().toString(),friend.getId(),new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                edtMessage.setText("");
-                getMessages();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        if(!edtMessage.getText().toString().isEmpty()){
+            daoSocialGift.sendMessage(edtMessage.getText().toString(),friend.getId(),new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    edtMessage.setText("");
+                    getMessages();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }

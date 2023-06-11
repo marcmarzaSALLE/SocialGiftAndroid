@@ -16,6 +16,8 @@ import com.example.socialgift.R;
 import com.example.socialgift.controller.SharedPreferencesController;
 import com.example.socialgift.model.Message;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
@@ -57,7 +59,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        Log.wtf("TAG", "bind: "+message.getContent() );
         if (message.getUser_id_send() == sharedPreferencesController.loadUserIdSharedPreferences(context)) {
             return MY_MESSAGE;
         } else {
@@ -65,14 +66,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtMessageMe;
+        private TextView txtMessageMe,txtHour;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMessageMe = itemView.findViewById(R.id.text_content);
+            txtHour = itemView.findViewById(R.id.txt_time);
         }
 
         public void bind(Message message){
             txtMessageMe.setText(message.getContent());
+            String time = message.getTimeStamp();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            LocalDateTime timeStamp = LocalDateTime.parse(time, formatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+            String formattedTime = timeStamp.format(outputFormatter);
+
+            txtHour.setText(formattedTime);
         }
     }
 }

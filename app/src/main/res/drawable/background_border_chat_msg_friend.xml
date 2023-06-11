@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#48606E" /> <!-- Color de fondo del cuadro de chat -->
+    <corners android:radius="10dp" /> <!-- Radio de los bordes redondeados -->
+</shape>
