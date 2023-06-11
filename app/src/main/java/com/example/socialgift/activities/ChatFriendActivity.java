@@ -3,8 +3,15 @@ package com.example.socialgift.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.socialgift.R;
+import com.example.socialgift.adapter.ChatAdapter;
 import com.example.socialgift.dao.DaoSocialGift;
 import com.example.socialgift.model.Friend;
 import com.example.socialgift.model.Message;
@@ -29,15 +37,16 @@ import java.util.ArrayList;
 
 public class ChatFriendActivity extends AppCompatActivity {
     TextView txtNameFriend;
-    ImageButton imgBtnToolbar;
+    ImageButton imgBtnToolbar,btnSendMessage;
     ImageView imgFriend;
     Toolbar toolbar;
     Friend friend;
     EditText edtMessage;
-    ListView listViewChat;
+    RecyclerView listViewChat;
     DaoSocialGift daoSocialGift;
     ArrayList<Message>messages;
     ArrayAdapter<Message> adapter;
+    ChatAdapter chatAdapter;
 
 
     @Override
@@ -49,9 +58,25 @@ public class ChatFriendActivity extends AppCompatActivity {
         syncronizedToolbar();
         syncronizedWidgets();
         addInformationToolbar();
+        getMessages();
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                sendMessage();
+            }
+        });
         imgBtnToolbar.setOnClickListener(v -> finish());
     }
-
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            View currentFocus = getCurrentFocus();
+            if (currentFocus != null) {
+                inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+            }
+        }
+    }
     private void getFriend() {
         friend = (Friend) getIntent().getSerializableExtra("friend");
     }
@@ -71,6 +96,7 @@ public class ChatFriendActivity extends AppCompatActivity {
     private void syncronizedWidgets(){
         edtMessage = findViewById(R.id.edit_text_chat_friend);
         listViewChat = findViewById(R.id.recycler_view_chat_friend);
+        btnSendMessage = findViewById(R.id.button_send_chat_friend);
     }
 
     private void getMessages(){
@@ -85,7 +111,7 @@ public class ChatFriendActivity extends AppCompatActivity {
                         message.setId(jsonObject.optInt("id"));
                         message.setContent(jsonObject.getString("content"));
                         message.setUser_id_send(jsonObject.getInt("user_id_send"));
-                        message.setUser_id_receive(jsonObject.getInt("user_id_received"));
+                        message.setUser_id_receive(jsonObject.getInt("user_id_recived"));
                         message.setTimeStamp(jsonObject.getString("timeStamp"));
                         messages.add(message);
                     } catch (JSONException e) {
@@ -102,7 +128,31 @@ public class ChatFriendActivity extends AppCompatActivity {
         });
     }
 
-    private void setAdapterChat(ArrayList<Message>messages){
+    private void setAdapterChat(ArrayList<Message>messagesFriend){
+        chatAdapter = new ChatAdapter(this, messagesFriend);
+        chatAdapter.notifyDataSetChanged();
+        listViewChat.setLayoutManager(new LinearLayoutManager(this));
+        listViewChat.setAdapter(chatAdapter);
+        listViewChat.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listViewChat.scrollToPosition(messagesFriend.size() - 1);
+            }
+        }, 100);
+    }
 
+    private void sendMessage(){
+        daoSocialGift.sendMessage(edtMessage.getText().toString(),friend.getId(),new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                edtMessage.setText("");
+                getMessages();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 }
