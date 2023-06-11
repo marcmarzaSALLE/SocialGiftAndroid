@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +47,7 @@ public class ListInfoFragment extends Fragment {
     private ImageButton imgBtnBack, imgBtnAddGift, imgBtnAddList;
     private TextView txtListName, txtDeleteList, txtAddGift, txtNoGifts;
     private EditText edtTxtListName, edtTxtDescription, edtTxtDate;
-    private Button btnSaveList, btnAddGift;
+    private Button btnSaveList;
     private RecyclerView recyclerViewGifts;
     private Wishlist wishlist;
     private DaoSocialGift daoSocialGift;
@@ -96,6 +97,19 @@ public class ListInfoFragment extends Fragment {
                 });
             }
         });
+        imgBtnAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new AddGiftFragment());
+            }
+        });
+
+        txtAddGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new AddGiftFragment());
+            }
+        });
         txtDeleteList.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             builder.setMessage(requireContext().getResources().getString(R.string.delete_wishlist, wishlist.getNameList()))
@@ -125,6 +139,18 @@ public class ListInfoFragment extends Fragment {
         return view;
     }
 
+    private void replace(Fragment fragment) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("wishlist", wishlist);
+
+        AddGiftFragment addGiftFragment = (AddGiftFragment) fragment;
+        addGiftFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameAddList, fragment);
+        transaction.commit();
+    }
+
     private void syncronizeViewToolbar() {
         toolbar = (Toolbar) requireActivity().findViewById(R.id.toolbarAddList);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -143,6 +169,8 @@ public class ListInfoFragment extends Fragment {
         btnSaveList = (Button) view.findViewById(R.id.btnSaveList);
         recyclerViewGifts = (RecyclerView) view.findViewById(R.id.recyclerViewGiftsWishList);
         txtNoGifts = (TextView) view.findViewById(R.id.txtListNoGifts);
+        imgBtnAddGift = (ImageButton) view.findViewById(R.id.btnAddGift);
+        txtAddGift = (TextView) view.findViewById(R.id.txtAddGift);
     }
 
     private void showInfoWidgets() {
@@ -234,5 +262,11 @@ public class ListInfoFragment extends Fragment {
                 }
             }));
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        addDataRecyclerViewGift();
     }
 }
