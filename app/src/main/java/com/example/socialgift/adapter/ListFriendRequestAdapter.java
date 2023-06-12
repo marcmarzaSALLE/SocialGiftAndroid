@@ -110,9 +110,9 @@ public class ListFriendRequestAdapter extends RecyclerView.Adapter<ListFriendReq
                     daoSocialGift.declineRequestFriend(friend.getId(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            friendsRequestList.remove(friend);
                             notifyItemRemoved(friendsRequestList.indexOf(friend));
                             notifyItemRangeChanged(friendsRequestList.indexOf(friend),getItemCount());
+                            friendsRequestList.remove(friend);
                             Toast.makeText(context, "You declined "+friend.getEmail()+"'s friend request", Toast.LENGTH_SHORT).show();
                             if(friendsRequestList.isEmpty()){
                                 recyclerView.setVisibility(View.GONE);
